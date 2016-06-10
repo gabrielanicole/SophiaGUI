@@ -3,6 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#Django Database
+ db.sqlite3
+ 
+#PyDev Project
+.project
+
 # C extensions
 *.so
 
