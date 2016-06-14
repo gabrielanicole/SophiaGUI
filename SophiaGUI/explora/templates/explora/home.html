@@ -5,51 +5,110 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/explora/exploraCSS.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/static/explora/facebook_login.js"></script>
 </head>
+
 <body>
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-default navbar-custom">
   <div class="container-fluid">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-      <a class="navbar-brand" href="#">Sophia Logo</a>
+      <a class="navbar-brand" href="#">Sophia Project</a>
     </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li><a href="#">Inicio</a></li>
-        <li><a href="#">Acerca</a></li>
-        <li><a href="#">Contacto</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Registrarse</a></li>
-        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-      </ul>
-    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#what-is">¿Qué es?</a></li>
+      <li><a href="#objetives">Objetivos</a></li>
+      <li><a href="#who-we-are">Acerca</a></li>
+	  <li>
+	    <p style="padding-right:10px" class = "navbar-btn">
+	  	   <a class = "btn btn-default"> Registrarse </a>
+	    </p>
+	  </li>
+	  <li>
+	    <p style ="padding-right:10px" class = "navbar-btn">
+	  	   <a class = "btn btn-default" onclick="FB.login();">Login</a>
+	    </p>
+	  </li>
+    </ul>
   </div>
 </nav>
-  
-<div class="container-fluid text-center">    
-  <div class="row content">
-    <div class="col-sm-2 sidenav">
-      <p><a href="#">Link 1</a></p>
-      <p><a href="#">Link 2</a></p>
-      <p><a href="#">Link 3</a></p>
-    </div>
-    <div class="col-sm-10 text-left"> 
-      <h1>Bienvenida</h1>
-      <p> Aquí va el texto de bienvenida</p>
-      <hr>
-      <h3>Acerca de Sophia</h3>
-      <p>Información sobre el proyecto Sophia</p>
-    </div>
-  </div>
+
+<div id=status>
+	
+</div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<img class="img-responsive" src=https://placehold.it/1200x400>
+		</div>
+	</div>
+</div>
+
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-6">
+			<h2 id="what-is">¿Qué es Sophia?</h2>
+			<p>Hoja ay oh tipo gris fiar un. Montaraces pentagrama expresivas vez ahi mia rio. Si sois digo te paga baja rito. Separados no contrario ve no perdieron punzantes encontrar escritura. Vagaban colonia lejanos de yo un id acababa. Ello sin rey mas alta odio daba ahi. Comedido dia esbeltos chi positivo pintadas consulta entregar mal. Pagarselos ido han ton pedantesca silencioso adivinarle. Lacrimoso castrillo ofenderle aplaudian le ti de periodico.</p>
+		</div>
+		<div class="col-md-6">
+			<img class="img-responsive" alt="Image1" src="https://placehold.it/400x200">
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-6">
+			<img class="img-responsive" alt="Image1" src="https://placehold.it/400x200">
+		</div>
+		<div class="col-md-6">
+			<h2 id="objetives">Objetivos</h2>
+			<p>Hoja ay oh tipo gris fiar un. Montaraces pentagrama expresivas vez ahi mia rio. Si sois digo te paga baja rito. Separados no contrario ve no perdieron punzantes encontrar escritura. Vagaban colonia lejanos de yo un id acababa. Ello sin rey mas alta odio daba ahi. Comedido dia esbeltos chi positivo pintadas consulta entregar mal. Pagarselos ido han ton pedantesca silencioso adivinarle. Lacrimoso castrillo ofenderle aplaudian le ti de periodico.</p>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div id="who-we-are" class="col-md-6">
+			<h2>Quienes somos</h2>
+			<p> De tristeza le es oh rociaban encendia. Quiso uno verle tio ser sobre tiple. Escena el oh el cuenta cruzar. Cogio la negra ukase mucho llamo bajos si. Gozaba era dia una delito decida. Comenzaba recordaba se gentilica despierta izquierda sensibles es </p>		
+		</div>
+		<div class="col-md-6">
+			<img class="img-responsive" alt="Image1" src="https://placehold.it/400x200">
+		</div>
+	</div>
+</div>
+
+
+<div class="container center_div">
+	<div class="col-md-12">
+		<form>
+		  <div>
+		    <h4>Empieza a explorar con Sophia</h4>
+		  </div>
+		  <fieldset class="form-group">
+		    <input type="text" class="form-control" placeholder="Email">
+		  </fieldset>
+		  <fieldset class="form-group">
+		    <input type="text" class="form-control" placeholder="Password">
+		  </fieldset>
+		  <div class="form-submit">
+		    <button type="submit" class="btn btn-default btn-block">Registrarse</button> 
+		    <button class="btn btn-default btn-block" onclick="FB.login();">
+		  		<span style="padding-right:10px" class="fa fa-facebook"></span> Login con Facebook</button>
+		  </div>
+		</form>
+	</div>
+</div>
+
+<div id="footer">
+	<p> Footer correspondiente</p>
+	<p> Copyright (c) 2016 sophiaproject.com All rights reserved</p>
 </div>
 
 </body>
 </html>
+
