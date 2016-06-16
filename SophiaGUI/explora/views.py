@@ -4,5 +4,5 @@ from django.shortcuts import HttpResponse
 def index(request):
     return render(request,'explora/home.html')
 
-def login(request):
-    return render(request,'explora/login.html')
+def inicio(request):
+    return render(request,'explora/inicio.html')
