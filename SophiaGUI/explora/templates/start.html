@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Sophia</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/start.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+  <!-- Modal -->
+  <!-- For now only charging static data just to know how it works -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Title</h4>
+        </div>
+        <div class="modal-body">
+        <div class="row news-deploy" >
+            <div class=row>
+        		<div class="col-sm-6">
+        			<p>Fuente:</p>
+        		</div>
+        		<div class="col-sm-6">
+        			<p>Tema:</p>
+        		</div>
+        	</div>
+        	<div class=row>
+        		<div class="col-sm-6">
+        			<p>Fecha:</p>
+        		</div>
+        		<div class="col-sm-6">
+        			<p>Ubicación:</p>
+        		</div>
+        	</div>
+        	<div class=row>
+        		<div class="col-sm-6">
+        			<p>Clasificación:</p>
+        		</div>
+        		<div class="col-sm-6">
+        			<p>Enlace:</p>
+        		</div>
+        	</div>        
+        </div>         
+          <p>Content</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div> 
+    </div>
+  </div>
+ <!-- End of Modal -->
+ 
+	<script>
+		//Script called to open the modal window
+		function load_modal()
+		{
+		 $('#myModal').modal('show');
+		}
+	</script>
+	
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="#">Sophia Project</a>
+	    </div>
+	    <ul class="nav navbar-nav navbar-right">
+    	  <li>
+		    <p style="padding-right:10px" class = "navbar-btn">
+		  	   <a class = "btn btn-default"> Configuración </a>
+		    </p>
+		  </li>
+		  <li>
+		    <p style ="padding-right:10px" class = "navbar-btn">
+		  	   <a class = "btn btn-default" onclick="FB.login();">Log out</a>
+		    </p>
+		  </li>
+	    </ul>
+	  </div>
+	</nav>
+
+
+	<div class="container-fluid">
+		<div class="col-md-3">
+			<ul class="nav nav-pills nav-stacked navbar-custom">
+			  <li role="presentation" class="active"><a href="#">App1</a></li>
+			  <li role="presentation"><a href="#">App2</a></li>
+			  <li role="presentation"><a href="#">App3</a></li>
+			</ul>
+		
+		</div>
+		
+		<div class="col-md-9">
+			
+			<div class=row>
+			
+				<form class="navbar-form navbar-left" role="search">
+				    <div class="form-group">
+				        <input type="text" class="form-control" name="terminos" placeholder="Terminos">		        
+				    </div>
+		
+				    <div class="form-group">
+				        <div class="selectContainer">
+				            <select class="form-control" name="medio">
+				            	<option value="null"> Cualquier medio</option>
+				                <option value="m1">Medio 1</option>
+				                <option value="m2">Medio 2</option>
+				                <option value="m3">Medio 3</option>
+				                <option value="m4">Medio 4</option>
+				            </select>
+				        </div>
+				    </div>
+				    
+				    <div class="form-group">
+				        <div class="selectContainer">
+				            <select class="form-control" name="categoria">
+				            	<option value="null"> Cualquier categoria</option>
+				                <option value="c1">Categoria 1</option>
+				                <option value="c2">Categoria 2</option>
+				                <option value="c3">Categoria 3</option>
+				                <option value="c4">Categoria 4</option>
+				            </select>
+				        </div>
+				    </div>
+					<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>  Buscar</button>	
+					<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>  Busqueda Avanzada</button>
+	  			</form>
+	</div>
+			
+			
+			 {% for d in data %}
+			<div class="row top-buffer news-deploy">
+				<div class ="col-md-3">
+					<img class="img-responsive" alt="image-not-found" src="{{d.imageLink}}">
+				</div>
+				<div class="col-md-9">
+					<h3 class="news-data" onclick="load_modal();" > {{ d.title }}</h3>
+                    <p  class="news-data" > {{ d.content }} </p>
+                </div>
+			</div>
+			 {% endfor %}
+		</div>
+	</div>
+
+
+</body>
+</html>

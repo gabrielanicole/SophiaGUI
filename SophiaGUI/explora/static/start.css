@@ -1,0 +1,17 @@
+.top-buffer { 
+	margin-top:10px;
+	 }
+.news-deploy{
+	background-color:WhiteSmoke;
+}
+.news-data{
+	padding-left:10px;
+}
+.img-responsive {
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
+.navbar-custom {
+    background-color: WhiteSmoke;
+}
