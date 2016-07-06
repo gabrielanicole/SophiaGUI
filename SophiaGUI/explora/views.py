@@ -31,7 +31,7 @@ def index(request):
 
 def start(request):
 
-    file = json.loads(open("user.json").read())
+    file = json.loads(open("explora/static/user.json").read())
     api_user = file["user"]
     api_password = file["password"]       
        
