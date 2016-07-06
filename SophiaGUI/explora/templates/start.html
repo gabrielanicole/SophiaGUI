@@ -20,7 +20,7 @@
 		function load_modal()
 		{
 			$.ajax({
-			    url: '/explora/start/modal_new',
+			    url: '/start/modal_new',
 			    type: 'POST',
 			    data:{news_id:'news_id', csrfmiddlewaretoken: '{{ csrf_token }}'},
 			    success: function(data) {
