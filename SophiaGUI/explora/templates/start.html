@@ -6,64 +6,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" href="/static/start.css">
+  <link rel="stylesheet" href="/static/news_modal.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
 
-  <!-- Modal -->
-  <!-- For now only charging static data just to know how it works -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog modal-lg">
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Title</h4>
-        </div>
-        <div class="modal-body">
-        <div class="row news-deploy" >
-            <div class=row>
-        		<div class="col-sm-6">
-        			<p>Fuente:</p>
-        		</div>
-        		<div class="col-sm-6">
-        			<p>Tema:</p>
-        		</div>
-        	</div>
-        	<div class=row>
-        		<div class="col-sm-6">
-        			<p>Fecha:</p>
-        		</div>
-        		<div class="col-sm-6">
-        			<p>Ubicación:</p>
-        		</div>
-        	</div>
-        	<div class=row>
-        		<div class="col-sm-6">
-        			<p>Clasificación:</p>
-        		</div>
-        		<div class="col-sm-6">
-        			<p>Enlace:</p>
-        		</div>
-        	</div>        
-        </div>         
-          <p>Content</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-        </div>
-      </div> 
-    </div>
-  </div>
- <!-- End of Modal -->
  
-	<script>
+	<script type="text/javascript">
 		//Script called to open the modal window
+
 		function load_modal()
 		{
-		 $('#myModal').modal('show');
+			$.ajax({
+			    url: '/explora/start/modal_new',
+			    type: 'POST',
+			    data:{news_id:'news_id', csrfmiddlewaretoken: '{{ csrf_token }}'},
+			    success: function(data) {
+			    	//Find if the element already exist
+			    	if( $('#myModal').length )
+			    	{
+			    		$('#myModal').remove();
+			    	}
+			    	//In the tag <modal> the append the response from Django
+			        $('#modal').append(data);
+			    	//Then display the modal window
+			        $('#myModal').modal('show');
+			    },
+			    failure: function(data) { 
+			        alert('Error de conexión');
+			    },
+			    crossDomain: true
+			}); 
 		}
 	</script>
 	
@@ -134,22 +109,25 @@
 					<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>  Busqueda Avanzada</button>
 	  			</form>
 	</div>
-			
-			
+						
 			 {% for d in data %}
 			<div class="row top-buffer news-deploy">
 				<div class ="col-md-3">
 					<img class="img-responsive" alt="image-not-found" src="{{d.imageLink}}">
 				</div>
 				<div class="col-md-9">
-					<h3 class="news-data" onclick="load_modal();" > {{ d.title }}</h3>
+					<span style="cursor:pointer">
+					    <h3 class="news-data" onclick="load_modal();">{{ d.title }}</h3>
+					</span>
                     <p  class="news-data" > {{ d.content }} </p>
                 </div>
 			</div>
 			 {% endfor %}
 		</div>
 	</div>
-
+	
+	<div id="modal">
+	</div>
 
 </body>
 </html>
