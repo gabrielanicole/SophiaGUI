@@ -69,14 +69,19 @@ def index(request):
 
 #here we should redirect 
 @login_required(login_url='/not_logged')
-def articles(request):
+def articles(request, num="1"):
            
-
+    pages = 10
+    num_pages = []
+    for i in range(1,pages):
+        num_pages.append(i)
+    
     file = json.loads(open("explora/static/user.json").read())
     api_user = file["user"]
     api_password = file["password"]       
-       
-    r = requests.get('http://api.sophia-project.info/articles/', auth=(api_user, api_password))
+    
+    api_url = u'http://api.sophia-project.info/articles/?page={0}'.format(num)   
+    r = requests.get(api_url, auth=(api_user, api_password))
     a = json.loads(r.text.encode('ascii','ignore')) 
     #the data to return to the template, later this should be a http response from the API
     data = a['results']
@@ -86,12 +91,16 @@ def articles(request):
     if my_user:
         #if is someone from facebook we get the profile image  
         url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
-        return render(request,'articles.html',{'data': data,
-                                               'user':request.user.get_full_name()
-                                               ,'profile_pic':url})
+        return render(request,'articles.html',{'data': data
+                                               ,'user':request.user.get_full_name()
+                                               ,'profile_pic':url
+                                               ,'num_pages':num_pages
+                                               })
     else:      
-        return render(request,'articles.html',{'data': data,
-                                               'user':request.user.get_full_name()})
+        return render(request,'articles.html',{'data': data
+                                               ,'user':request.user.get_full_name()
+                                               ,'num_pages':num_pages
+                                               })
 
 @login_required()
 def logout(request):

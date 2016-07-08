@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/static/start.css">
-  <link rel="stylesheet" href="/static/news_modal.css">
+  <link rel="stylesheet" href="/static/start.css" type="text/css">
+  <link rel="stylesheet" href="/static/news_modal.css" type="text/css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -80,7 +80,6 @@
 	  </div>
 	</nav>
 
-
 	<div class="container-fluid">
 		<div class="col-md-3">
 			<ul class="nav nav-pills nav-stacked navbar-custom">
@@ -92,6 +91,8 @@
 		</div>
 		
 		<div class="col-md-9">
+		
+		
 			
 			<div class=row>
 			
@@ -126,23 +127,36 @@
 					<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>  Buscar</button>	
 					<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>  Busqueda Avanzada</button>
 	  			</form>
-	</div>
-						
-			 {% for d in data %}
-			<div class="row top-buffer news-deploy">
-				<div class ="col-md-3">
-					<img class="img-responsive" alt="image-not-found" src="{{d.imageLink}}">
-				</div>
-				<div class="col-md-9">
-					<span style="cursor:pointer">
-					    <h3 class="news-data" data-val="{{d.pk}}" ">{{ d.title }}</h3>
-					</span>	
-                    <p  class="news-data" > {{ d.content }} </p>
-                </div>
-			</div>
-			 {% endfor %}
+	  				  					
 		</div>
-	</div>
+		<div class="row">
+				<ul class="pagination">
+				<li><a href="#">&laquo;</a></li>
+			   {% for i in num_pages %}
+			   	 <li><a href="/articles/{{i}}/">{{i}}</a></li>
+			   {% endfor %}
+			    <li><a href="#">&raquo;</a></li>
+			  
+			</ul>
+		</div>
+
+	
+				
+				 {% for d in data %}
+				<div class="row top-buffer news-deploy">
+					<div class ="col-md-3">
+						<img class="img-responsive" alt="image-not-found" src="{{d.imageLink}}">
+					</div>
+					<div class="col-md-9">
+						<span style="cursor:pointer">
+						    <h3 class="news-data" data-val="{{d.pk}}" ">{{ d.title }}</h3>
+						</span>	
+	                    <p  class="news-data" > {{ d.content|truncatechars:500 }} </p>
+	                </div>
+				</div>
+				 {% endfor %}
+			</div>
+	 </div>
 	
 	<div id="modal">
 	</div>

@@ -3,20 +3,23 @@
 	 }
 .news-deploy{
 	background-color:WhiteSmoke;
-}
+	}
 .news-data{
 	padding-left:10px;
-}
+	}
 .img-responsive {
   display: block;
   height: auto;
   max-width: 100%;
+}	
+
+.news-metadata{
+	background-color:WhiteSmoke;
+	margin:5px;
+	padding:5px;
 }
-.navbar-custom {
-    background-color: WhiteSmoke;
-}
-.profile-pic{
-	width:50%;
-	height:auto;
-	padding:0px 10px 10px 10px;
+
+.news-image{
+	margin:5px;
+	padding:5px;
 }
