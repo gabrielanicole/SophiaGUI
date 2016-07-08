@@ -1,35 +1,76 @@
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
+from django.shortcuts import redirect
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth.decorators import login_required
 import requests
 import simplejson as json
 from telnetlib import theNULL
 from pprint import pprint
 
 
+
+def login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                auth_login(request,user)
+                return redirect('articles')
+        #here should be an else for when user account is disbled
+        else:
+            return redirect('index')
+        
 def modal_new(request):
         if request.method == 'POST':
             #here we should have the id of the new.
-            json_data = json.dumps({
-                                    "title":"Titular de la Noticia",
-                                    "date":"23/01/2016",
-                                    "host":"Radio BioBio",
-                                    "url": "https://t.co/l5U8VqUGcA",
-                                    "content":"Attention he extremity unwilling on otherwise. Conviction up partiality as delightful is discovered. Yet jennings resolved disposed exertion you off. Left did fond drew fat head poor. So if he into shot half many long. China fully him every fat was world grave  Left did fond drew fat head poor. So if he into shot half many long. China fully him every fat was world grave  Left did fond drew fat head poor. So if he into shot half many long. China fully him every fat was world grave  Left did fond drew fat head poor. So if he into shot half many long. China fully him every fat was world grave  Left did fond drew fat head poor. So if he into shot half many long. China fully him every fat was world grave  Left did fond drew fat head poor. So if he into shot half many long. China fully him every fat was world grave  Left did fond drew fat head poor. So if he into shot half many long. China fully him every fat was world grave  Left did fond drew fat head poor. So if he into shot half many long. China fully him every fat was world grave.",
-                                    "imageLink":"https://placehold.it/300x300",
-                                    "category":"Category of the news",
-                                    "location":"Santiago, Chile"
-                                    })
-            data = json.loads(json_data)
-            return render(request,'news_modal.html',{'data':data})
+            news_pk = request.POST['news_id']
+            
+            file = json.loads(open("explora/static/user.json").read())
+            api_user = file["user"]
+            api_password = file["password"]
+            
+            api_url = u'http://api.sophia-project.info/articles/{0}/'.format(news_pk) 
+            r = requests.get(api_url, auth=(api_user, api_password))
+            a = json.loads(r.text.encode('ascii','ignore'))
+            #Here come the data
+            title = a['title']
+            date = a['date']
+            host = a['host']
+            url = a['url']
+            content = a['content']
+            imageLink = a['imageLink']
+            
+            
+
+            return render(request,'news_modal.html',{'title':title,
+                                                     'date':date,
+                                                     'host':host,
+                                                     'url':url,
+                                                     'content':content,
+                                                     'imageLink':imageLink})
         else:
             return HttpResponse("Error")
 
 
+def user_not_logged(request):
+    return HttpResponse("User not logged in")
 
 def index(request):
-    return render(request,'home.html')
+       
+    if request.user.is_authenticated():
+        return redirect('articles')
+    else:
+        return render(request,'home.html')
 
-def start(request):
+
+#here we should redirect 
+@login_required(login_url='/not_logged')
+def articles(request):
+           
 
     file = json.loads(open("explora/static/user.json").read())
     api_user = file["user"]
@@ -39,4 +80,21 @@ def start(request):
     a = json.loads(r.text.encode('ascii','ignore')) 
     #the data to return to the template, later this should be a http response from the API
     data = a['results']
-    return render(request,'start.html',{'data': data})
+    
+    #Search if is a social user
+    my_user = request.user.social_auth.filter(provider='facebook').first()
+    if my_user:
+        #if is someone from facebook we get the profile image  
+        url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
+        return render(request,'articles.html',{'data': data,
+                                               'user':request.user.get_full_name()
+                                               ,'profile_pic':url})
+    else:      
+        return render(request,'articles.html',{'data': data,
+                                               'user':request.user.get_full_name()})
+
+@login_required()
+def logout(request):
+    #Log out the user from facebook or django
+    auth_logout(request)
+    return redirect('index')

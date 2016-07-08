@@ -8,38 +8,43 @@
   <link rel="stylesheet" href="/static/start.css">
   <link rel="stylesheet" href="/static/news_modal.css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
 
  
 	<script type="text/javascript">
 		//Script called to open the modal window
-
-		function load_modal()
-		{
-			$.ajax({
-			    url: '/start/modal_new',
-			    type: 'POST',
-			    data:{news_id:'news_id', csrfmiddlewaretoken: '{{ csrf_token }}'},
-			    success: function(data) {
-			    	//Find if the element already exist
-			    	if( $('#myModal').length )
-			    	{
-			    		$('#myModal').remove();
-			    	}
-			    	//In the tag <modal> the append the response from Django
-			        $('#modal').append(data);
-			    	//Then display the modal window
-			        $('#myModal').modal('show');
-			    },
-			    failure: function(data) { 
-			        alert('Error de conexión');
-			    },
-			    crossDomain: true
-			}); 
-		}
+		
+		$(document).ready(function(){
+			$('.news-data').on('click',function(){
+				
+				var pk = $(this).data('val');
+				
+				$.ajax({
+				    url: '/articles/modal_new',
+				    type: 'POST',
+				    data:{news_id:pk , csrfmiddlewaretoken: '{{ csrf_token }}'},
+				    success: function(data) {
+				    	//Find if the element already exist
+				    	if( $('#myModal').length )
+				    	{
+				    		$('#myModal').remove();
+				    	}
+				    	//In the tag <modal> the append the response from Django
+				        $('#modal').append(data);
+				    	//Then display the modal window
+				        $('#myModal').modal('show');
+				    },
+				    failure: function(data) { 
+				        alert('Error de conexión');
+				    },
+				    crossDomain: true
+				}); 							
+			});
+		});
+		
 	</script>
 	
 	<nav class="navbar navbar-default">
@@ -48,6 +53,19 @@
 	      <a class="navbar-brand" href="#">Sophia Project</a>
 	    </div>
 	    <ul class="nav navbar-nav navbar-right">
+	    	{%if profile_pic %}
+	    		<li>
+	    		<img src="{{profile_pic}}" class="profile-pic img-circle">
+	    	    </li>
+	      	{% else %}
+		    	<li>
+		    		<img src="http://placehold.it/40x40" class="profile-pic img-circle">
+		    	</li>
+		    {% endif %}
+	      	<li>
+	      		<a href="#">{{user}}</a>
+	      	</li>
+
     	  <li>
 		    <p style="padding-right:10px" class = "navbar-btn">
 		  	   <a class = "btn btn-default"> Configuración </a>
@@ -55,7 +73,7 @@
 		  </li>
 		  <li>
 		    <p style ="padding-right:10px" class = "navbar-btn">
-		  	   <a class = "btn btn-default" onclick="FB.login();">Log out</a>
+		  	   <a class = "btn btn-default" href="/logout">Log out</a>
 		    </p>
 		  </li>
 	    </ul>
@@ -117,8 +135,8 @@
 				</div>
 				<div class="col-md-9">
 					<span style="cursor:pointer">
-					    <h3 class="news-data" onclick="load_modal();">{{ d.title }}</h3>
-					</span>
+					    <h3 class="news-data" data-val="{{d.pk}}" ">{{ d.title }}</h3>
+					</span>	
                     <p  class="news-data" > {{ d.content }} </p>
                 </div>
 			</div>

@@ -38,8 +38,33 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'explora',
+     # Add the python social auth
+    'social.apps.django_app.default',
 ]
+
+    #Adding facebook and django default backends
+AUTHENTICATION_BACKENDS = (
+    # Facebook
+    'social.backends.facebook.FacebookOAuth2',
+    # Django
+    'django.contrib.auth.backends.ModelBackend',
+    )
+
+SOCIAL_AUTH_FACEBOOK_KEY = '1746978768908293'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'ecdd8d3f68f361ff2f4736c0c7da4eb2'
+#We ask facebook to give us the email of the user
+FACEBOOK_EXTENDED_PERMISSIONS = ['email']
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/"
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id,name,email', #here we can add more params if we want to save them from the user
+}
+
+#Save social auth users as Django default users
+#SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
+#SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -65,6 +90,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                 # Python Social Auth Context Processors
+                 'social.apps.django_app.context_processors.backends',
+                 'social.apps.django_app.context_processors.login_redirect',
             ],
         },
     },
