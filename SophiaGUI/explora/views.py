@@ -35,7 +35,7 @@ def modal_new(request):
             
             api_url = u'http://api.sophia-project.info/articles/{0}/'.format(news_pk) 
             r = requests.get(api_url, auth=(api_user, api_password))
-            a = json.loads(r.text.encode('ascii','ignore'))
+            a = json.loads(r.text.encode('utf8'))
             #Here come the data
             title = a['title']
             date = a['date']
@@ -43,9 +43,7 @@ def modal_new(request):
             url = a['url']
             content = a['content']
             imageLink = a['imageLink']
-            
-            
-
+                    
             return render(request,'news_modal.html',{'title':title,
                                                      'date':date,
                                                      'host':host,
@@ -82,7 +80,7 @@ def articles(request, num="1"):
     
     api_url = u'http://api.sophia-project.info/articles/?page={0}'.format(num)   
     r = requests.get(api_url, auth=(api_user, api_password))
-    a = json.loads(r.text.encode('ascii','ignore')) 
+    a = json.loads(r.text.encode('utf8'))
     #the data to return to the template, later this should be a http response from the API
     data = a['results']
     
@@ -91,6 +89,7 @@ def articles(request, num="1"):
     if my_user:
         #if is someone from facebook we get the profile image  
         url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
+        print url
         return render(request,'articles.html',{'data': data
                                                ,'user':request.user.get_full_name()
                                                ,'profile_pic':url

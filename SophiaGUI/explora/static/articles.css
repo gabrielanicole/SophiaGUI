@@ -2,6 +2,8 @@
 	margin-top:10px;
 	 }
 .news-deploy{
+	border: 1px solid #cccccc;
+	border-radius: 10px;
 	background-color:WhiteSmoke;
 	}
 .news-data{
@@ -14,12 +16,27 @@
 }	
 
 .news-metadata{
+	border: 1px solid #cccccc;
+	border-radius: 10px;
 	background-color:WhiteSmoke;
 	margin:5px;
 	padding:5px;
 }
 
+.news-content{
+	border: 1px solid #cccccc;
+	border-radius: 10px;
+	background-color:WhiteSmoke;
+	margin:5px;
+	padding:5px;
+}
 .news-image{
 	margin:5px;
 	padding:5px;
+}
+
+.profile-pic{
+	margin-top:4px;
+	width:80%; /* you can use % */
+    height: auto;
 }

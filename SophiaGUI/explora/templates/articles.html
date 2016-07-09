@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/static/start.css" type="text/css">
-  <link rel="stylesheet" href="/static/news_modal.css" type="text/css">
+  <link rel="stylesheet" href="/static/articles.css" type="text/css">
+  <link rel="stylesheet" href="/static/explora/navbar.css" type="text/css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -47,7 +47,7 @@
 		
 	</script>
 	
-	<nav class="navbar navbar-default">
+	<nav id="custom-bootstrap-menu" class="navbar navbar-default">
 	  <div class="container-fluid">
 	    <div class="navbar-header">
 	      <a class="navbar-brand" href="#">Sophia Project</a>
@@ -59,7 +59,7 @@
 	    	    </li>
 	      	{% else %}
 		    	<li>
-		    		<img src="http://placehold.it/40x40" class="profile-pic img-circle">
+		    		<img src="http://placehold.it/50x50" class="profile-pic img-circle">
 		    	</li>
 		    {% endif %}
 	      	<li>
@@ -68,12 +68,12 @@
 
     	  <li>
 		    <p style="padding-right:10px" class = "navbar-btn">
-		  	   <a class = "btn btn-default"> Configuración </a>
+		       <a href="#" class="btn btn-default" role="button"><span class="glyphicon glyphicon-cog"></span> Configuración</a>
 		    </p>
 		  </li>
 		  <li>
 		    <p style ="padding-right:10px" class = "navbar-btn">
-		  	   <a class = "btn btn-default" href="/logout">Log out</a>
+		    	<a href="/logout" class="btn btn-default" role="button"><span class="glyphicon glyphicon-off"></span> Log out</a>
 		    </p>
 		  </li>
 	    </ul>
@@ -82,10 +82,11 @@
 
 	<div class="container-fluid">
 		<div class="col-md-3">
-			<ul class="nav nav-pills nav-stacked navbar-custom">
-			  <li role="presentation" class="active"><a href="#">App1</a></li>
-			  <li role="presentation"><a href="#">App2</a></li>
-			  <li role="presentation"><a href="#">App3</a></li>
+			<ul class="nav nav-pills nav-stacked">
+			  <li role="presentation"><a href="#">Aplicación 1</a></li>
+			  <li role="presentation"><a href="#">Aplicación 2</a></li>
+			  <li role="presentation"><a href="#">Aplicación 3</a></li>
+			  <li role="presentation"><a href="#">Aplicación 4</a></li>
 			</ul>
 		
 		</div>
@@ -139,8 +140,6 @@
 			  
 			</ul>
 		</div>
-
-	
 				
 				 {% for d in data %}
 				<div class="row top-buffer news-deploy">
