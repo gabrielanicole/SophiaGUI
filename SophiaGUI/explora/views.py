@@ -89,7 +89,6 @@ def articles(request, num="1"):
     if my_user:
         #if is someone from facebook we get the profile image  
         url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
-        print url
         return render(request,'articles.html',{'data': data
                                                ,'user':request.user.get_full_name()
                                                ,'profile_pic':url
