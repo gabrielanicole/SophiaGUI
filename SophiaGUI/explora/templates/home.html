@@ -5,9 +5,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/static/explora.css">
-  <link rel="stylesheet" href="/static/navbar.css" type="text/css">
+  <link rel="stylesheet" href="/static/explora/explora.css" type="text/css">
+  <link rel="stylesheet" href="/static/explora/navbar.css" type="text/css">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
@@ -20,9 +21,9 @@
       <a class="navbar-brand" href="#">Sophia Project</a>
     </div>
     <ul class="nav navbar-nav navbar-left">
-      <li><a href="#what-is">¿Qué es?</a></li>
-      <li><a href="#objetives">Objetivos</a></li>
-      <li><a href="#who-we-are">Acerca</a></li>
+      <li><a href="#para-que">¿Para qué?</a></li>
+      <li><a href="#para-quien">¿Para quién?</a></li>
+      <li><a href="#como-funciona">¿Cómo funciona?</a></li>
      </ul>
      <ul class="nav navbar-nav navbar-right">
       <li>
@@ -34,6 +35,12 @@
 		  <button type="submit" class="btn btn-default">Login</button>
 		</form>
      </li>
+     
+     <li>
+    	<a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" class="btn btn-default btn-block" role="button">
+			  <span style="padding-right:10px" class="fa fa-facebook"></span>Login con Facebook</a>
+     </li>
+    
     </ul>
   </div>
 </nav>
@@ -42,46 +49,81 @@
 	
 </div>
 
+<!-- 
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
 			<img class="img-responsive" src=https://placehold.it/1200x400>
 		</div>
 	</div>
-</div>
+</div>   -->
 
 
 <div class="container-fluid">
 
 	<div class="row">
 		<div class="col-md-6">
-			<h2 id="what-is">¿Qué es Sophia?</h2>
-			<p>Hoja ay oh tipo gris fiar un. Montaraces pentagrama expresivas vez ahi mia rio. Si sois digo te paga baja rito. Separados no contrario ve no perdieron punzantes encontrar escritura. Vagaban colonia lejanos de yo un id acababa. Ello sin rey mas alta odio daba ahi. Comedido dia esbeltos chi positivo pintadas consulta entregar mal. Pagarselos ido han ton pedantesca silencioso adivinarle. Lacrimoso castrillo ofenderle aplaudian le ti de periodico.</p>
+			<h2 id="para-que">¿Para qué?</h2>
+			<p align="justify">Sophia es un observatorio independiente de medios de información en Chile. 
+			 Defiende una visión de la prensa basada sobre el <strong>pluralismo</strong>, la <strong>objetividad</strong> y la <strong>independencia</strong> de la prensa como pilares de la libertad de expresión 
+			 y de la construcción de una sociedad humana democrática.</p>
+			 <p align="justify">El observatorio Sophia tiene como objetivo de medir a lo largo del tiempo la evolución de las prácticas mediáticas para evaluar el estado y el progreso de una sociedad en el camino a la democracia. 
+			 En este objetivo, el observatorio pone a disposición de la comunidad dos herramientas:</p>
+			 <ul>
+			 	<li>
+			 		<p align=justify><strong>Sophia  Indicadores:</strong> un informe actualizado regularmente presentando un conjunto de  indicadores 
+			 		visuales y estadísticos para evaluar el pluralismo, la objetividad y la independencia de la prensa.</p>
+			 	</li>
+			 	<li>
+			 		<p align=justify><strong>Sophia Explora:</strong> una plataforma web de exploración de datos permitiendo de crear sus 
+			 		propias observaciones, indicadores y análisis sobre las practicas de medios de información.</p>
+			 	</li>
+			 </ul>
 		</div>
 		<div class="col-md-6">
-			<img class="img-responsive" alt="Image1" src="https://placehold.it/400x200">
+			<img class="img-responsive" alt="Image1" src="https://placehold.it/600x350">
 		</div>
 	</div>
 	
 	<div class="row">
 		<div class="col-md-6">
-			<img class="img-responsive" alt="Image1" src="https://placehold.it/400x200">
+			<img class="img-responsive" alt="Image1" src="https://placehold.it/600x350">
 		</div>
 		<div class="col-md-6">
-			<h2 id="objetives">Objetivos</h2>
-			<p>Hoja ay oh tipo gris fiar un. Montaraces pentagrama expresivas vez ahi mia rio. Si sois digo te paga baja rito. Separados no contrario ve no perdieron punzantes encontrar escritura. Vagaban colonia lejanos de yo un id acababa. Ello sin rey mas alta odio daba ahi. Comedido dia esbeltos chi positivo pintadas consulta entregar mal. Pagarselos ido han ton pedantesca silencioso adivinarle. Lacrimoso castrillo ofenderle aplaudian le ti de periodico.</p>
+			<h2 id="para-quien">¿Para quién?</h2>
+			<p align=justify>Sophia es un observatorio ciudadano, libre y participativo. Todo ciudadano interesado por la construcción de una sociedad democrática
+			 puede participar al observatorio, desarrollar sus propias análisis y difundirlas.</p>
+			 <p align=justify>En particular, la plataforma web de exploración Sophia Explora se dirige a los estudiantes en ciencias sociales y ciencias de datos, a los investigadores y analistas, a los profesionales de medios y a todos los ciudadanos que deseen desarrollar su 
+			 mirada crítica sobre los desafíos vinculados con el pluralismo, la objetividad y la independencia de la prensa.</p>
+			 <p align=justify>Sophia Explora no pretende reemplazar la inteligencia humana, es una herramienta informática que permite la recopilación, los preprocesamientos y la organización
+			  de gran volúmenes de datos para facilitar el análisis de datos complejos y interconectados.</p>
 		</div>
 	</div>
 	
 	<div class="row">
-		<div id="who-we-are" class="col-md-6">
-			<h2>Quienes somos</h2>
-			<p> De tristeza le es oh rociaban encendia. Quiso uno verle tio ser sobre tiple. Escena el oh el cuenta cruzar. Cogio la negra ukase mucho llamo bajos si. Gozaba era dia una delito decida. Comenzaba recordaba se gentilica despierta izquierda sensibles es </p>		
+		<div id="como-funciona" class="col-md-6">
+			<h2>¿Cómo funciona?</h2>
+			<p align=justify>La plataforma Sophia Explora recopila, preprocesa y organiza visualmente los datos publicados por los medios en los redes sociales (Twitter, Facebook, Youtube, etc.). 
+			Analiza la audiencia y la influencia de varios artefactos (medio, canales de publicación, articulos, etc.) cruzando esta información con otros datos extraidos por el anaĺisis del contenido textual de los articulos (la categoria tematica, el evento, la cobiertura geografica, etc.). </p>
 		</div>
 		<div class="col-md-6">
-			<img class="img-responsive" alt="Image1" src="https://placehold.it/400x200">
+			<img class="img-responsive" alt="Image1" src="https://placehold.it/600x200">
 		</div>
 	</div>
+	
+	
+	<div class="row">
+		<div class="col-md-6">
+			<img class="img-responsive" alt="Image1" src="https://placehold.it/600x200">
+		</div>
+		<div class="col-md-6">
+			<h2 id="quienes-somos">¿Quienes somos?</h2>
+			<p align=justify>El observatorio Sophia es llevado por una comunidad de estudiantes, docentes y investigadores en Ciencias Sociales, Ciencia de la Información y Informática de la Universidad Austral de Chile (UACh).</p>
+		</div>
+	</div>
+	
+	
+	
 </div>
 
 
