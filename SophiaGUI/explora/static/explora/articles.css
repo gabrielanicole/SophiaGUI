@@ -40,3 +40,7 @@
 	width:80%; /* you can use % */
     height: auto;
 }
+
+body{
+	font-family: 'Roboto', sans-serif;
+}

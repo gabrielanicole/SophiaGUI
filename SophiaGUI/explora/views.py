@@ -55,7 +55,10 @@ def modal_new(request):
 
 
 def user_not_logged(request):
-    return HttpResponse("User not logged in")
+    if request.user.is_authenticated():
+        return redirect('articles')
+    else:
+        return render(request,'content_not_available.html')
 
 def index(request):
        
