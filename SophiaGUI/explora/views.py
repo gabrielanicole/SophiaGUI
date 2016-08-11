@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
 from django.shortcuts import redirect
@@ -10,7 +11,9 @@ from telnetlib import theNULL
 from pprint import pprint
 
 
-
+##@brief Function that login the user to Sophia GUI.
+##@param request Web request with login data (username, password)
+##@return HttpResponse Redirect to the "Index" if Login fails or "Articles" if success
 def login(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -26,7 +29,6 @@ def login(request):
 
 def modal_new(request):
         if request.method == 'POST':
-            #here we should have the id of the new.
             news_pk = request.POST['news_id']
 
             file = json.loads(open("explora/static/user.json").read())
@@ -53,7 +55,9 @@ def modal_new(request):
         else:
             return HttpResponse("Internal Error")
 
-
+##@brief Function that redirect if a user is not logged into Sophia GUI
+##@param request
+##return HttpResponse Redirect to "articles" if success, or "login_required" if fails
 def user_not_logged(request):
     if request.user.is_authenticated():
         return redirect('articles')
@@ -68,7 +72,11 @@ def index(request):
         return render(request,'home.html')
 
 
-#here we should redirect
+##@brief Function that  render the "articles" page.
+##@param request Web request
+##@param num Value for the pagination
+##@return HttpResponse with the articles page.
+##@warning Login is required.
 @login_required(login_url='/login_required')
 def articles(request, num="1"):
 
@@ -84,13 +92,10 @@ def articles(request, num="1"):
     api_url = u'http://api.sophia-project.info/articles/?page={0}'.format(num)
     r = requests.get(api_url, auth=(api_user, api_password))
     a = json.loads(r.text.encode('utf8'))
-    #the data to return to the template, later this should be a http response from the API
     data = a['results']
 
-    #Search if is a social user
     my_user = request.user.social_auth.filter(provider='facebook').first()
     if my_user:
-        #if is someone from facebook we get the profile image
         url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
         return render(request,'articles.html',{'data': data
                                                ,'user':request.user.get_full_name()
@@ -102,9 +107,10 @@ def articles(request, num="1"):
                                                ,'user':request.user.get_full_name()
                                                ,'num_pages':num_pages
                                                })
-
+##@brief Function that log out the user from Sophia
+##@param request
+##@return HttpResponse with the main page
 @login_required()
 def logout(request):
-    #Log out the user from facebook or django
     auth_logout(request)
     return redirect('index')
