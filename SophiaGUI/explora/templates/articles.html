@@ -7,22 +7,22 @@
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" href="/static/explora/articles.css" type="text/css">
   <link rel="stylesheet" href="/static/explora/navbar.css" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
 
- 
+
 	<script type="text/javascript">
 		//Script called to open the modal window
-		
+
 		$(document).ready(function(){
 			$('.news-data').on('click',function(){
-				
+
 				var pk = $(this).data('val');
-				
+
 				$.ajax({
 				    url: '/articles/modal_new',
 				    type: 'POST',
@@ -38,16 +38,16 @@
 				    	//Then display the modal window
 				        $('#myModal').modal('show');
 				    },
-				    failure: function(data) { 
+				    failure: function(data) {
 				        alert('Error de conexión');
 				    },
 				    crossDomain: true
-				}); 							
+				});
 			});
 		});
-		
+
 	</script>
-	
+
 	<nav id="custom-bootstrap-menu" class="navbar navbar-default">
 	  <div class="container-fluid">
 	    <div class="navbar-header">
@@ -84,25 +84,24 @@
 	<div class="container-fluid">
 		<div class="col-md-3">
 			<ul class="nav nav-pills nav-stacked">
-			  <li role="presentation"><a href="#">Aplicación 1</a></li>
-			  <li role="presentation"><a href="#">Aplicación 2</a></li>
-			  <li role="presentation"><a href="#">Aplicación 3</a></li>
-			  <li role="presentation"><a href="#">Aplicación 4</a></li>
+			  <li role="presentation"><a href="#">Noticias</a></li>
+			  <li role="presentation"><a href="#">Casos Noticiosos</a></li>
+
 			</ul>
-		
+
 		</div>
-		
+
 		<div class="col-md-9">
-		
-		
-			
+
+
+
 			<div class=row>
-			
+
 				<form class="navbar-form navbar-left" role="search">
 				    <div class="form-group">
-				        <input type="text" class="form-control" name="terminos" placeholder="Terminos">		        
+				        <input type="text" class="form-control" name="terminos" placeholder="Terminos">
 				    </div>
-		
+
 				    <div class="form-group">
 				        <div class="selectContainer">
 				            <select class="form-control" name="medio">
@@ -114,7 +113,7 @@
 				            </select>
 				        </div>
 				    </div>
-				    
+
 				    <div class="form-group">
 				        <div class="selectContainer">
 				            <select class="form-control" name="categoria">
@@ -126,10 +125,10 @@
 				            </select>
 				        </div>
 				    </div>
-					<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>  Buscar</button>	
+					<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>  Buscar</button>
 					<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>  Busqueda Avanzada</button>
 	  			</form>
-	  				  					
+
 		</div>
 		<div class="row">
 				<ul class="pagination">
@@ -138,26 +137,28 @@
 			   	 <li><a href="/articles/{{i}}/">{{i}}</a></li>
 			   {% endfor %}
 			    <li><a href="#">&raquo;</a></li>
-			  
+
 			</ul>
+
 		</div>
-				
-				 {% for d in data %}
-				<div class="row top-buffer news-deploy">
-					<div class ="col-md-3">
-						<img class="img-responsive" alt="image-not-found" src="{{d.imageLink}}">
-					</div>
-					<div class="col-md-9">
-						<span style="cursor:pointer">
-						    <h3 class="news-data" data-val="{{d.pk}}" ">{{ d.title }}</h3>
-						</span>	
-	                    <p  class="news-data" > {{ d.content|truncatechars:500 }} </p>
-	                </div>
-				</div>
-				 {% endfor %}
+
+    <div class ="row">
+        {%for d in data%}
+        <div class="col-md-3 news-deploy">
+        <span style="cursor:pointer">
+          <img class="img-responsive" alt="image-not-found" src="{{d.imageLink}}">
+          <h4 class="news-data" data-val="{{d.pk}}"> {{d.title}} </h4>
+        </span>
+        </div>
+        {% if forloop.counter|divisibleby:"4" and not forloop.last %}
+            </div><div class="row">
+        {% endif %}
+        {% endfor %}
 			</div>
-	 </div>
-	
+    </div>
+
+   </div>
+
 	<!-- Here we put the rendered modal window code via AJAX-->
 	<div id="modal"> </div>
 
