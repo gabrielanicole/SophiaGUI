@@ -3,7 +3,7 @@
 	 }
 .news-deploy{
 	border: 1px solid #cccccc;
-	border-radius: 10px;
+	border-radius: 5px;
 	background-color:WhiteSmoke;
 	}
 .news-data{
@@ -41,10 +41,14 @@
   height: auto;
 }
 
+
 body{
 	font-family: 'Roboto', sans-serif;
 }
 
 .custom-modal-dialog{
    width: 1250px;
+}
+.category{
+	background-color:LightGreen;
 }

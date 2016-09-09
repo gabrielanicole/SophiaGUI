@@ -1,3 +1,26 @@
+
+<script>
+  function load_items()
+  {
+  $(".metadata").fadeOut(0);
+  $("#news-case-button").fadeOut(0);
+
+  $.ajax({
+      url: '/articles/user_news_case',
+      type: 'GET',
+      data:{csrfmiddlewaretoken: '{{ csrf_token }}'},
+      success: function(data) {
+        $(".news-case").append(data);
+      },
+      failure: function(data) {
+          alert('Error de conexión');
+      },
+      crossDomain: true
+  });
+
+}
+</script>
+
 <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog modal-lg custom-modal-dialog">
       <!-- Modal content-->
@@ -11,57 +34,60 @@
         <div class="container-fluid">
 
           <div class="row">
-            <div class="col-md-2">
 
-              <div class="row">
+            <div class="col-md-2 news-case">
+
+              <div  class="row metadata">
                 <div class="news-metadata">
                   <p>Fuente: {{host}}</p>
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row metadata">
                 <div class="news-metadata">
                   <p>Tema: {{host}}</p>
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row metadata">
                 <div class="news-metadata">
                   <p>Fecha: {{date}}</p>
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row metadata">
                 <div class="news-metadata">
                   <p>Categoria: Categoria </p>
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row metadata">
                 <div class="news-metadata">
                   <p>Lugar: Ubicación</p>
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row metadata">
                 <div class="news-metadata">
                 <p>Enlace: <a href="{{url}}">{{url}}</a> </p>
                 </div>
               </div>
 
               <div class="row">
-                  <button style="margin:5px;width:95%;" type="button" class="btn btn-default">Caso Noticioso</button>
+                  <button id="news-case-button" style="margin:5px;width:95%;" type="button" class="btn btn-default" onclick="load_items()">Caso Noticioso</button>
               </div>
-
             </div>
+
             <div class="col-md-10">
               <div class="row">
                 <div class="col-md-12">
-                     <iframe src="{{url}}" height="500" width="1000"></iframe>
+                     <iframe src="{{url}}" height="500" width="1000" frameBorder="0"></iframe>
                 </div>
               </div>
             </div>
+
           </div>
+
         	</div>
 
         <div class="modal-footer">

@@ -114,3 +114,16 @@ def articles(request, num="1"):
 def logout(request):
     auth_logout(request)
     return redirect('index')
+
+@login_required()
+def user_news_case(request):
+    if request.method == 'GET':
+        #Here we should get the user news cases
+        cases = []
+        cases.append("Caso noticioso 1")
+        cases.append("Caso noticioso 2")
+        cases.append("Caso noticioso 3")
+        cases.append("Caso noticioso 4")
+        return render(request,'user_news_case.html',{'cases':cases })
+    else:
+        return HttpResponse("Internal Error")

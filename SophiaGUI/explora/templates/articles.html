@@ -11,6 +11,8 @@
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+  <link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
 </head>
 <body>
 
@@ -33,7 +35,7 @@
 				    	{
 				    		$('#myModal').remove();
 				    	}
-				    	//In the tag <modal> the append the response from Django
+				    	//In the tag <modal> then append the response from Django
 				        $('#modal').append(data);
 				    	//Then display the modal window
 				        $('#myModal').modal('show');
@@ -142,12 +144,26 @@
 
 		</div>
 
+    <!--
+    <div class="row">
+      <div id='timeline-embed' style="width: 100%; height: 600px"></div>
+    </div>
+
+    <script type="text/javascript">
+      timeline = new TL.Timeline('timeline-embed','static/data.json');
+    </script>
+
+    //-->
+
     <div class ="row">
         {%for d in data%}
         <div class="col-md-3 news-deploy">
         <span style="cursor:pointer">
+          <h5 class="category"> Categoria </h5>
           <img class="img-responsive" alt="image-not-found" src="{{d.imageLink}}">
           <h4 class="news-data" data-val="{{d.pk}}"> {{d.title}} </h4>
+          <h5> Fuente: {{d.host}} </h5>
+          <h5> Fecha: {{d.date}} </h5>
         </span>
         </div>
         {% if forloop.counter|divisibleby:"4" and not forloop.last %}

@@ -1,0 +1,56 @@
+<script>
+  function restore_metadata()
+  {
+      $(".news-cases-form").remove();
+      $(".metadata").fadeIn();
+      $("#news-case-button").fadeIn();
+  }
+  </script>
+
+<div class="news-cases-form">
+
+  <div class="row">
+    <div class="form-group">
+        <div class="selectContainer">
+            <select class="form-control" name="categoria">
+              <option value="null"> Cualquier categoria</option>
+                <option value="c1">Categoria 1</option>
+                <option value="c2">Categoria 2</option>
+                <option value="c3">Categoria 3</option>
+                <option value="c4">Categoria 4</option>
+            </select>
+        </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Buscar Casos...">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Buscar</button>
+      </span>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <ul class="list-group">
+      {%for case in cases %}
+      <li class="list-group-item"> {{case}}
+        <button type="button" class="btn btn-default">
+          <span class="glyphicon glyphicon-plus"></span>
+        </button>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="row">
+      <button style="margin:5px;width:95%;" type="button" class="btn btn-default" >Nuevo Caso</button>
+  </div>
+
+  <div class="row">
+      <button style="margin:5px;width:95%;" type="button" class="btn btn-default" onclick="restore_metadata()" >Volver</button>
+  </div>
+
+</div>
