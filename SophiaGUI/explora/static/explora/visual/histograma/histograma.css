@@ -1,0 +1,51 @@
+.chart{
+  stroke: #000;
+  font-family: sans-serif;
+  font-size: 10px;
+  stroke-width: 0.5px;
+
+}
+  x.axis line,
+  x.axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+  }
+  y.axis line,
+  y.axis path {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+  .brush {
+  fill: lightgray;
+  fill-opacity: .75;
+  shape-rendering: crispEdges;
+}
+.area {
+  fill: #078770;
+  clip-path: url(#clip);
+}
+
+#tip {
+    position: absolute;
+    width: 200px;
+    height: auto;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 1px;
+    -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    -mox-box-shadow: 4px 4px 4px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 4px 4px 10px rbga(0, 0, 0, 0.4) pointer-events: none;
+}
+#tip.hidden {
+    opacity: 0;
+}
+#tip p {
+    margin: 0;
+    font-family: sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+}

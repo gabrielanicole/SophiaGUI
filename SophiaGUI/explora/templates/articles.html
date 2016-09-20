@@ -13,9 +13,25 @@
   <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
   <link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+
+  <!-- histograma -->
+  <link rel="stylesheet" type="text/css" href="/static/explora/visual/histograma/histograma.css">
+  <script type="text/javascript" src="/static/explora/visual/histograma/d3.v3.min.js"></script>
+  <script type="text/javascript" src="/static/explora/visual/histograma/histograma.js"></script>
+
 </head>
 <body>
 
+<div class="row">
+  <div id="tip" class="hidden">
+      <p><strong style="color:red">Cantidad</strong>
+      </p>
+      <p style="color:white"><span id="value">100</span></p>
+      <p><strong style="color:red">Fecha</strong>
+      </p>
+      <p style="color:white"><span id="date">0</span></p>
+  </div>
+</div>
 
 	<script type="text/javascript">
 		//Script called to open the modal window
@@ -49,6 +65,8 @@
 		});
 
 	</script>
+
+
 
 	<nav id="custom-bootstrap-menu" class="navbar navbar-default">
 	  <div class="container-fluid">
@@ -84,21 +102,16 @@
 	</nav>
 
 	<div class="container-fluid">
-		<div class="col-md-3">
+		<div class="col-md-2">
 			<ul class="nav nav-pills nav-stacked">
 			  <li role="presentation"><a href="#">Noticias</a></li>
 			  <li role="presentation"><a href="#">Casos Noticiosos</a></li>
 
 			</ul>
-
 		</div>
 
-		<div class="col-md-9">
-
-
-
+		<div class="col-md-10">
 			<div class=row>
-
 				<form class="navbar-form navbar-left" role="search">
 				    <div class="form-group">
 				        <input type="text" class="form-control" name="terminos" placeholder="Terminos">
@@ -130,8 +143,9 @@
 					<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>  Buscar</button>
 					<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span>  Busqueda Avanzada</button>
 	  			</form>
-
 		</div>
+
+
 		<div class="row">
 				<ul class="pagination">
 				<li><a href="#">&laquo;</a></li>
@@ -141,9 +155,18 @@
 			    <li><a href="#">&raquo;</a></li>
 
 			</ul>
-
 		</div>
 
+    <div class = "row">
+      <div id="histograma" style="width: 100%">
+      </div>
+    </div>
+
+
+    <script>
+      var histogram = generate_histogram(width=1050,
+                                     height=300);
+  	</script>
     <!--
     <div class="row">
       <div id='timeline-embed' style="width: 100%; height: 600px"></div>
