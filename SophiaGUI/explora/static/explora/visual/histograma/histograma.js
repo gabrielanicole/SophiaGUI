@@ -181,10 +181,12 @@ function generate_histogram(width, height){
                   .attr("y", function(d) { return y(d.value); })
                   .attr("height", function(d) { return h - y(d.value); })
                   .on("mouseover",function(d){
+                   var coord = [0,0];
+                   cord = d3.mouse(this);
                    d3.select(this).style("fill","#66cdaa");
                    d3.select("#tip")
-                        .style("left", d3.event.pageX + "px")
-                        .style("top", d3.event.pageY + "px")
+                        .style("left", cord[0]+ "px")
+                        .style("top", cord[1]+ "px")
                         .style("opacity", 1);
                     d3.select("#value").text(d.value);
                     d3.select("#tip").select("#date").text(d.date);
@@ -194,7 +196,7 @@ function generate_histogram(width, height){
                      d3.select("#tip")
                      .style("left", 0 + "px")
                      .style("top", 0 + "px")
-                    .style("opacity", 0);
+                     .style("opacity", 0);
                     })
                   .style("fill","#078770");
 

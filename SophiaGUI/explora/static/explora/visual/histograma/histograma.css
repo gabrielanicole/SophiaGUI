@@ -33,14 +33,14 @@
     height: auto;
     padding: 10px;
     background: rgba(0, 0, 0, 0.8);
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
     border-radius: 1px;
     -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
     -mox-box-shadow: 4px 4px 4px 10px rgba(0, 0, 0, 0.4);
     box-shadow: 4px 4px 10px rbga(0, 0, 0, 0.4) pointer-events: none;
 }
-#tip.hidden {
+#tip.hid {
     opacity: 0;
 }
 #tip p {
