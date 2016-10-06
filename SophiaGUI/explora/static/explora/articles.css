@@ -1,18 +1,26 @@
 .top-buffer {
 	margin-top:10px;
 	 }
+
 .news-deploy{
 	border: 1px solid #cccccc;
-	border-radius: 5px;
+	border-radius: 0px;
 	background-color:WhiteSmoke;
+	height: 380px;
 	}
+
 .news-data{
 	padding-left:10px;
 	}
+
 .img-responsive {
   display: block;
   height: auto;
-  max-width: 100%;
+	max-width: 95%;
+  max-height: 100%;
+}
+.news-image{
+	height:150px;
 }
 
 .news-metadata{
@@ -51,4 +59,9 @@ body{
 }
 .category{
 	background-color:LightGreen;
+}
+
+.pagination li a {
+    background: #078770;
+    color: white;
 }

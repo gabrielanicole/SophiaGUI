@@ -1,11 +1,11 @@
-function generate_histogram(width, height){
+function generate_histogram(width, height, data_json){
 
 
   var parseDate = d3.time.format("%Y-%m-%d").parse,
-   formatDate = d3.time.format("%Y");
+      formatDate = d3.time.format("%Y");
 
-  var margin = {top:40, right:40, bottom:40, left: 100};
-  var margin2 = {top:40, right:40, bottom:20, left:100};
+  var margin = {top:20, right:40, bottom:50, left: 100};
+  var margin2 = {top:20, right:40, bottom:50, left:100};
 
   var w = width - margin.left - margin.right;
   var h = height - margin.top - margin.bottom;
@@ -65,6 +65,7 @@ function generate_histogram(width, height){
 
     var yAxis2 = d3.svg.axis()
                     .scale(y2)
+                    .ticks(6)
                     .tickSize(8, 1)
                     .orient("left")
 
@@ -98,49 +99,35 @@ function generate_histogram(width, height){
              .style("text-anchor", "middle")
              .text("Cantidad");
 
-    d3.csv("/static/explora/visual/histograma/readme-flights.csv", function(error, data) {
 
+  //  d3.json(data_json, function(error, data) {
+    var brush = d3.svg.brush()
+                     .x(x2)
+                     .on("brush",brushed);
 
-      var brush = d3.svg.brush()
-                        .x(x2)
-                        .on("brush",brushed);
-
-      minichart.append("g")
-                       .attr("class","brush")
-                       .call(brush)
-                       .selectAll('rect')
-                       .attr("height",h2);
-
+      data = data_json;
 
       data.forEach(function(d) {
-            d.date = parseDate(d.date);
-            d.value = +d.value;
+            d.key_as_string = d.key_as_string.substring(0, 10);
+            d.key_as_string = parseDate(d.key_as_string);
+            d.doc_count = +d.doc_count;
         });
 
-      x.domain([d3.min(data, function(d){ return d.date;}),
-                d3.max(data, function(d){ return d.date;})]);
+      x.domain([d3.min(data, function(d){ return d.key_as_string;}),
+                d3.max(data, function(d){ return d.key_as_string;})]);
 
-      y.domain([0, d3.max(data, function(d){ return d.value;})]);
+      y.domain([0, d3.max(data, function(d){ return d.doc_count;})]);
 
-      x2.domain([d3.min(data, function(d){ return d.date;}),
-                 d3.max(data, function(d){ return d.date;})]);
-      y2.domain([0, d3.max(data, function(d){ return d.value;})]);
+
+      x2_min = d3.min(data, function(d){ return d.key_as_string;});
+      x2_max = d3.max(data, function(d){ return d.key_as_string;});
+      x2.domain([x2_min,x2_max]);
+
+      y2.domain([0, d3.max(data, function(d){ return d.doc_count;})]);
 
       chart.select("g.y.axis").call(yAxis);
       chart.select("g.x.axis").call(xAxis);
 
-      minichart.select("g.y.axis").call(yAxis2);
-      minichart.select("g.x.axis").call(xAxis2);
-
-      var area = d3.svg.area()
-           .x(function(d) { return x2(d.date); })
-           .y0(h2)
-           .y1(function(d) { return y2(d.value); });
-
-        minichart.append("path")
-          .datum(data)
-          .attr("class", "area")
-          .attr("d", area);
 
       minichart.append("g")
                .attr("class","brush")
@@ -148,10 +135,37 @@ function generate_histogram(width, height){
                .selectAll('rect')
                .attr("height",h2);
 
+      minichart.selectAll(".bar")
+              .data(data)
+              .enter()
+              .append("rect")
+              .filter(function(d){
+                 return d.key_as_string > x2_min && d.key_as_string < x2_max;
+              })
+              .attr("class", "bar")
+              .attr("x", function(d) { return x2(d.key_as_string); })
+              .attr("width", function(d){
+                         //Calculate the diference between days
+                         var dif = Math.abs(x2_min - x2_max);
+                         var days = Math.ceil(dif / (1000 * 3600 * 24));
+                         return w/days;
+                       })
+               .attr("y", function(d) { return y2(d.doc_count); })
+               .attr("height", function(d) { return h2 - y2(d.doc_count); })
+               .style("fill","#078770");
+
+      minichart.select("g.y.axis").call(yAxis2);
+      minichart.select("g.x.axis").call(xAxis2);
+
+        minichart.append("g")
+                 .attr("class","brush")
+                 .call(brush)
+                 .selectAll('rect')
+                 .attr("height",h2);
+
       function brushed(){
 
           var val = brush.extent();
-
           x.domain([val[0],val[1]]);
 
           chart.selectAll(".bar2").remove();
@@ -162,24 +176,24 @@ function generate_histogram(width, height){
                   .enter()
                   .append("rect")
                   .filter(function(d){
-                     return d.date > val[0] && d.date < val[1];
+                     return d.key_as_string > val[0] && d.key_as_string < val[1];
                   })
                   .each(function(d){
-                    if (d.value > ymax){
-                      ymax = d.value;
+                    if (d.doc_count > ymax){
+                      ymax = d.doc_count;
                       y.domain([0,ymax]);
                     }
                   })
                   .attr("class", "bar2")
-                  .attr("x", function(d) { return x(d.date); })
+                  .attr("x", function(d) { return x(d.key_as_string); })
                   .attr("width", function(d){
                     //Calculate the diference between days
                     var dif = Math.abs(val[0] - val[1]);
                     var days = Math.ceil(dif / (1000 * 3600 * 24));
                     return w/days;
                   })
-                  .attr("y", function(d) { return y(d.value); })
-                  .attr("height", function(d) { return h - y(d.value); })
+                  .attr("y", function(d) { return y(d.doc_count); })
+                  .attr("height", function(d) { return h - y(d.doc_count); })
                   .on("mouseover",function(d){
                    var coord = [0,0];
                    cord = d3.mouse(this);
@@ -188,8 +202,8 @@ function generate_histogram(width, height){
                         .style("left", cord[0]+ "px")
                         .style("top", cord[1]+ "px")
                         .style("opacity", 1);
-                    d3.select("#value").text(d.value);
-                    d3.select("#tip").select("#date").text(d.date);
+                    d3.select("#value").text(d.doc_count);
+                    d3.select("#tip").select("#date").text(d.key_as_string);
                   })
                   .on("mouseout",function(d){
                      d3.select(this).style("fill","#078770");
@@ -204,5 +218,5 @@ function generate_histogram(width, height){
           chart.select("g.x.axis").call(xAxis);
           }
 
-  });
+//  });
 }

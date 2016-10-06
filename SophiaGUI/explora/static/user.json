@@ -1,4 +1,5 @@
 {
   "user":"sophia",
-  "password":"kelluwen"
+  "password":"kelluwen",
+  "api_url":"api.sophia-project.info"
 }

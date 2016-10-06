@@ -29,12 +29,12 @@
 		$(document).ready(function(){
 			$('.news-data').on('click',function(){
 
-				var pk = $(this).data('val');
+				var art_id = $(this).data('val');
 
 				$.ajax({
 				    url: '/articles/modal_new',
 				    type: 'POST',
-				    data:{news_id:pk , csrfmiddlewaretoken: '{{ csrf_token }}'},
+				    data:{art_id:art_id , csrfmiddlewaretoken: '{{ csrf_token }}'},
 				    success: function(data) {
 				    	//Find if the element already exist
 				    	if( $('#myModal').length )
@@ -100,7 +100,7 @@
 			</ul>
 		</div>
 
-		<div class="col-md-10">
+		<div id="main-content" class="col-md-10">
 			<div class=row>
 				<form class="navbar-form navbar-left" role="search">
 				    <div class="form-group">
@@ -136,17 +136,6 @@
 		</div>
 
 
-		<div class="row">
-				<ul class="pagination">
-				<li><a href="#">&laquo;</a></li>
-			   {% for i in num_pages %}
-			   	 <li><a href="/articles/{{i}}/">{{i}}</a></li>
-			   {% endfor %}
-			    <li><a href="#">&raquo;</a></li>
-
-			</ul>
-		</div>
-
     <div class = "row">
 
       <div class="hid" id="tip">
@@ -164,9 +153,41 @@
 
 
     <script>
-      var histograma = generate_histogram(width=1050,
-                                     height=300);
+      var w = document.getElementById('main-content').offsetWidth;
+
+      $.ajax({
+      	    url: '/get_data/articles/histogram',
+      	    type: 'POST',
+            data:{startdate:'2015-01-01',
+                  enddate:'2016-01-01',
+                  countby:'day',
+                  csrfmiddlewaretoken: '{{ csrf_token }}'},
+      	    success: function(data) {
+                  var histograma = generate_histogram(width=w,
+                                                 height=300, data_json=data);
+      				    },
+      				    failure: function(data) {
+      				        alert('Error de conexión');
+      				    },
+      				    crossDomain: true
+      				});
+
+
   	</script>
+
+    <div class="row" style="float: none; margin: 0 auto;">
+    <div class="col-md-3"> </div> <!-- Offset-->
+    <div class="col-md-6">
+				<ul class="pagination">
+				<li><a href="#">&laquo;</a></li>
+			   {% for i in num_pages %}
+			   	 <li><a href="/articles/{{i}}/">{{i}}</a></li>
+			   {% endfor %}
+			    <li><a href="#">&raquo;</a></li>
+			</ul>
+    </div>
+    <div class="col-md-3"></div> <!-- Offset-->
+		</div>
     <!--
     <div class="row">
       <div id='timeline-embed' style="width: 100%; height: 600px"></div>
@@ -178,22 +199,29 @@
 
     //-->
 
+<div id="article-list">
     <div class ="row">
         {%for d in data%}
         <div class="col-md-3 news-deploy">
         <span style="cursor:pointer">
           <h5 class="category"> Categoria </h5>
-          <img class="img-responsive" alt="image-not-found" src="{{d.imageLink}}">
-          <h4 class="news-data" data-val="{{d.pk}}"> {{d.title}} </h4>
-          <h5> Fuente: {{d.host}} </h5>
-          <h5> Fecha: {{d.date}} </h5>
+          <h5> Fuente: {{d.art_host}} </h5>
+          <h5> Fecha: {{d.art_date}} </h5>
+          <div class = "row">
+            <div class="col-md-12 news-image">
+                <img class="img-responsive" alt="image-not-found" src="{{d.art_image_link}}">
+            </div>
+          </div>
+          <h4 class="news-data" data-val="{{d.art_id}}"> {{d.art_title}} </h4>
         </span>
         </div>
         {% if forloop.counter|divisibleby:"4" and not forloop.last %}
             </div><div class="row">
         {% endif %}
         {% endfor %}
-			</div>
+</div>
+
+  		</div>
     </div>
 
    </div>

@@ -5,10 +5,12 @@ from django.shortcuts import redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 import requests
 import simplejson as json
 from telnetlib import theNULL
 from pprint import pprint
+
 
 
 ##@brief Function that login the user to Sophia GUI.
@@ -27,24 +29,33 @@ def login(request):
         else:
             return redirect('index')
 
+@login_required()
 def modal_new(request):
         if request.method == 'POST':
-            news_pk = request.POST['news_id']
 
             file = json.loads(open("explora/static/user.json").read())
             api_user = file["user"]
             api_password = file["password"]
+            api_url = file["api_url"]
 
-            api_url = u'http://api.sophia-project.info/articles/{0}/'.format(news_pk)
-            r = requests.get(api_url, auth=(api_user, api_password))
-            a = json.loads(r.text.encode('utf8'))
-            #Here come the data
-            title = a['title']
-            date = a['date']
-            host = a['host']
-            url = a['url']
-            content = a['content']
-            imageLink = a['imageLink']
+            art_id = request.POST['art_id']
+
+            client = requests.post('http://{0}/v2/login/'.format(api_url),
+                 {'username': api_user, 'password': api_password})
+            cookies = dict(sessionid=client.cookies['sessionid'])
+            #api_url = u'http://api.sophia-project.info/articles/{0}/'.format(news_pk)
+            api_url = u'http://{0}/v2/articles/{1}/'.format(api_url,art_id)
+
+            response = requests.get(api_url ,cookies=cookies)
+
+            data = json.loads(response.text.encode('utf8'))
+
+            title = data['_source']['art_title']
+            date = data['_source']['art_date']
+            host = data['_source']['art_name_press_source']
+            url = data['_source']['art_url']
+            content = data['_source']['art_content']
+            imageLink = data['_source']['art_image_link']
 
             return render(request,'news_modal.html',{'title':title,
                                                      'date':date,
@@ -80,19 +91,41 @@ def index(request):
 @login_required(login_url='/login_required')
 def articles(request, num="1"):
 
+    file = json.loads(open("explora/static/user.json").read())
+    api_user = file["user"]
+    api_password = file["password"]
+    api_url = file["api_url"]
+
+    client = requests.post('http://{0}/v2/login/'.format(api_url),
+         {'username': api_user, 'password': api_password})
+
+    cookies = dict(sessionid=client.cookies['sessionid'])
+
+    response = requests.get(u'http://{0}/v2/articles/'.format(api_url), cookies=cookies)
+    a = json.loads(response.text.encode('utf8'))
+
+    #give the format to the data
+    data = a['hits']['hits']
+    results = []
+    for key in data:
+        array_element = {
+                'art_id':key['_id'],
+                'art_title':key['_source']['art_title'],
+                'art_url':key['_source']['art_url'],
+                'art_image_link': key['_source']['art_image_link'],
+                'art_content':key['_source']['art_content'],
+                'art_name_press_source':key['_source']['art_name_press_source'],
+                'art_category':key['_source']['art_category'],
+                'art_date':key['_source']['art_date']
+        }
+        results.append(array_element)
+
     pages = 10
     num_pages = []
     for i in range(1,pages):
         num_pages.append(i)
 
-    file = json.loads(open("explora/static/user.json").read())
-    api_user = file["user"]
-    api_password = file["password"]
-
-    api_url = u'http://api.sophia-project.info/articles/?page={0}'.format(num)
-    r = requests.get(api_url, auth=(api_user, api_password))
-    a = json.loads(r.text.encode('utf8'))
-    data = a['results']
+    data = results
 
     my_user = request.user.social_auth.filter(provider='facebook').first()
     if my_user:
@@ -108,7 +141,7 @@ def articles(request, num="1"):
                                                ,'num_pages':num_pages
                                                })
 ##@brief Function that log out the user from Sophia
-##@param request
+##@param requestfrom django.http import JsonResponse
 ##@return HttpResponse with the main page
 @login_required()
 def logout(request):
@@ -122,8 +155,33 @@ def user_news_case(request):
         cases = []
         cases.append("Caso noticioso 1")
         cases.append("Caso noticioso 2")
-        cases.append("Caso noticioso 3")
-        cases.append("Caso noticioso 4")
         return render(request,'user_news_case.html',{'cases':cases })
     else:
         return HttpResponse("Internal Error")
+
+@login_required(login_url='/login_required')
+def articlesCountBy(request):
+    if request.method == 'POST':
+
+        startdate = request.POST['startdate']
+        enddate = request.POST['enddate']
+        countby = request.POST['countby']
+
+        file = json.loads(open("explora/static/user.json").read())
+        api_user = file["user"]
+        api_password = file["password"]
+        api_url = file["api_url"]
+
+        client = requests.post('http://{0}/v2/login/'.format(api_url),
+             {'username': api_user, 'password': api_password})
+
+        cookies = dict(sessionid=client.cookies['sessionid'])
+
+        api = u'http://{0}/v2/articles/from/{1}/to/{2}/countby/{3}'.format(api_url,startdate,enddate,countby)
+        response = requests.get(api,cookies=cookies)
+
+        data = json.loads(response.text.encode('utf8'))
+
+        data = data['aggregations']['articles_over_time']['buckets']
+        #data = data['articles_over_time']['buckets']
+        return JsonResponse(data,safe=False)
