@@ -158,8 +158,8 @@
       $.ajax({
       	    url: '/get_data/articles/histogram',
       	    type: 'POST',
-            data:{startdate:'2015-01-01',
-                  enddate:'2016-01-01',
+            data:{startdate:'2016-01-01',
+                  enddate:'2016-12-30',
                   countby:'day',
                   csrfmiddlewaretoken: '{{ csrf_token }}'},
       	    success: function(data) {
@@ -204,8 +204,8 @@
         {%for d in data%}
         <div class="col-md-3 news-deploy">
         <span style="cursor:pointer">
-          <h5 class="category"> Categoria </h5>
-          <h5> Fuente: {{d.art_host}} </h5>
+          <h5 class="category"> {{d.art_category}} </h5>
+          <h5> Fuente: {{d.art_name_press_source}} </h5>
           <h5> Fecha: {{d.art_date}} </h5>
           <div class = "row">
             <div class="col-md-12 news-image">
