@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'explora',
      # Add the python social auth
     'social.apps.django_app.default',
@@ -153,3 +153,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
                     os.path.join(BASE_DIR,'static'),
                     )
+
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
