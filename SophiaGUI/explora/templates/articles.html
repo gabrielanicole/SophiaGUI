@@ -158,8 +158,8 @@
       $.ajax({
       	    url: '/get_data/articles/histogram',
       	    type: 'POST',
-            data:{startdate:'2015-01-01',
-                  enddate:'2016-01-01',
+            data:{startdate:'2016-01-01',
+                  enddate:'2017-01-01',
                   countby:'day',
                   csrfmiddlewaretoken: '{{ csrf_token }}'},
       	    success: function(data) {
