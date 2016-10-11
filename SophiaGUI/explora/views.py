@@ -102,21 +102,22 @@ def articles(request, num="1"):
     cookies = dict(sessionid=client.cookies['sessionid'])
 
     response = requests.get(u'http://{0}/v2/articles/'.format(api_url), cookies=cookies)
-    a = json.loads(response.text.encode('utf8'))
+    data_array = json.loads(response.text.encode('utf8'))
 
     #give the format to the data
-    data = a['hits']['hits']
+    data = data_array['hits']['hits']
     results = []
+
     for key in data:
         array_element = {
-                'art_id':key['_id'],
-                'art_title':key['_source']['art_title'],
-                'art_url':key['_source']['art_url'],
-                'art_image_link': key['_source']['art_image_link'],
-                'art_content':key['_source']['art_content'],
-                'art_name_press_source':key['_source']['art_name_press_source'],
-                'art_category':key['_source']['art_category'],
-                'art_date':key['_source']['art_date']
+                    'art_id':key['_id'],
+                    'art_title':key['_source']['art_title'],
+                    'art_url':key['_source']['art_url'],
+                    'art_image_link': key['_source']['art_image_link'],
+                    'art_content':key['_source']['art_content'],
+                    'art_name_press_source':key['_source']['art_name_press_source'],
+                    'art_category':key['_source']['art_category'],
+                    'art_date':key['_source']['art_date']
         }
         results.append(array_element)
 
@@ -159,6 +160,11 @@ def user_news_case(request):
     else:
         return HttpResponse("Internal Error")
 
+
+
+##@brief Function that conect to the API and get articles between two dates and group by date
+##@param request
+##@return JsonResponse with the data
 @login_required(login_url='/login_required')
 def articlesCountBy(request):
     if request.method == 'POST':
@@ -178,10 +184,59 @@ def articlesCountBy(request):
         cookies = dict(sessionid=client.cookies['sessionid'])
 
         api = u'http://{0}/v2/articles/from/{1}/to/{2}/countby/{3}'.format(api_url,startdate,enddate,countby)
+
         response = requests.get(api,cookies=cookies)
 
         data = json.loads(response.text.encode('utf8'))
 
         data = data['aggregations']['articles_over_time']['buckets']
+        #print JsonResponse(data, safe=False)
         #data = data['articles_over_time']['buckets']
         return JsonResponse(data,safe=False)
+
+
+##@brief Function that conect to the API and get articles between two dates
+## called from histogram.js brushed() function.
+##@param request
+##@return JsonResponse with the data
+@login_required(login_url='/login_required')
+def articlesByDates(request):
+    if request.method == 'POST':
+
+        startdate = request.POST['startdate']
+        enddate = request.POST['enddate']
+
+        file = json.loads(open("explora/static/user.json").read())
+        api_user = file["user"]
+        api_password = file["password"]
+        api_url = file["api_url"]
+
+        client = requests.post('http://{0}/v2/login/'.format(api_url),
+             {'username': api_user, 'password': api_password})
+
+        cookies = dict(sessionid=client.cookies['sessionid'])
+
+        api = u'http://{0}/v2/articles/from/{1}/to/{2}/'.format(api_url,startdate,enddate)
+
+        response = requests.get(api,cookies=cookies)
+
+        data_array = json.loads(response.text.encode('utf8'))
+
+        #give the format to the data
+        data = data_array['hits']['hits']
+        results = []
+        for key in data:
+            array_element = {
+                    'art_id':key['_id'],
+                    'art_title':key['_source']['art_title'],
+                    'art_url':key['_source']['art_url'],
+                    'art_image_link': key['_source']['art_image_link'],
+                    'art_content':key['_source']['art_content'],
+                    'art_name_press_source':key['_source']['art_name_press_source'],
+                    'art_category':key['_source']['art_category'],
+                    'art_date':key['_source']['art_date']
+            }
+            results.append(array_element)
+        data = results
+
+        return render(request,'articles_list.html',{'data': data})

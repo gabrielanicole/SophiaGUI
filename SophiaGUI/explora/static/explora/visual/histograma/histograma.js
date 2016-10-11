@@ -100,10 +100,10 @@ function generate_histogram(width, height, data_json){
              .text("Cantidad");
 
 
-  //  d3.json(data_json, function(error, data) {
+
     var brush = d3.svg.brush()
                      .x(x2)
-                     .on("brush",brushed);
+                     .on("brushend",brushed);
 
       data = data_json;
 
@@ -140,7 +140,7 @@ function generate_histogram(width, height, data_json){
               .enter()
               .append("rect")
               .filter(function(d){
-                 return d.key_as_string > x2_min && d.key_as_string < x2_max;
+                 return d.key_as_string >= x2_min && d.key_as_string < x2_max;
               })
               .attr("class", "bar")
               .attr("x", function(d) { return x2(d.key_as_string); })
@@ -157,16 +157,19 @@ function generate_histogram(width, height, data_json){
       minichart.select("g.y.axis").call(yAxis2);
       minichart.select("g.x.axis").call(xAxis2);
 
-        minichart.append("g")
-                 .attr("class","brush")
-                 .call(brush)
-                 .selectAll('rect')
-                 .attr("height",h2);
+      minichart.append("g")
+               .attr("class","brush")
+               .call(brush)
+               .selectAll('rect')
+               .attr("height",h2);
+
+
 
       function brushed(){
 
-          var val = brush.extent();
-          x.domain([val[0],val[1]]);
+          var brush_values = brush.extent();
+
+          x.domain([brush_values[0],brush_values[1]]);
 
           chart.selectAll(".bar2").remove();
 
@@ -176,7 +179,7 @@ function generate_histogram(width, height, data_json){
                   .enter()
                   .append("rect")
                   .filter(function(d){
-                     return d.key_as_string > val[0] && d.key_as_string < val[1];
+                     return d.key_as_string >= brush_values[0] && d.key_as_string < brush_values[1];
                   })
                   .each(function(d){
                     if (d.doc_count > ymax){
@@ -188,19 +191,19 @@ function generate_histogram(width, height, data_json){
                   .attr("x", function(d) { return x(d.key_as_string); })
                   .attr("width", function(d){
                     //Calculate the diference between days
-                    var dif = Math.abs(val[0] - val[1]);
+                    var dif = Math.abs(brush_values[0] - brush_values[1]);
                     var days = Math.ceil(dif / (1000 * 3600 * 24));
                     return w/days;
                   })
                   .attr("y", function(d) { return y(d.doc_count); })
                   .attr("height", function(d) { return h - y(d.doc_count); })
                   .on("mouseover",function(d){
-                   var coord = [0,0];
+
                    cord = d3.mouse(this);
                    d3.select(this).style("fill","#66cdaa");
                    d3.select("#tip")
-                        .style("left", cord[0]+ "px")
-                        .style("top", cord[1]+ "px")
+                        .style("left",cord[0] - 100  + "px")
+                        .style("top", cord[1] - 100 + "px")
                         .style("opacity", 1);
                     d3.select("#value").text(d.doc_count);
                     d3.select("#tip").select("#date").text(d.key_as_string);
@@ -216,7 +219,59 @@ function generate_histogram(width, height, data_json){
 
           chart.select("g.y.axis").call(yAxis);
           chart.select("g.x.axis").call(xAxis);
-          }
 
-//  });
+          //brush brush_values converted into date format yyyy-MM-dd
+          var startdate = brush_values[0].toISOString().slice(0,10);
+          var enddate = brush_values[1].toISOString().slice(0,10);
+
+          //Get the CSRF taken from Django documentation
+          //https://docs.djangoproject.com/en/1.8/ref/csrf/#ajax
+
+          function getCookie(name) {
+              var cookieValue = null;
+              if (document.cookie && document.cookie != '') {
+                  var cookies = document.cookie.split(';');
+                  for (var i = 0; i < cookies.length; i++) {
+                      var cookie = jQuery.trim(cookies[i]);
+                      // Does this cookie string begin with the name we want?
+                      if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                          break;
+                      }
+                  }
+              }
+              return cookieValue;
+          }
+          var csrftoken = getCookie('csrftoken');
+
+          var opts = {
+            lines: 15 // The number of lines to draw
+          , length: 23 // The length of each line
+          , width: 8 // The line thickness
+          , radius: 15 // The radius of the inner circle
+          , color: '#18bc9c' // #rgb or #rrggbb or array of colors
+          , className: 'spinner' // The CSS class to assign to the spinner
+          , position: 'relative'
+         }
+
+          var target = document.getElementById('spinner');
+          var spinner = new Spinner(opts).spin(target);
+
+          $.ajax({
+          	    url: 'get_data/articles/articles-list',
+          	    type: 'POST',
+                data:{startdate: startdate,
+                      enddate: enddate,
+                      csrfmiddlewaretoken: csrftoken },
+          	    success: function(data) {
+                        $('#article-list').remove();
+                        $('#articles-container').append(data);
+                        spinner.stop();
+          				    },
+          				    failure: function(data) {
+          				        alert('Error de conexión');
+          				    },
+          				    crossDomain: true
+          });
+    }
 }

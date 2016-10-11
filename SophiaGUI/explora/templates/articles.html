@@ -12,6 +12,8 @@
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+  <script src="http://spin.js.org/spin.min.js"></script>
+
   <link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
 
   <!-- histograma -->
@@ -27,9 +29,11 @@
 		//Script called to open the modal window
 
 		$(document).ready(function(){
-			$('.news-data').on('click',function(){
+
+			$(document).on('click','.news-data',function(){
 
 				var art_id = $(this).data('val');
+        console.log(art_id);
 
 				$.ajax({
 				    url: '/articles/modal_new',
@@ -155,14 +159,23 @@
     <script>
       var w = document.getElementById('main-content').offsetWidth;
 
+      //By default loads the latest news from 6 months
+
+      var histogram_enddate = new Date().toISOString().slice(0,10);
+
+      var histogram_startdate = new Date();
+          histogram_startdate.setMonth(histogram_startdate.getMonth() - 6);
+          histogram_startdate = histogram_startdate.toISOString().slice(0,10);
+
+
       $.ajax({
       	    url: '/get_data/articles/histogram',
       	    type: 'POST',
-            data:{startdate:'2016-01-01',
-                  enddate:'2016-12-30',
-                  countby:'day',
-                  csrfmiddlewaretoken: '{{ csrf_token }}'},
-      	    success: function(data) {
+            data:{ startdate: histogram_startdate,
+                   enddate: histogram_enddate,
+                   countby:'day',
+                   csrfmiddlewaretoken: '{{ csrf_token }}'},
+      	          success: function(data) {
                   var histograma = generate_histogram(width=w,
                                                  height=300, data_json=data);
       				    },
@@ -172,9 +185,9 @@
       				    crossDomain: true
       				});
 
-
   	</script>
 
+    <div id="spinner"> </div>
     <div class="row" style="float: none; margin: 0 auto;">
     <div class="col-md-3"> </div> <!-- Offset-->
     <div class="col-md-6">
@@ -199,32 +212,34 @@
 
     //-->
 
-<div id="article-list">
-    <div class ="row">
-        {%for d in data%}
-        <div class="col-md-3 news-deploy">
-        <span style="cursor:pointer">
-          <h5 class="category"> {{d.art_category}} </h5>
-          <h5> Fuente: {{d.art_name_press_source}} </h5>
-          <h5> Fecha: {{d.art_date}} </h5>
-          <div class = "row">
-            <div class="col-md-12 news-image">
-                <img class="img-responsive" alt="image-not-found" src="{{d.art_image_link}}">
+  <div id="articles-container">
+
+    <div id="article-list">
+        <div class ="row">
+            {%for d in data%}
+            <div class="col-md-3 news-deploy">
+            <span style="cursor:pointer">
+              <h5 class="category"> {{d.art_category}} </h5>
+              <h5> Fuente: {{d.art_name_press_source}} </h5>
+              <h5> Fecha: {{d.art_date}} </h5>
+              <div class = "row">
+                <div class="col-md-12 news-image">
+                    <img class="img-responsive" alt="image-not-found" src="{{d.art_image_link}}">
+                </div>
+              </div>
+              <h4 class="news-data" data-val="{{d.art_id}}"> {{d.art_title}} </h4>
+            </span>
             </div>
-          </div>
-          <h4 class="news-data" data-val="{{d.art_id}}"> {{d.art_title}} </h4>
-        </span>
-        </div>
-        {% if forloop.counter|divisibleby:"4" and not forloop.last %}
-            </div><div class="row">
-        {% endif %}
-        {% endfor %}
-</div>
-
-  		</div>
+            {% if forloop.counter|divisibleby:"4" and not forloop.last %}
+                </div><div class="row">
+            {% endif %}
+            {% endfor %}
+            </div>
     </div>
+  </div>
 
-   </div>
+  </div>
+</div>
 
 	<!-- Here we put the rendered modal window code via AJAX-->
 	<div id="modal"> </div>
