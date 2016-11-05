@@ -2,17 +2,39 @@
     <div class ="row">
         {%for d in data%}
         <div class="col-md-3 news-deploy">
-        <span style="cursor:pointer">
-          <h5 class="category"> {{d.art_category}} </h5>
-          <h5> Fuente: {{d.art_name_press_source}} </h5>
-          <h5> Fecha: {{d.art_date}} </h5>
-          <div class = "row">
-            <div class="col-md-12 news-image">
+
+           <div class="row">
+             <div class="col-md-6">
+               <h5 class="text-left"> {{d.art_date}}  </h5>
+             </div>
+            <span style="cursor:pointer">
+               <div class="col-md-6 dropdown">
+                 <h5 class="category text-right"> {{d.art_category|upper}}</h5>
+                 <div class="dropdown-content">
+                    <h5 class="category text-left">POLITICA</h5>
+                    <h5 class="category text-left">ECONOMIA</h5>
+                 </div>
+               </div>
+            </span>
+           </div>
+
+          <div class="row">
+              <div class="col-md-12 news-image">
                 <img class="img-responsive" alt="image-not-found" src="{{d.art_image_link}}">
+              </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+                 <h5>{{d.art_name_press_source}} </h5>
             </div>
           </div>
-          <h4 class="news-data" data-val="{{d.art_id}}"> {{d.art_title}} </h4>
-        </span>
+
+          <div class="row">
+            <span style="cursor:pointer">
+              <h4 class="news-data" data-val="{{d.art_id}}"> {{d.art_title}} </h4>
+            </span>
+          </div>
+
         </div>
         {% if forloop.counter|divisibleby:"4" and not forloop.last %}
             </div><div class="row">

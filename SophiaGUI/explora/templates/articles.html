@@ -239,7 +239,6 @@
 
   	</script>
 
-
     <div id="spinner"> </div>
     <div class="row" style="float: none; margin: 0 auto;">
     <div class="col-md-3"> </div> <!-- Offset-->
@@ -256,29 +255,7 @@
 		</div>
 
   <div id="articles-container">
-
-    <div id="article-list">
-        <div class ="row">
-            {%for d in data%}
-            <div class="col-md-3 news-deploy">
-            <span style="cursor:pointer">
-              <h5 class="category"> {{d.art_category}} </h5>
-              <h5> Fuente: {{d.art_name_press_source}} </h5>
-              <h5> Fecha: {{d.art_date}} </h5>
-              <div class = "row">
-                <div class="col-md-12 news-image">
-                    <img class="img-responsive" alt="image-not-found" src="{{d.art_image_link}}">
-                </div>
-              </div>
-              <h4 class="news-data" data-val="{{d.art_id}}"> {{d.art_title}} </h4>
-            </span>
-            </div>
-            {% if forloop.counter|divisibleby:"4" and not forloop.last %}
-                </div><div class="row">
-            {% endif %}
-            {% endfor %}
-            </div>
-    </div>
+    {% include "articles_list.html" %}
   </div>
 
   </div>
