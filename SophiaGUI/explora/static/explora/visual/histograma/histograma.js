@@ -1,8 +1,7 @@
 function generate_histogram(width, height, data_json){
 
 
-  var parseDate = d3.time.format("%Y-%m-%d").parse,
-      formatDate = d3.time.format("%Y");
+  var parseDate = d3.time.format("%Y-%m-%d").parse
 
   var margin = {top:20, right:40, bottom:50, left: 100};
   var margin2 = {top:20, right:40, bottom:50, left:100};
@@ -11,8 +10,7 @@ function generate_histogram(width, height, data_json){
   var h = height - margin.top - margin.bottom;
   var h2 = height/2 - margin2.top - margin2.bottom;
 
-
-  var chart = d3.select("#histograma")
+  var chart = d3.select("#histogram")
               .append("svg")
               .attr("class","chart")
               .attr("width",w + margin.left + margin.right)
@@ -20,7 +18,7 @@ function generate_histogram(width, height, data_json){
               .append("g")
               .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-   var minichart = d3.select("#histograma")
+   var minichart = d3.select("#histogram")
               .append("svg")
               .attr("class","chart")
               .attr("width",w + margin2.left + margin2.right)
@@ -28,10 +26,14 @@ function generate_histogram(width, height, data_json){
               .append("g")
               .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
-
     var x = d3.time.scale()
-      //	.ticks(d3.time.day,1)
         .range([0, w]);
+
+    var xordinal = d3.scale.ordinal()
+              .rangeRoundBands([0, w], 0, 0);
+
+    var x2ordinal = d3.scale.ordinal()
+              .rangeRoundBands([0, w], 0, 0);
 
     var y = d3.scale.linear()
         .range([h, 0]);
@@ -105,7 +107,13 @@ function generate_histogram(width, height, data_json){
                      .x(x2)
                      .on("brushend",brushed);
 
+      //The input data is stored in data variable, this should change later...
       data = data_json;
+
+      //Using ordinal for rangeBand
+      x2ordinal.domain(data.map(function(d) {
+          return d.key_as_string;
+      }))
 
       data.forEach(function(d) {
             d.key_as_string = d.key_as_string.substring(0, 10);
@@ -144,11 +152,9 @@ function generate_histogram(width, height, data_json){
               })
               .attr("class", "bar")
               .attr("x", function(d) { return x2(d.key_as_string); })
-              .attr("width", function(d){
+              .attr("width", function(d){ //Change here for days, month, seconds, etc.
                          //Calculate the diference between days
-                         var dif = Math.abs(x2_min - x2_max);
-                         var days = Math.ceil(dif / (1000 * 3600 * 24));
-                         return w/days;
+                         return x2ordinal.rangeBand();
                        })
                .attr("y", function(d) { return y2(d.doc_count); })
                .attr("height", function(d) { return h2 - y2(d.doc_count); })
@@ -164,12 +170,22 @@ function generate_histogram(width, height, data_json){
                .attr("height",h2);
 
 
-
       function brushed(){
 
           var brush_values = brush.extent();
 
-          x.domain([brush_values[0],brush_values[1]]);
+          //Cambiar el dominio para que sean solo dentro de los valores del selected data
+          //x.domain([brush_values[0],brush_values[1]]);
+
+          selected_data = data.filter(function(d){
+             return d.key_as_string >= brush_values[0] && d.key_as_string < brush_values[1];
+          });
+          xordinal.domain(selected_data.map(function(d) {
+              return d.key_as_string;
+          }))
+
+          x.domain([d3.min(selected_data, function(d){ return d.key_as_string;}),
+                    d3.max(selected_data, function(d){ return d.key_as_string;})]);
 
           chart.selectAll(".bar2").remove();
 
@@ -190,10 +206,7 @@ function generate_histogram(width, height, data_json){
                   .attr("class", "bar2")
                   .attr("x", function(d) { return x(d.key_as_string); })
                   .attr("width", function(d){
-                    //Calculate the diference between days
-                    var dif = Math.abs(brush_values[0] - brush_values[1]);
-                    var days = Math.ceil(dif / (1000 * 3600 * 24));
-                    return w/days;
+                     return xordinal.rangeBand();
                   })
                   .attr("y", function(d) { return y(d.doc_count); })
                   .attr("height", function(d) { return h - y(d.doc_count); })
@@ -217,8 +230,10 @@ function generate_histogram(width, height, data_json){
                     })
                   .style("fill","#078770");
 
+
           chart.select("g.y.axis").call(yAxis);
           chart.select("g.x.axis").call(xAxis);
+
 
           //brush brush_values converted into date format yyyy-MM-dd
           var startdate = brush_values[0].toISOString().slice(0,10);

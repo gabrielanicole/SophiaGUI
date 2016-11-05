@@ -56,12 +56,14 @@ def modal_new(request):
             url = data['_source']['art_url']
             content = data['_source']['art_content']
             imageLink = data['_source']['art_image_link']
+            category = data['_source']['art_category']
 
             return render(request,'news_modal.html',{'title':title,
                                                      'date':date,
                                                      'host':host,
                                                      'url':url,
                                                      'content':content,
+                                                     'category':category,
                                                      'imageLink':imageLink})
         else:
             return HttpResponse("Internal Error")
@@ -184,7 +186,7 @@ def articlesCountBy(request):
         cookies = dict(sessionid=client.cookies['sessionid'])
 
         api = u'http://{0}/v2/articles/from/{1}/to/{2}/countby/{3}'.format(api_url,startdate,enddate,countby)
-
+        print api
         response = requests.get(api,cookies=cookies)
 
         data = json.loads(response.text.encode('utf8'))
@@ -192,6 +194,7 @@ def articlesCountBy(request):
         data = data['aggregations']['articles_over_time']['buckets']
         #print JsonResponse(data, safe=False)
         #data = data['articles_over_time']['buckets']
+        print data
         return JsonResponse(data,safe=False)
 
 
