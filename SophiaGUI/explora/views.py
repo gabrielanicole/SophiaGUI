@@ -186,7 +186,7 @@ def articlesCountBy(request):
         cookies = dict(sessionid=client.cookies['sessionid'])
 
         api = u'http://{0}/v2/articles/from/{1}/to/{2}/countby/{3}'.format(api_url,startdate,enddate,countby)
-        print api
+
         response = requests.get(api,cookies=cookies)
 
         data = json.loads(response.text.encode('utf8'))
@@ -194,7 +194,7 @@ def articlesCountBy(request):
         data = data['aggregations']['articles_over_time']['buckets']
         #print JsonResponse(data, safe=False)
         #data = data['articles_over_time']['buckets']
-        print data
+
         return JsonResponse(data,safe=False)
 
 
@@ -243,3 +243,12 @@ def articlesByDates(request):
         data = results
 
         return render(request,'articles_list.html',{'data': data})
+
+@login_required(login_url='/login_required')
+def advancedSearch(request):
+    if request.method == 'POST':
+        data = request.POST.get('json_data')
+        #print request.POST['json_data']
+
+        print data
+        return HttpResponse("Ok")

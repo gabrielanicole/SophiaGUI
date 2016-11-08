@@ -101,8 +101,6 @@ function generate_histogram(width, height, data_json){
              .style("text-anchor", "middle")
              .text("Cantidad");
 
-
-
     var brush = d3.svg.brush()
                      .x(x2)
                      .on("brushend",brushed);
@@ -110,16 +108,18 @@ function generate_histogram(width, height, data_json){
       //The input data is stored in data variable, this should change later...
       data = data_json;
 
-      //Using ordinal for rangeBand
-      x2ordinal.domain(data.map(function(d) {
-          return d.key_as_string;
-      }))
+
 
       data.forEach(function(d) {
             d.key_as_string = d.key_as_string.substring(0, 10);
             d.key_as_string = parseDate(d.key_as_string);
             d.doc_count = +d.doc_count;
         });
+
+        //Using ordinal for rangeBand
+        x2ordinal.domain(data.map(function(d) {
+            return d.key_as_string;
+        }))
 
       x.domain([d3.min(data, function(d){ return d.key_as_string;}),
                 d3.max(data, function(d){ return d.key_as_string;})]);
@@ -129,6 +129,7 @@ function generate_histogram(width, height, data_json){
 
       x2_min = d3.min(data, function(d){ return d.key_as_string;});
       x2_max = d3.max(data, function(d){ return d.key_as_string;});
+
       x2.domain([x2_min,x2_max]);
 
       y2.domain([0, d3.max(data, function(d){ return d.doc_count;})]);
@@ -148,7 +149,7 @@ function generate_histogram(width, height, data_json){
               .enter()
               .append("rect")
               .filter(function(d){
-                 return d.key_as_string >= x2_min && d.key_as_string < x2_max;
+                 return d.key_as_string >= x2_min && d.key_as_string <= x2_max;
               })
               .attr("class", "bar")
               .attr("x", function(d) { return x2(d.key_as_string); })
@@ -186,6 +187,7 @@ function generate_histogram(width, height, data_json){
 
           x.domain([d3.min(selected_data, function(d){ return d.key_as_string;}),
                     d3.max(selected_data, function(d){ return d.key_as_string;})]);
+
 
           chart.selectAll(".bar2").remove();
 
