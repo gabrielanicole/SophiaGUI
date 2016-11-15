@@ -77,7 +77,7 @@
 		    	</li>
 		    {% endif %}
 	      	<li>
-	      		<a href="#">{{user}}</a>
+	      		<a>{{user}}</a>
 	      	</li>
 
     	  <li>
@@ -186,7 +186,7 @@
 
              var json_data = {
                   "index":"articles",
-                  "fields":["art_tittle","art_content"],
+                  "fields":["art_title","art_content"],
                   "and": must_contain_group,
                   "or": should_contain_group,
                   "not_and": not_contain_group,
@@ -198,6 +198,8 @@
                 data:{ json_data: JSON.stringify(json_data),
                         csrfmiddlewaretoken: '{{ csrf_token }}'},
                           success: function(data) {
+                            $('#article-list').remove();
+                            $('#articles-container').append(data);
                           },
                           failure: function(data) {
                               alert('Error de conexión');
@@ -276,8 +278,8 @@
                    countby: granularity,
                    csrfmiddlewaretoken: '{{ csrf_token }}'},
                   success: function(data) {
-                  var histograma = generate_histogram(width=w,
-                                                 height=300, data_json=data);
+                //  var histograma = generate_histogram(width=w,
+                //                                 height=300, data_json=data);
                   },
                   failure: function(data) {
                       alert('Error de conexión');

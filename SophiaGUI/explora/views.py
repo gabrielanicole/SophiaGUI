@@ -250,5 +250,35 @@ def advancedSearch(request):
         data = request.POST.get('json_data')
         #print request.POST['json_data']
 
-        print data
-        return HttpResponse("Ok")
+        file = json.loads(open("explora/static/user.json").read())
+        api_user = file["user"]
+        api_password = file["password"]
+        api_url = file["api_url"]
+
+        #client = requests.post('http://{0}/v2/login/'.format(api_url),
+        #     {'username': api_user, 'password': api_password})
+
+        #cookies = dict(sessionid=client.cookies['sessionid'])
+
+
+        api = u'http://{0}/v2/search/'.format(api_url)
+
+        response = requests.post(api,data=data)
+
+        data_array = json.loads(response.content.encode('utf8'))
+        data = data_array['hits']['hits']
+        results = []
+        for key in data:
+            array_element = {
+                    'art_id':key['_id'],
+                    'art_title':key['_source']['art_title'],
+                    'art_url':key['_source']['art_url'],
+                    'art_image_link': key['_source']['art_image_link'],
+                    'art_content':key['_source']['art_content'],
+                    'art_name_press_source':key['_source']['art_name_press_source'],
+                    'art_category':key['_source']['art_category'],
+                    'art_date':key['_source']['art_date']
+            }
+            results.append(array_element)
+        data = results
+        return render(request,'articles_list.html',{'data': data})
