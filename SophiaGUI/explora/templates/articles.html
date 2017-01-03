@@ -19,10 +19,16 @@
   <script type="text/javascript" src="/static/explora/visual/histograma/histograma.js"></script>
   <!--taggle.js-->
   <script type="text/javascript" src="/static/explora/externalJS/taggle.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
   <link rel="stylesheet" href="/static/explora/externalCSS/taggle.css" type="text/css">
 
+  <!-- angularAPP -->
+  <script type="text/javascript" src="/static/explora/js/app.js"></script>
+  <script type="text/javascript" src="/static/explora/js/controller/MainController.js"></script>
+
 </head>
-<body>
+
+<body ng-app="explora">
 
 
 	<script type="text/javascript">
@@ -292,24 +298,65 @@
 
   	</script>
 
-    <div id="spinner"> </div>
+
+  <div id="articles-container" ng-controller="articlesListController">
+
+
+    <div id="spinner"></div>
     <div class="row" style="float: none; margin: 0 auto;">
     <div class="col-md-3"> </div> <!-- Offset-->
+    
     <div class="col-md-6">
-				<ul class="pagination">
+			<ul class="pagination">
 				<li><a href="#">&laquo;</a></li>
-			   {% for i in num_pages %}
-			   	 <li><a href="/articles/{{i}}/">{{i}}</a></li>
-			   {% endfor %}
-			    <li><a href="#">&raquo;</a></li>
+			   	 <li ng-repeat="page in range(index-4,index+4) track by $index"><a ng-click="page_number([[page]])" href="" > [[page]]</a></li>
+        <li><a href="#">&raquo;</a></li>
 			</ul>
-    </div>
-    <div class="col-md-3"></div> <!-- Offset-->
+
+     </div>
+     <div class="col-md-3"></div> <!-- Offset-->
 		</div>
 
-  <div id="articles-container">
-    {% include "articles_list.html" %}
+    <div ng-repeat="d in articulos">
+      <div ng-class="row|($index % 4 == 0)">
+
+         <div class="col-md-3 news-deploy">
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <h5 class="text-left"> [[d.art_date]]  </h5>
+                    </div>
+                    <span style="cursor:pointer">
+                      <div class="col-md-6 dropdown">
+                        <h5 class="category text-right"> [[d.art_category|uppercase]]</h5>
+                        <div class="dropdown-content">
+                            <h5 class="category text-left">POLITICA</h5>
+                        </div>
+                      </div>
+                    </span>
+                  </div>
+
+                  <div class="row">
+                      <div class="col-md-12 news-image">
+                        <img class="img-responsive" alt="image-not-found" src="[[d.art_image_link]]">
+                      </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                        <h5>[[d.art_name_press_source]] </h5>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <span style="cursor:pointer">
+                      <h4 class="news-data" data-val="[[d.art_id]]"> [[d.art_title|limitTo:150]] </h4>
+                    </span>
+                  </div>
+             </div>     
+       </div>
+    </div>
   </div>
+
 
   </div>
 </div>

@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.http import JsonResponse
 import requests
 import simplejson as json
@@ -91,56 +92,22 @@ def index(request):
 ##@return HttpResponse with the articles page.
 ##@warning Login is required.
 @login_required(login_url='/login_required')
-def articles(request, num="1"):
-
-    file = json.loads(open("explora/static/user.json").read())
-    api_user = file["user"]
-    api_password = file["password"]
-    api_url = file["api_url"]
-
-    client = requests.post('http://{0}/v2/login/'.format(api_url),
-         {'username': api_user, 'password': api_password})
-
-    cookies = dict(sessionid=client.cookies['sessionid'])
-
-    response = requests.get(u'http://{0}/v2/articles/'.format(api_url), cookies=cookies)
-    data_array = json.loads(response.text.encode('utf8'))
-
-    #give the format to the data
-    data = data_array['hits']['hits']
-    results = []
-
-    for key in data:
-        array_element = {
-                    'art_id':key['_id'],
-                    'art_title':key['_source']['art_title'],
-                    'art_url':key['_source']['art_url'],
-                    'art_image_link': key['_source']['art_image_link'],
-                    'art_content':key['_source']['art_content'],
-                    'art_name_press_source':key['_source']['art_name_press_source'],
-                    'art_category':key['_source']['art_category'],
-                    'art_date':key['_source']['art_date']
-        }
-        results.append(array_element)
+def articles(request, num=1):
 
     pages = 10
     num_pages = []
     for i in range(1,pages):
         num_pages.append(i)
-
-    data = results
-
+    
     my_user = request.user.social_auth.filter(provider='facebook').first()
     if my_user:
         url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
-        return render(request,'articles.html',{'data': data
-                                               ,'user':request.user.get_full_name()
+        return render(request,'articles.html',{'user':request.user.get_full_name()
                                                ,'profile_pic':url
                                                ,'num_pages':num_pages
                                                })
     else:
-        return render(request,'articles.html',{'data': data
-                                               ,'user':request.user.get_full_name()
+        return render(request,'articles.html',{'user':request.user.get_full_name()
                                                ,'num_pages':num_pages
                                                })
 ##@brief Function that log out the user from Sophia
@@ -282,3 +249,43 @@ def advancedSearch(request):
             results.append(array_element)
         data = results
         return render(request,'articles_list.html',{'data': data})
+
+
+@login_required(login_url='/login_required')
+def get_articles_list(request, num=1):
+
+    print num
+    if request.method == 'POST':
+
+        file = json.loads(open("explora/static/user.json").read())
+        api_user = file["user"]
+        api_password = file["password"]
+        api_url = file["api_url"]
+
+        client = requests.post('http://{0}/v2/login/'.format(api_url),
+            {'username': api_user, 'password': api_password})
+
+        cookies = dict(sessionid=client.cookies['sessionid'])
+
+        response = requests.get(u'http://{0}/v2/articles/'.format(api_url), cookies=cookies)
+        data_array = json.loads(response.text.encode('utf8'))
+
+        #give the format to the data
+        data = data_array['hits']['hits']
+        results = []
+
+        for key in data:
+            array_element = {
+                        'art_id':key['_id'],
+                        'art_title':key['_source']['art_title'],
+                        'art_url':key['_source']['art_url'],
+                        'art_image_link': key['_source']['art_image_link'],
+                        'art_content':key['_source']['art_content'],
+                        'art_name_press_source':key['_source']['art_name_press_source'],
+                        'art_category':key['_source']['art_category'],
+                        'art_date':key['_source']['art_date']
+            }
+            results.append(array_element)
+        data = results
+
+        return JsonResponse(data,safe=False)
