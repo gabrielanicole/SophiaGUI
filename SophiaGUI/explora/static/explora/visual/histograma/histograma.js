@@ -108,8 +108,6 @@ function generate_histogram(width, height, data_json){
       //The input data is stored in data variable, this should change later...
       data = data_json;
 
-
-
       data.forEach(function(d) {
             d.key_as_string = d.key_as_string.substring(0, 10);
             d.key_as_string = parseDate(d.key_as_string);

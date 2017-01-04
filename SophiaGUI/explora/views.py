@@ -252,9 +252,8 @@ def advancedSearch(request):
 
 
 @login_required(login_url='/login_required')
-def get_articles_list(request, num=1):
+def get_articles_list(request, page=1):
 
-    print num
     if request.method == 'POST':
 
         file = json.loads(open("explora/static/user.json").read())
@@ -262,18 +261,22 @@ def get_articles_list(request, num=1):
         api_password = file["password"]
         api_url = file["api_url"]
 
-        client = requests.post('http://{0}/v2/login/'.format(api_url),
-            {'username': api_user, 'password': api_password})
+        #client = requests.post('http://{0}/v2/login/'.format(api_url),
+        #   {'username': api_user, 'password': api_password})
 
-        cookies = dict(sessionid=client.cookies['sessionid'])
+       # cookies = dict(sessionid=client.cookies['sessionid'])
 
-        response = requests.get(u'http://{0}/v2/articles/'.format(api_url), cookies=cookies)
+        #response = requests.get(u'http://{0}/v2/articles/'.format(api_url), cookies=cookies)
+        response = requests.get(u'http://{0}/v2/articles/page/{1}'.format(api_url, page))
+        
         data_array = json.loads(response.text.encode('utf8'))
+
+        total_pages = data_array['totalPages']
 
         #give the format to the data
         data = data_array['hits']['hits']
-        results = []
 
+        results = []
         for key in data:
             array_element = {
                         'art_id':key['_id'],
@@ -285,7 +288,11 @@ def get_articles_list(request, num=1):
                         'art_category':key['_source']['art_category'],
                         'art_date':key['_source']['art_date']
             }
-            results.append(array_element)
-        data = results
 
-        return JsonResponse(data,safe=False)
+            results.append(array_element)
+
+        json_response = {'totalpages': total_pages,
+                         'results': results}
+        print json_response
+        
+        return JsonResponse(json_response ,safe=False)
