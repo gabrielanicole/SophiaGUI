@@ -229,7 +229,6 @@
                 <span class="caret"></span>
             </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a class="granularity" data-granularity="second">Segundo</a></li>
                 <li><a class="granularity" data-granularity="minute">Minuto</a></li>
                 <li><a class="granularity" data-granularity="hour">Hora</a></li>
                 <li><a class="granularity" data-granularity="day" >Día</a></li>
@@ -284,8 +283,7 @@
                    countby: granularity,
                    csrfmiddlewaretoken: '{{ csrf_token }}'},
                   success: function(data) {
-                  //var histograma = generate_histogram(width=w,
-                  //                                   height=300, data_json=data);
+                      var histograma = generate_histogram(width=w,height=300, data_json=data);
                   },
                   failure: function(data) {
                       alert('Error de conexión');

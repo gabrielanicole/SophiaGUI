@@ -107,6 +107,8 @@ function generate_histogram(width, height, data_json){
 
       //The input data is stored in data variable, this should change later...
       data = data_json;
+      var m_e = data.length;
+      console.log(m_e);
 
       data.forEach(function(d) {
             d.key_as_string = d.key_as_string.substring(0, 10);
@@ -151,10 +153,10 @@ function generate_histogram(width, height, data_json){
               })
               .attr("class", "bar")
               .attr("x", function(d) { return x2(d.key_as_string); })
-              .attr("width", function(d){ //Change here for days, month, seconds, etc.
-                         //Calculate the diference between days
-                         return x2ordinal.rangeBand();
-                       })
+              .attr("width", function(d){
+                         //return x2ordinal.rangeBand();
+                         return w/(m_e-1);
+                    })
                .attr("y", function(d) { return y2(d.doc_count); })
                .attr("height", function(d) { return h2 - y2(d.doc_count); })
                .style("fill","#078770");
@@ -177,8 +179,11 @@ function generate_histogram(width, height, data_json){
           //x.domain([brush_values[0],brush_values[1]]);
 
           selected_data = data.filter(function(d){
-             return d.key_as_string >= brush_values[0] && d.key_as_string < brush_values[1];
+             return d.key_as_string >= brush_values[0] && d.key_as_string <= brush_values[1];
           });
+
+          var n_e = selected_data.length;
+
           xordinal.domain(selected_data.map(function(d) {
               return d.key_as_string;
           }))
@@ -195,7 +200,7 @@ function generate_histogram(width, height, data_json){
                   .enter()
                   .append("rect")
                   .filter(function(d){
-                     return d.key_as_string >= brush_values[0] && d.key_as_string < brush_values[1];
+                     return d.key_as_string >= brush_values[0] && d.key_as_string <= brush_values[1];
                   })
                   .each(function(d){
                     if (d.doc_count > ymax){
@@ -206,7 +211,9 @@ function generate_histogram(width, height, data_json){
                   .attr("class", "bar2")
                   .attr("x", function(d) { return x(d.key_as_string); })
                   .attr("width", function(d){
-                     return xordinal.rangeBand();
+                      e = Object.keys(d).length;
+                      //return xordinal.rangeBand();
+                       return w/(n_e - 1);
                   })
                   .attr("y", function(d) { return y(d.doc_count); })
                   .attr("height", function(d) { return h - y(d.doc_count); })
@@ -257,6 +264,7 @@ function generate_histogram(width, height, data_json){
               }
               return cookieValue;
           }
+         
           var csrftoken = getCookie('csrftoken');
 
           var opts = {
@@ -269,6 +277,7 @@ function generate_histogram(width, height, data_json){
           , position: 'relative'
          }
 
+/*
           var target = document.getElementById('spinner');
           var spinner = new Spinner(opts).spin(target);
 
@@ -287,6 +296,6 @@ function generate_histogram(width, height, data_json){
           				        alert('Error de conexión');
           				    },
           				    crossDomain: true
-          });
+          }); */
     }
 }

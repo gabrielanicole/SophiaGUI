@@ -11,6 +11,7 @@ import requests
 import simplejson as json
 from telnetlib import theNULL
 from pprint import pprint
+from functions import addBucket
 
 
 
@@ -147,21 +148,31 @@ def articlesCountBy(request):
         api_password = file["password"]
         api_url = file["api_url"]
 
-        client = requests.post('http://{0}/v2/login/'.format(api_url),
-             {'username': api_user, 'password': api_password})
+       # client = requests.post('http://{0}/v2/login/'.format(api_url),
+       #      {'username': api_user, 'password': api_password})
 
-        cookies = dict(sessionid=client.cookies['sessionid'])
+       # cookies = dict(sessionid=client.cookies['sessionid'])
 
         api = u'http://{0}/v2/articles/from/{1}/to/{2}/countby/{3}'.format(api_url,startdate,enddate,countby)
+        print api
 
-        response = requests.get(api,cookies=cookies)
+        # response = requests.get(api,cookies=cookies)
+        try:
+            response = requests.get(api)
+
+        except Exception as e:
+             return HttpResponse(e)
 
         data = json.loads(response.text.encode('utf8'))
 
         data = data['aggregations']['articles_over_time']['buckets']
+
+        #We append one key more to the bucket, this is offset for the histogram
+        new_bucket = addBucket(data[len(data)-1] , countby)
+        data.append(new_bucket)
+
         #print JsonResponse(data, safe=False)
         #data = data['articles_over_time']['buckets']
-
         return JsonResponse(data,safe=False)
 
 
@@ -215,7 +226,6 @@ def articlesByDates(request):
 def advancedSearch(request):
     if request.method == 'POST':
         data = request.POST.get('json_data')
-        #print request.POST['json_data']
 
         file = json.loads(open("explora/static/user.json").read())
         api_user = file["user"]
@@ -293,6 +303,5 @@ def get_articles_list(request, page=1):
 
         json_response = {'totalpages': total_pages,
                          'results': results}
-        print json_response
-        
+      
         return JsonResponse(json_response ,safe=False)
