@@ -1,5 +1,10 @@
 import datetime
 
+
+##@brief Function to add a new offset "bucket" to histogram.
+##@param previous 
+##@param granularity
+##@return new Bucket as JSON.
 def addBucket(previous, granularity):
    
     if (granularity == "minute"):

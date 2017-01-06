@@ -11,8 +11,6 @@ import requests
 import simplejson as json
 from telnetlib import theNULL
 from pprint import pprint
-from functions import addBucket
-
 
 
 ##@brief Function that login the user to Sophia GUI.
@@ -111,6 +109,7 @@ def articles(request, num=1):
         return render(request,'articles.html',{'user':request.user.get_full_name()
                                                ,'num_pages':num_pages
                                                })
+                                            
 ##@brief Function that log out the user from Sophia
 ##@param requestfrom django.http import JsonResponse
 ##@return HttpResponse with the main page
@@ -139,9 +138,11 @@ def user_news_case(request):
 def articlesCountBy(request):
     if request.method == 'POST':
 
-        startdate = request.POST['startdate']
-        enddate = request.POST['enddate']
-        countby = request.POST['countby']
+        print request.POST
+
+        startdate = request.POST.get('startdate')
+        enddate = request.POST.get('enddate')
+        countby = request.POST.get('countby')
 
         file = json.loads(open("explora/static/user.json").read())
         api_user = file["user"]
@@ -167,12 +168,6 @@ def articlesCountBy(request):
 
         data = data['aggregations']['articles_over_time']['buckets']
 
-        #We append one key more to the bucket, this is offset for the histogram
-        new_bucket = addBucket(data[len(data)-1] , countby)
-        data.append(new_bucket)
-
-        #print JsonResponse(data, safe=False)
-        #data = data['articles_over_time']['buckets']
         return JsonResponse(data,safe=False)
 
 
@@ -219,7 +214,7 @@ def articlesByDates(request):
             }
             results.append(array_element)
         data = results
-
+        
         return render(request,'articles_list.html',{'data': data})
 
 @login_required(login_url='/login_required')

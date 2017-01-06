@@ -1,7 +1,6 @@
 function generate_histogram(width, height, data_json){
 
-
-  var parseDate = d3.time.format("%Y-%m-%d").parse
+  var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse
 
   var margin = {top:20, right:40, bottom:50, left: 100};
   var margin2 = {top:20, right:40, bottom:50, left:100};
@@ -29,11 +28,6 @@ function generate_histogram(width, height, data_json){
     var x = d3.time.scale()
         .range([0, w]);
 
-    var xordinal = d3.scale.ordinal()
-              .rangeRoundBands([0, w], 0, 0);
-
-    var x2ordinal = d3.scale.ordinal()
-              .rangeRoundBands([0, w], 0, 0);
 
     var y = d3.scale.linear()
         .range([h, 0]);
@@ -108,18 +102,13 @@ function generate_histogram(width, height, data_json){
       //The input data is stored in data variable, this should change later...
       data = data_json;
       var m_e = data.length;
-      console.log(m_e);
+      //console.log(m_e);
 
       data.forEach(function(d) {
-            d.key_as_string = d.key_as_string.substring(0, 10);
+            d.key_as_string = d.key_as_string.substring(0, 19);
             d.key_as_string = parseDate(d.key_as_string);
             d.doc_count = +d.doc_count;
         });
-
-        //Using ordinal for rangeBand
-        x2ordinal.domain(data.map(function(d) {
-            return d.key_as_string;
-        }))
 
       x.domain([d3.min(data, function(d){ return d.key_as_string;}),
                 d3.max(data, function(d){ return d.key_as_string;})]);
@@ -154,7 +143,6 @@ function generate_histogram(width, height, data_json){
               .attr("class", "bar")
               .attr("x", function(d) { return x2(d.key_as_string); })
               .attr("width", function(d){
-                         //return x2ordinal.rangeBand();
                          return w/(m_e-1);
                     })
                .attr("y", function(d) { return y2(d.doc_count); })
@@ -184,9 +172,7 @@ function generate_histogram(width, height, data_json){
 
           var n_e = selected_data.length;
 
-          xordinal.domain(selected_data.map(function(d) {
-              return d.key_as_string;
-          }))
+        
 
           x.domain([d3.min(selected_data, function(d){ return d.key_as_string;}),
                     d3.max(selected_data, function(d){ return d.key_as_string;})]);
@@ -209,11 +195,11 @@ function generate_histogram(width, height, data_json){
                     }
                   })
                   .attr("class", "bar2")
-                  .attr("x", function(d) { return x(d.key_as_string); })
+                  .attr("x", function(d) {
+                      return x(d.key_as_string); })
                   .attr("width", function(d){
                       e = Object.keys(d).length;
-                      //return xordinal.rangeBand();
-                       return w/(n_e - 1);
+                      return w/(n_e - 1);
                   })
                   .attr("y", function(d) { return y(d.doc_count); })
                   .attr("height", function(d) { return h - y(d.doc_count); })
@@ -241,61 +227,8 @@ function generate_histogram(width, height, data_json){
           chart.select("g.y.axis").call(yAxis);
           chart.select("g.x.axis").call(xAxis);
 
-
           //brush brush_values converted into date format yyyy-MM-dd
           var startdate = brush_values[0].toISOString().slice(0,10);
           var enddate = brush_values[1].toISOString().slice(0,10);
-
-          //Get the CSRF taken from Django documentation
-          //https://docs.djangoproject.com/en/1.8/ref/csrf/#ajax
-
-          function getCookie(name) {
-              var cookieValue = null;
-              if (document.cookie && document.cookie != '') {
-                  var cookies = document.cookie.split(';');
-                  for (var i = 0; i < cookies.length; i++) {
-                      var cookie = jQuery.trim(cookies[i]);
-                      // Does this cookie string begin with the name we want?
-                      if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                          break;
-                      }
-                  }
-              }
-              return cookieValue;
-          }
-         
-          var csrftoken = getCookie('csrftoken');
-
-          var opts = {
-            lines: 15 // The number of lines to draw
-          , length: 23 // The length of each line
-          , width: 8 // The line thickness
-          , radius: 15 // The radius of the inner circle
-          , color: '#18bc9c' // #rgb or #rrggbb or array of colors
-          , className: 'spinner' // The CSS class to assign to the spinner
-          , position: 'relative'
-         }
-
-/*
-          var target = document.getElementById('spinner');
-          var spinner = new Spinner(opts).spin(target);
-
-          $.ajax({
-          	    url: 'get_data/articles/articles-list',
-          	    type: 'POST',
-                data:{startdate: startdate,
-                      enddate: enddate,
-                      csrfmiddlewaretoken: csrftoken },
-          	    success: function(data) {
-                        $('#article-list').remove();
-                        $('#articles-container').append(data);
-                        spinner.stop();
-          				    },
-          				    failure: function(data) {
-          				        alert('Error de conexión');
-          				    },
-          				    crossDomain: true
-          }); */
     }
 }

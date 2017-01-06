@@ -19,10 +19,10 @@
   <script type="text/javascript" src="/static/explora/visual/histograma/histograma.js"></script>
   <!--taggle.js-->
   <script type="text/javascript" src="/static/explora/externalJS/taggle.js"></script>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
   <link rel="stylesheet" href="/static/explora/externalCSS/taggle.css" type="text/css">
-
+  
   <!-- angularAPP -->
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
   <script type="text/javascript" src="/static/explora/js/app.js"></script>
   <script type="text/javascript" src="/static/explora/js/controller/MainController.js"></script>
 
@@ -159,7 +159,6 @@
           var not_contain = new Taggle('not',{placeholder:'Concepto o frase que permite excluir resultados'});
 
           function generate_array(data_array){
-
             var results = [];
             if(data_array.length > 0){
               var match = "";
@@ -197,6 +196,7 @@
                   "or": should_contain_group,
                   "not_and": not_contain_group,
                 }
+              
 
             $.ajax({
                 url: '/get_data/articles/articles_advance_search',
@@ -213,7 +213,7 @@
                           crossDomain: true
                       });
 
-             console.log(JSON.stringify(json_data));
+             //console.log(JSON.stringify(json_data));
           }
 
         </script>
@@ -221,6 +221,7 @@
     </div>
 
 
+  <div ng-controller="searchController">
     <div class="row">
       <div class="col-md-12">
         <div class="dropdown">
@@ -229,18 +230,14 @@
                 <span class="caret"></span>
             </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a class="granularity" data-granularity="minute">Minuto</a></li>
-                <li><a class="granularity" data-granularity="hour">Hora</a></li>
-                <li><a class="granularity" data-granularity="day" >Día</a></li>
-                <li><a class="granularity" data-granularity="month">Mes</a></li>
-                <li><a class="granularity" data-granularity="year">Año</a></li>
-              </ul>
-            </div>
+                <li ng-repeat="option in options"><a ng-click="selectedItem(option.value)">[[option.key]]</a></li>
+             </ul>
+         </div>
       </div>
     </div>
 
 
-    <div class = "row">
+   <div class = "row">
       <div class="hid" id="tip">
           <p><strong style="color:red">Cantidad</strong>
           </p>
@@ -249,56 +246,13 @@
           </p>
           <p style="color:white"><span id="date">0</span></p>
       </div>
+
       <div id="histogram_container" style="width: 100%">
-          <div id="histogram">
-          </div>
+           <div id="histogram"></div>
       </div>
-    </div>
+  </div>
 
-    <script>
-
-    var w = document.getElementById('main-content').offsetWidth;
-
-    //Histogram granularity by default is "day"
-    var granularity = "day";
-
-    var histogram_enddate = new Date().toISOString().slice(0,10);
-    var histogram_startdate = new Date();
-        histogram_startdate.setMonth(histogram_startdate.getMonth() - 2);
-        histogram_startdate = histogram_startdate.toISOString().slice(0,10);
-
-    $(document).on('click','.granularity',function(){
-       granularity = $(this).data('granularity');
-       $("#histogram").empty();
-       draw_histogram();
-    });
-
-    function draw_histogram(){
-        $.ajax({
-            url: '/get_data/articles/histogram',
-            type: 'POST',
-
-            data:{ startdate: histogram_startdate,
-                   enddate: histogram_enddate,
-                   countby: granularity,
-                   csrfmiddlewaretoken: '{{ csrf_token }}'},
-                  success: function(data) {
-                      var histograma = generate_histogram(width=w,height=300, data_json=data);
-                  },
-                  failure: function(data) {
-                      alert('Error de conexión');
-                  },
-                  crossDomain: true
-              });
-    }
-    //draw histogram for the first time
-    draw_histogram();
-
-  	</script>
-
-
-  <div id="articles-container" ng-controller="articlesListController">
-
+  <div id="articles-container">
 
     <div id="spinner"></div>
     <div class="row" style="float: none; margin: 0 auto;">
@@ -354,7 +308,7 @@
        </div>
     </div>
   </div>
-
+</div>
 
   </div>
 </div>
