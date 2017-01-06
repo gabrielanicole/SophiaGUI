@@ -113,7 +113,7 @@
 
 <div ng-controller="searchController">
 
-			<div class=row>
+	 <div class=row>
 				<form class="navbar-form navbar-left" role="search">
 
 				    <div class="form-group">
@@ -139,7 +139,7 @@
 				            </select>
 				        </div>
 				    </div>
-            <button class="btn btn-default" ngclick="get_input_data()"> Buscar</button>
+            <button class="btn btn-default" ng-click="get_input_data()"> Buscar</button>
 					</form>
 
 		</div>
@@ -195,7 +195,7 @@
     <div class="col-md-6">
 			<ul class="pagination">
 				<li><a href="#">&laquo;</a></li>
-			   	 <li ng-repeat="page in range(index-size,index+size) track by $index"><a ng-click="page_number([[page]])" href="" > [[page]]</a></li>
+			   	 <li ng-repeat="page in range(page_init,page_end)"><a ng-click="page_number([[page]])" href="" > [[page]]</a></li>
         <li><a href="#">&raquo;</a></li>
 			</ul>
 
@@ -242,6 +242,7 @@
        </div>
     </div>
   </div>
+
 </div>
 
   </div>

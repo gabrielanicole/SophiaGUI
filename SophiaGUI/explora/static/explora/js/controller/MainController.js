@@ -1,21 +1,25 @@
 
 app.controller('searchController', ['$scope', '$http', '$window', function ($scope, $http, $window) {
 
-    $scope.index = 5;
-    $scope.size = 4;
     $scope.total_pages;
+    $scope.actual_page;
     $scope.articulos;
-
+    $scope.page_init;
+    $scope.page_end;
+    $scope.max_page = 10;
+    $scope.index = 4;
+    $scope.size = 3;
+    $scope.index;
 
     $scope.page_number = function (page_number) {
         //Function to get the page number from view
-        var page = page_number[0][0]-1;
+        var page = page_number[0][0];
         if (page == $scope.index - $scope.size && page != 1) {
             $scope.index = $scope.index - 1;
             $scope.update_list(page);
 
         }
-        else if (page == $scope.index + $scope.size && $scope.index + $scope.size != $scope.total_pages) {
+        else if (page == $scope.page_end && page <= $scope.total_pages) {
             $scope.index = $scope.index + 1;
             $scope.update_list(page);
         }
@@ -24,21 +28,6 @@ app.controller('searchController', ['$scope', '$http', '$window', function ($sco
             $scope.update_list(page);
         }
     }
-
-    $scope.update_list = function (page) {
-        $http({
-            method: 'POST',
-            url: '/get_data/articles/' + page + '/'
-        }).then(function successCallback(response) {
-            $scope.articulos = response.data.results;
-            $scope.total_pages = response.data.totalpages;
-
-        }, function errorCallback(response) {
-
-        });
-    }
-    //load the first page
-    $scope.update_list(0);
 
     $scope.range = function (min, max) {
         var output = [];
@@ -84,7 +73,7 @@ app.controller('searchController', ['$scope', '$http', '$window', function ($sco
         }).then(function successCallback(response) {
             $("#histogram").empty();
             var histograma = generate_histogram(width = ($scope.windowsWidth - 300), height = 300, data_json = response.data);
-            
+
         }, function errorCallback(response) {
             console.log(response);
         });
@@ -92,7 +81,6 @@ app.controller('searchController', ['$scope', '$http', '$window', function ($sco
     }
     //Draw Histogram for first time
     $scope.selectedItem(granularity);
-
 
     //Section to control the TAG sistem
     var should_contain = new Taggle('should', { placeholder: 'Concepto o frase importante en mi búsqueda' });
@@ -120,7 +108,8 @@ app.controller('searchController', ['$scope', '$http', '$window', function ($sco
         return results;
     }
 
-    $scope.get_input_data = function() {
+    $scope.update_list = function (page) {
+
 
         var should_contain_group = should_contain.getTagValues();
         var must_contain_group = must_contain.getTagValues();
@@ -138,25 +127,46 @@ app.controller('searchController', ['$scope', '$http', '$window', function ($sco
             "not_and": not_contain_group,
         }
 
-        /*
-        $.ajax({
-            url: '/get_data/articles/articles_advance_search',
-            type: 'POST',
-            data: {
-                json_data: JSON.stringify(json_data),
-                csrfmiddlewaretoken: '{{ csrf_token }}'
-            },
-            success: function (data) {
-                $('#article-list').remove();
-                $('#articles-container').append(data);
-            },
-            failure: function (data) {
-                alert('Error de conexión');
-            },
-            crossDomain: true
-        }); */
+        $http({
+            method: 'POST',
+            url: '/get_data/articles/articles_advance_search/' + page + '/',
+            data: $.param({ data: JSON.stringify(json_data) })
+        }).then(function successCallback(response) {
+            //$scope.articulos = response.data.results;
+            //$scope.total_pages = response.data.totalpages;
+            $scope.articulos = response.data.results;
+            $scope.total_pages = response.data.totalpages;
+            $scope.actual_page = response.data.page;
 
-         console.log(JSON.stringify(json_data));
+            if ($scope.actual_page - 1 != 0) {
+                $scope.page_init = $scope.actual_page - 1;
+                if ($scope.total_pages < $scope.max_page) {
+                    $scope.page_end = $scope.total_pages;
+                }
+                else {
+                    $scope.page_end = $scope.max_page;
+                }
+            }
+            else {
+                $scope.page_init = 1;
+                if ($scope.total_pages < $scope.max_page) {
+                    $scope.page_end = $scope.total_pages;
+                }
+                else {
+                    $scope.page_end = $scope.max_page;
+                }
+            }
+
+        }, function errorCallback(response) {
+
+        });
+    }
+
+    //load the first page
+    $scope.update_list(1);
+
+    $scope.get_input_data = function () {
+        $scope.update_list(1);
     }
 
 }]);

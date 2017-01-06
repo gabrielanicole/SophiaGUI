@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'articles/user_news_case$',views.user_news_case,name='user_news_case'),
     url(r'^get_data/articles/histogram$', views.articlesCountBy ,name='articlesCountBy'),
     url(r'^get_data/articles/articles-list$', views.articlesByDates ,name='articlesByDates'),
-    url(r'^get_data/articles/articles_advance_search$', views.advancedSearch, name='advancedSearch'),
+    url(r'^get_data/articles/articles_advance_search/([0-9]*)/$', views.advancedSearch, name='advancedSearch'),
     url(r'^get_data/articles/([0-9]*)/$',views.get_articles_list, name='get_articles_list'),
 
 ]

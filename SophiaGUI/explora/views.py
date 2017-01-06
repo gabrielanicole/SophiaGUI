@@ -218,9 +218,10 @@ def articlesByDates(request):
         return render(request,'articles_list.html',{'data': data})
 
 @login_required(login_url='/login_required')
-def advancedSearch(request):
+def advancedSearch(request, page=1):
     if request.method == 'POST':
-        data = request.POST.get('json_data')
+        
+        data = request.POST.get('data')
 
         file = json.loads(open("explora/static/user.json").read())
         api_user = file["user"]
@@ -232,13 +233,16 @@ def advancedSearch(request):
 
         #cookies = dict(sessionid=client.cookies['sessionid'])
 
-
-        api = u'http://{0}/v2/search/'.format(api_url)
+        api = u'http://{0}/v2/search/page/{1}/'.format(api_url, page)
 
         response = requests.post(api,data=data)
 
         data_array = json.loads(response.content.encode('utf8'))
+
+        total_pages = data_array['totalPages']
+        actual_page = data_array['page']        
         data = data_array['hits']['hits']
+        
         results = []
         for key in data:
             array_element = {
@@ -252,9 +256,12 @@ def advancedSearch(request):
                     'art_date':key['_source']['art_date']
             }
             results.append(array_element)
-        data = results
-        return render(request,'articles_list.html',{'data': data})
 
+        json_response = {'totalpages': total_pages,
+                         'page': actual_page,
+                         'results': results}
+
+        return JsonResponse(json_response,safe=False)
 
 @login_required(login_url='/login_required')
 def get_articles_list(request, page=1):
