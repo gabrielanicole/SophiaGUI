@@ -6,27 +6,13 @@ app.controller('searchController', ['$scope', '$http', '$window', function ($sco
     $scope.articulos;
     $scope.page_init;
     $scope.page_end;
-    $scope.max_page = 10;
-    $scope.index = 4;
+    $scope.max_page = 7;
     $scope.size = 3;
-    $scope.index;
-
+   
     $scope.page_number = function (page_number) {
         //Function to get the page number from view
         var page = page_number[0][0];
-        if (page == $scope.index - $scope.size && page != 1) {
-            $scope.index = $scope.index - 1;
-            $scope.update_list(page);
-
-        }
-        else if (page == $scope.page_end && page <= $scope.total_pages) {
-            $scope.index = $scope.index + 1;
-            $scope.update_list(page);
-        }
-        else {
-            $scope.index = $scope.index;
-            $scope.update_list(page);
-        }
+        $scope.update_list(page);
     }
 
     $scope.range = function (min, max) {
@@ -110,7 +96,6 @@ app.controller('searchController', ['$scope', '$http', '$window', function ($sco
 
     $scope.update_list = function (page) {
 
-
         var should_contain_group = should_contain.getTagValues();
         var must_contain_group = must_contain.getTagValues();
         var not_contain_group = not_contain.getTagValues();
@@ -132,30 +117,31 @@ app.controller('searchController', ['$scope', '$http', '$window', function ($sco
             url: '/get_data/articles/articles_advance_search/' + page + '/',
             data: $.param({ data: JSON.stringify(json_data) })
         }).then(function successCallback(response) {
-            //$scope.articulos = response.data.results;
-            //$scope.total_pages = response.data.totalpages;
             $scope.articulos = response.data.results;
-            $scope.total_pages = response.data.totalpages;
-            $scope.actual_page = response.data.page;
+            $scope.total_pages = parseInt(response.data.totalpages);
+            $scope.actual_page = parseInt(response.data.page);
 
-            if ($scope.actual_page - 1 != 0) {
-                $scope.page_init = $scope.actual_page - 1;
-                if ($scope.total_pages < $scope.max_page) {
-                    $scope.page_end = $scope.total_pages;
+            var c1 = $scope.actual_page;
+            var c2 = $scope.actual_page;
+
+            for (var a = $scope.actual_page; a <= $scope.actual_page + $scope.size; a++) {
+                if (a >= $scope.total_pages) {
+                    c1 = c1;
                 }
                 else {
-                    $scope.page_end = $scope.max_page;
+                    c1++;
                 }
             }
-            else {
-                $scope.page_init = 1;
-                if ($scope.total_pages < $scope.max_page) {
-                    $scope.page_end = $scope.total_pages;
+            for (var b = $scope.actual_page; b > $scope.actual_page - $scope.size; b--) {
+                if (b <= 1) {
+                    c2 = c2;
                 }
                 else {
-                    $scope.page_end = $scope.max_page;
+                    c2--;
                 }
             }
+            $scope.page_init = c2;
+            $scope.page_end = c1;
 
         }, function errorCallback(response) {
 
@@ -165,6 +151,7 @@ app.controller('searchController', ['$scope', '$http', '$window', function ($sco
     //load the first page
     $scope.update_list(1);
 
+    //Controler for advancesearch button.
     $scope.get_input_data = function () {
         $scope.update_list(1);
     }
