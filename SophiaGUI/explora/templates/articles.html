@@ -188,7 +188,6 @@
 
   <div id="articles-container">
 
-    <div id="spinner"></div>
     <div class="row" style="float: none; margin: 0 auto;">
     <div class="col-md-3"> </div> <!-- Offset-->
     
@@ -241,6 +240,22 @@
              </div>     
        </div>
     </div>
+
+    <div class="row" style="float: none; margin: 0 auto;">
+    <div class="col-md-3"> </div> <!-- Offset-->
+    
+    <div class="col-md-6">
+			<ul class="pagination">
+				<li><a href="#">&laquo;</a></li>
+			   	 <li ng-repeat="page in range(page_init,page_end)"><a ng-click="page_number([[page]])" href="" > [[page]]</a></li>
+        <li><a href="#">&raquo;</a></li>
+			</ul>
+
+     </div>
+     <div class="col-md-3"></div> <!-- Offset-->
+		</div>
+
+  
   </div>
 
 </div>

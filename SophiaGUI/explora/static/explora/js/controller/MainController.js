@@ -37,7 +37,7 @@ app.controller('searchController', ['$scope', '$http', '$window', function ($sco
     var histogram_enddate = new Date().toISOString().slice(0, 10);
 
     var histogram_startdate = new Date();
-    histogram_startdate.setMonth(histogram_startdate.getMonth() - 2);
+    histogram_startdate.setMonth(histogram_startdate.getMonth() - 3);
     histogram_startdate = histogram_startdate.toISOString().slice(0, 10);
 
 
@@ -132,7 +132,7 @@ app.controller('searchController', ['$scope', '$http', '$window', function ($sco
                     c1++;
                 }
             }
-            for (var b = $scope.actual_page; b > $scope.actual_page - $scope.size; b--) {
+            for (var b = $scope.actual_page; b >= $scope.actual_page - $scope.size; b--) {
                 if (b <= 1) {
                     c2 = c2;
                 }
@@ -144,7 +144,7 @@ app.controller('searchController', ['$scope', '$http', '$window', function ($sco
             $scope.page_end = c1;
 
         }, function errorCallback(response) {
-
+            return(response);
         });
     }
 
