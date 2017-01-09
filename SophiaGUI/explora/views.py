@@ -92,23 +92,16 @@ def index(request):
 ##@warning Login is required.
 @login_required(login_url='/login_required')
 def articles(request, num=1):
-
-    pages = 10
-    num_pages = []
-    for i in range(1,pages):
-        num_pages.append(i)
-    
+ 
     my_user = request.user.social_auth.filter(provider='facebook').first()
     if my_user:
         url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
         return render(request,'articles.html',{'user':request.user.get_full_name()
                                                ,'profile_pic':url
-                                               ,'num_pages':num_pages
                                                })
     else:
         return render(request,'articles.html',{'user':request.user.get_full_name()
-                                               ,'num_pages':num_pages
-                                               })
+                                              })
                                             
 ##@brief Function that log out the user from Sophia
 ##@param requestfrom django.http import JsonResponse
@@ -214,8 +207,7 @@ def articlesByDates(request):
             }
             results.append(array_element)
         data = results
-        
-        return render(request,'articles_list.html',{'data': data})
+        return JsonResponse(data, safe=False)
 
 @login_required(login_url='/login_required')
 def advancedSearch(request, page=1):
@@ -306,4 +298,57 @@ def get_articles_list(request, page=1):
         json_response = {'totalpages': total_pages,
                          'results': results}
       
+        return JsonResponse(json_response ,safe=False)
+
+
+@login_required(login_url='/login_required')
+def tweets(request):
+
+    my_user = request.user.social_auth.filter(provider='facebook').first()
+    if my_user:
+        url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
+        return render(request,'tweets.html',{'user':request.user.get_full_name()
+                                             ,'profile_pic':url
+                                               })
+    else:
+        return render(request,'tweets.html',{'user':request.user.get_full_name()
+                                               })
+
+@login_required(login_url='/login_required')
+def getTweetsList(request, page=1):
+
+    if request.method == 'POST':
+        try:
+            file = json.loads(open("explora/static/user.json").read())
+            api_user = file["user"]
+            api_password = file["password"]
+            api_url = file["api_url"]
+
+        except Exception as e:
+             return HttpResponse("Failed to load user")
+        
+        api = u'http://{0}/v2/search/page/{1}/'.format(api_url, page)
+        data = request.POST.get('data').encode('utf8')
+        response = requests.post(api,data=data)
+        data_array = json.loads(response.text.encode('utf8'))
+        totalPages = data_array['totalPages']
+        actual_page = data_array['page']
+        data_array = data_array['hits']['hits']
+        results = []
+        
+        for document in data_array:
+            result = {
+                "pub_username": document['_source']['pub_username'],
+                "pub_date": document['_source']['pub_date'],
+                "pub_content": document['_source']['pub_content'],
+                "pub_url": document['_source']['pub_url']
+            }
+            results.append(result)
+
+        json_response = {
+            'totalPages':totalPages,
+            'results':results,
+            'page':actual_page
+        }
+
         return JsonResponse(json_response ,safe=False)

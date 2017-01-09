@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Sophia</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/explora/articles.css" type="text/css">
+  <link rel="stylesheet" href="/static/explora/navbar.css" type="text/css">
+	<link rel="stylesheet" href="/static/explora/tweets.css" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="http://spin.js.org/spin.min.js"></script>
+
+  <!-- histograma -->
+  <link rel="stylesheet" type="text/css" href="/static/explora/visual/histograma/histograma.css">
+  <script type="text/javascript" src="/static/explora/visual/histograma/d3.v3.min.js"></script>
+  <script type="text/javascript" src="/static/explora/visual/histograma/histograma.js"></script>
+  <!--taggle.js-->
+  <script type="text/javascript" src="/static/explora/externalJS/taggle.js"></script>
+  <link rel="stylesheet" href="/static/explora/externalCSS/taggle.css" type="text/css">
+  
+  <!-- angularAPP -->
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+  <script type="text/javascript" src="/static/explora/js/app.js"></script>
+  <script type="text/javascript" src="/static/explora/js/controller/MainController.js"></script>
+
+</head>
+
+<body ng-app="explora">
+
+	<nav id="custom-bootstrap-menu" class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="#">Sophia Project</a>
+	    </div>
+	    <ul class="nav navbar-nav navbar-right">
+	    	{%if profile_pic %}
+	    		<li>
+	    		<img src="{{profile_pic}}" class="profile-pic img-circle">
+	    	    </li>
+	      	{% else %}
+		    	<li>
+		    		<img src="http://placehold.it/50x50" class="profile-pic img-circle">
+		    	</li>
+		    {% endif %}
+	      	<li>
+	      		<a>{{user}}</a>
+	      	</li>
+
+    	  <li>
+		    <p style="padding-right:10px" class = "navbar-btn">
+		       <a href="#" class="btn btn-default" role="button"><span class="glyphicon glyphicon-cog"></span> Configuración</a>
+		    </p>
+		  </li>
+		  <li>
+		    <p style ="padding-right:10px" class = "navbar-btn">
+		    	<a href="/logout" class="btn btn-default" role="button"><span class="glyphicon glyphicon-off"></span> Log out</a>
+		    </p>
+		  </li>
+	    </ul>
+	  </div>
+	</nav>
+
+	<div class="container-fluid">
+		<div class="col-md-2">
+			<ul class="nav nav-pills nav-stacked">
+			  <li role="presentation"><a href="/tweets">Tweets</a></li>
+			  <li role="presentation"><a href="/articles">Noticias</a></li> 
+
+			</ul>
+		</div>
+
+		<div id="main-content" class="col-md-10">
+        {% block content %}
+        {% endblock %}
+       </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+{% extends 'base.html' %} {% block content %}
+
+<div ng-controller='tweetsController'>
+
+    <div class=row>
+        <form class="navbar-form navbar-left" role="search">
+
+            <div class="form-group">
+                <div class="selectContainer">
+                    <select class="form-control" name="medio">
+				            	<option value="null"> Cualquier medio</option>
+				                <option value="m1">Medio 1</option>
+				            </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="selectContainer">
+                    <select class="form-control" name="categoria">
+	   			            	<option value="null"> Cualquier categoria</option>
+		     		                <option value="c1">Categoria 1</option>
+		 		            </select>
+                </div>
+            </div>
+            <button class="btn btn-default" ng-click="get_input_data()"> Buscar</button>
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div id="should" class="input textarea"></div>
+        </div>
+        <div class="col-md-4">
+            <div id="and" class="input textarea"></div>
+        </div>
+        <div class="col-md-4">
+            <div id="not" class="input textarea"></div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="true">
+                Ver por
+                <span class="caret"></span>
+            </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li ng-repeat="option in options"><a ng-click="selectedItem(option.value)">[[option.key]]</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-3"></div>
+        <!-- Offset-->
+        <div class="col-md-6">
+            <ul class="pagination">
+                <li><a href="#">&laquo;</a></li>
+                <li ng-repeat="page in range(page_init,page_end)"><a ng-click="page_number([[page]])" href=""> [[page]]</a></li>
+                <li><a href="#">&raquo;</a></li>
+            </ul>
+        </div>
+        <div class="col-md-3"></div>
+        <!-- Offset-->
+    </div>
+
+    <div ng-repeat="d in tweets">
+        <div class="row tweet-box">
+            <div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5><strong>Usuario: </strong>[[ d.pub_username ]]</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <h5><strong>Fecha: </strong>[[ d.pub_date ]] </h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5><strong>Contenido: </strong>[[ d.pub_content ]]</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p><strong>Url: </strong><a href="[[d.pub_url]]">[[d.pub_url]]</a> </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

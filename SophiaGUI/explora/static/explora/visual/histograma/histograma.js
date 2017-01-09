@@ -209,8 +209,8 @@ function generate_histogram(width, height, data_json) {
                 cord = d3.mouse(this);
                 d3.select(this).style("fill", "#66cdaa");
                 d3.select("#tip")
-                    .style("left", cord[0] - 100 + "px")
-                    .style("top", cord[1] - 100 + "px")
+                    .style("left", cord[0] + "px")
+                    .style("top", cord[1] + "px")
                     .style("opacity", 1);
                 d3.select("#value").text(d.doc_count);
                 d3.select("#tip").select("#date").text(d.key_as_string);
@@ -219,7 +219,7 @@ function generate_histogram(width, height, data_json) {
                 d3.select(this).style("fill", "#078770");
                 d3.select("#tip")
                     .style("left", 0 + "px")
-                    .style("top", 0 + "px")
+                    .style("top", 2000 + "px")
                     .style("opacity", 0);
             })
             .style("fill", "#078770");

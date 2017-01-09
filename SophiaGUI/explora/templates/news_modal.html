@@ -1,101 +1,90 @@
-
 <script>
-  function load_items()
-  {
-  $(".metadata").fadeOut(0);
-  $("#news-case-button").fadeOut(0);
+  function load_items() {
+    $(".metadata").fadeOut(0);
+    $("#news-case-button").fadeOut(0);
 
-  $.ajax({
+    $.ajax({
       url: '/articles/user_news_case',
       type: 'GET',
-      data:{csrfmiddlewaretoken: '{{ csrf_token }}'},
-      success: function(data) {
+      data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
+      success: function (data) {
         $(".news-case").append(data);
       },
-      failure: function(data) {
-          alert('Error de conexión');
+      failure: function (data) {
+        alert('Error de conexión');
       },
       crossDomain: true
-  });
+    });
 
-}
+  }
 </script>
 
 <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog modal-lg custom-modal-dialog">
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header" style="background-color:#078770">
-          <button type="button" style="color:White" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title" style="color:White" align="center">Detalles de la noticia	</h4>
+  <div class="modal-dialog modal-lg custom-modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header" style="background-color:#078770">
+<button type="button" style="color:White" class="close" data-dismiss="modal">&times;</button>
+<h4 class="modal-title" style="color:White" align="center">Detalles de la noticia </h4>
+</div>
+
+<div class="modal-body">
+  <div class="container-fluid">
+
+    <div class="row">
+
+      <div class="col-md-2 news-case">
+
+        <div class="row metadata">
+          <div class="news-metadata">
+            <p>Fuente: {{host}}</p>
+          </div>
         </div>
 
-        <div class="modal-body">
-        <div class="container-fluid">
-
-          <div class="row">
-
-            <div class="col-md-2 news-case">
-
-              <div  class="row metadata">
-                <div class="news-metadata">
-                  <p>Fuente: {{host}}</p>
-                </div>
-              </div>
-
-              <div class="row metadata">
-                <div class="news-metadata">
-                  <p>Tema: {{host}}</p>
-                </div>
-              </div>
-
-              <div class="row metadata">
-                <div class="news-metadata">
-                  <p>Fecha: {{date}}</p>
-                </div>
-              </div>
-
-              <div class="row metadata">
-                <div class="news-metadata">
-                  <p>Categoria: {{category}} </p>
-                </div>
-              </div>
-
-              <div class="row metadata">
-                <div class="news-metadata">
-                  <p>Lugar: Ubicación</p>
-                </div>
-              </div>
-
-              <div class="row metadata">
-                <div class="news-metadata">
-                <p>Enlace: <a href="{{url}}">{{url|urlizetrunc:15}}</a> </p>
-                </div>
-              </div>
-
-              <div class="row">
-                  <button id="news-case-button" style="margin:5px;width:95%;" type="button" class="btn btn-default" onclick="load_items()">Caso Noticioso</button>
-              </div>
-            </div>
-
-            <div class="col-md-10">
-              <div class="row">
-                <div class="col-md-12">
-                     <iframe src="{{url}}" height="500" width="1000" frameBorder="0"></iframe>
-                </div>
-              </div>
-            </div>
-
+        <div class="row metadata">
+          <div class="news-metadata">
+            <p>Fecha: {{date}}</p>
           </div>
+        </div>
 
-        	</div>
+        <div class="row metadata">
+          <div class="news-metadata">
+            <p>Categoria: {{category}} </p>
+          </div>
+        </div>
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <div class="row metadata">
+          <div class="news-metadata">
+            <p>Lugar: Ubicación</p>
+          </div>
+        </div>
+
+        <div class="row metadata">
+          <div class="news-metadata">
+            <p>Enlace: <a href="{{url}}">{{url|urlizetrunc:15}}</a> </p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-md-12">
+            <iframe src="{{url}}" height="500" width="1000" frameBorder="0"></iframe>
+          </div>
         </div>
       </div>
+
     </div>
-   </div>
+
   </div>
- </div>
- <!-- End of Modal -->
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- End of Modal -->

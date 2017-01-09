@@ -1,37 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <title>Sophia</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/static/explora/articles.css" type="text/css">
-  <link rel="stylesheet" href="/static/explora/navbar.css" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-  <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <script src="http://spin.js.org/spin.min.js"></script>
-
-  <!-- histograma -->
-  <link rel="stylesheet" type="text/css" href="/static/explora/visual/histograma/histograma.css">
-  <script type="text/javascript" src="/static/explora/visual/histograma/d3.v3.min.js"></script>
-  <script type="text/javascript" src="/static/explora/visual/histograma/histograma.js"></script>
-  <!--taggle.js-->
-  <script type="text/javascript" src="/static/explora/externalJS/taggle.js"></script>
-  <link rel="stylesheet" href="/static/explora/externalCSS/taggle.css" type="text/css">
-  
-  <!-- angularAPP -->
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
-  <script type="text/javascript" src="/static/explora/js/app.js"></script>
-  <script type="text/javascript" src="/static/explora/js/controller/MainController.js"></script>
-
-</head>
-
-<body ng-app="explora">
-
-
-	<script type="text/javascript">
+{% extends 'base.html' %}
+{% block content %}
+<script type="text/javascript">
 		//Script called to open the modal window
 
 		$(document).ready(function(){
@@ -66,51 +35,6 @@
 	</script>
 
 
-
-	<nav id="custom-bootstrap-menu" class="navbar navbar-default">
-	  <div class="container-fluid">
-	    <div class="navbar-header">
-	      <a class="navbar-brand" href="#">Sophia Project</a>
-	    </div>
-	    <ul class="nav navbar-nav navbar-right">
-	    	{%if profile_pic %}
-	    		<li>
-	    		<img src="{{profile_pic}}" class="profile-pic img-circle">
-	    	    </li>
-	      	{% else %}
-		    	<li>
-		    		<img src="http://placehold.it/50x50" class="profile-pic img-circle">
-		    	</li>
-		    {% endif %}
-	      	<li>
-	      		<a>{{user}}</a>
-	      	</li>
-
-    	  <li>
-		    <p style="padding-right:10px" class = "navbar-btn">
-		       <a href="#" class="btn btn-default" role="button"><span class="glyphicon glyphicon-cog"></span> Configuración</a>
-		    </p>
-		  </li>
-		  <li>
-		    <p style ="padding-right:10px" class = "navbar-btn">
-		    	<a href="/logout" class="btn btn-default" role="button"><span class="glyphicon glyphicon-off"></span> Log out</a>
-		    </p>
-		  </li>
-	    </ul>
-	  </div>
-	</nav>
-
-	<div class="container-fluid">
-		<div class="col-md-2">
-			<ul class="nav nav-pills nav-stacked">
-			  <li role="presentation"><a href="#">Noticias</a></li>
-			  <li role="presentation"><a href="#">Casos Noticiosos</a></li>
-
-			</ul>
-		</div>
-
-		<div id="main-content" class="col-md-10">
-
 <div ng-controller="searchController">
 
 	 <div class=row>
@@ -121,9 +45,6 @@
 				            <select class="form-control" name="medio">
 				            	<option value="null"> Cualquier medio</option>
 				                <option value="m1">Medio 1</option>
-				                <option value="m2">Medio 2</option>
-				                <option value="m3">Medio 3</option>
-				                <option value="m4">Medio 4</option>
 				            </select>
 				        </div>
 		    </div>
@@ -133,9 +54,6 @@
 				            <select class="form-control" name="categoria">
 				            	<option value="null"> Cualquier categoria</option>
 				                <option value="c1">Categoria 1</option>
-				                <option value="c2">Categoria 2</option>
-				                <option value="c3">Categoria 3</option>
-				                <option value="c4">Categoria 4</option>
 				            </select>
 				        </div>
 				    </div>
@@ -179,19 +97,19 @@
 
   <div id="articles-container">
 
-    <div class="row" style="float: none; margin: 0 auto;">
-    <div class="col-md-3"> </div> <!-- Offset-->
-    
-    <div class="col-md-6">
-			<ul class="pagination">
-				<li><a href="#">&laquo;</a></li>
-			   	 <li ng-repeat="page in range(page_init,page_end)"><a ng-click="page_number([[page]])" href="" > [[page]]</a></li>
-        <li><a href="#">&raquo;</a></li>
-			</ul>
-
-     </div>
-     <div class="col-md-3"></div> <!-- Offset-->
-		</div>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <!-- Offset-->
+        <div class="col-md-6">
+            <ul class="pagination">
+                <li><a href="#">&laquo;</a></li>
+                <li ng-repeat="page in range(page_init,page_end)"><a ng-click="page_number([[page]])" href=""> [[page]]</a></li>
+                <li><a href="#">&raquo;</a></li>
+            </ul>
+        </div>
+        <div class="col-md-3"></div>
+        <!-- Offset-->
+    </div>
 
     <div ng-repeat="d in articulos">
       <div ng-class="row|($index % 4 == 0)">
@@ -202,14 +120,9 @@
                     <div class="col-md-6">
                       <h5 class="text-left"> [[d.art_date]]  </h5>
                     </div>
-                    <span style="cursor:pointer">
-                      <div class="col-md-6 dropdown">
+                      <div class="col-md-6">
                         <h5 class="category text-right"> [[d.art_category|uppercase]]</h5>
-                        <div class="dropdown-content">
-                            <h5 class="category text-left">POLITICA</h5>
-                        </div>
                       </div>
-                    </span>
                   </div>
 
                   <div class="row">
@@ -232,39 +145,21 @@
        </div>
     </div>
 
-    <div class="row" style="float: none; margin: 0 auto;">
-    <div class="col-md-3"> </div> <!-- Offset-->
-    
-    <div class="col-md-6">
-			<ul class="pagination">
-				<li><a href="#">&laquo;</a></li>
-			   	 <li ng-repeat="page in range(page_init,page_end)"><a ng-click="page_number([[page]])" href="" > [[page]]</a></li>
-        <li><a href="#">&raquo;</a></li>
-			</ul>
-
-     </div>
-     <div class="col-md-3"></div> <!-- Offset-->
-		</div>
-
-<div class="row">
-     <div class="hid" id="tip">
-          <p><strong style="color:red">Cantidad</strong>
-          </p>
-          <p style="color:white"><span id="value">100</span></p>
-          <p><strong style="color:red">Fecha</strong>
-          </p>
-          <p style="color:white"><span id="date">0</span></p>
-      </div>
-</div>
-  
+    <div class="row">
+        <div class="hid" id="tip">
+              <p><strong style="color:red">Cantidad</strong>
+              </p>
+              <p style="color:white"><span id="value">100</span></p>
+              <p><strong style="color:red">Fecha</strong>
+              </p>
+              <p style="color:white"><span id="date">0</span></p>
+          </div>
+    </div>
+      
   </div>
 
-</div>
-
-  </div>
 </div>
 	<!-- Here we put the rendered modal window code via AJAX-->
 	<div id="modal"> </div>
-
-</body>
-</html>
+  </div>
+{% endblock content %}
