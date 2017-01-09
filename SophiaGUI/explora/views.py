@@ -221,7 +221,7 @@ def articlesByDates(request):
 def advancedSearch(request, page=1):
     if request.method == 'POST':
         
-        data = request.POST.get('data')
+        data = request.POST.get('data').encode('utf8')
 
         file = json.loads(open("explora/static/user.json").read())
         api_user = file["user"]
