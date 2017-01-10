@@ -46,6 +46,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     histogram_startdate = histogram_startdate.toISOString().slice(0, 10);
     $scope.windowsWidth = $window.innerWidth;
     $scope.granularity = 'day';
+
     $scope.selectedItem = function (selected) {
         $scope.granularity = selected;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
@@ -90,6 +91,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
+            "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
         }
 
         $http({
@@ -130,6 +132,8 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     $scope.page_end;
     $scope.max_page = 7;
     $scope.size = 3;
+    $scope.startdate;
+    $scope.enddate;
 
     var should_contain = new Taggle('should', { placeholder: 'Concepto o frase importante en mi búsqueda' });
     var must_contain = new Taggle('and', { placeholder: 'Concepto o frase fundamental en mi búsqueda' });
@@ -165,6 +169,9 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     histogram_startdate = histogram_startdate.toISOString().slice(0, 10);
     $scope.windowsWidth = $window.innerWidth;
     $scope.granularity = 'day';
+
+    $scope.startdate = histogram_startdate;
+    $scope.enddate = histogram_enddate;
 
     $scope.selectedItem = function (selected) {
         $scope.granularity = selected;
@@ -211,6 +218,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
+            "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
         }
 
         $http({

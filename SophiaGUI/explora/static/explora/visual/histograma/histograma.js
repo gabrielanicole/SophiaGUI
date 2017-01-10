@@ -224,19 +224,18 @@ function generate_histogram(width, height, data_json) {
             })
             .style("fill", "#078770");
 
-
         chart.select("g.y.axis").call(yAxis);
         chart.select("g.x.axis").call(xAxis);
-
 
         //brush brush_values converted into date format yyyy-MM-dd
         var startdate = brush_values[0].toISOString().slice(0, 10);
         var enddate = brush_values[1].toISOString().slice(0, 10);
 
-        var scope = angular.element($("#articlesController")).scope();
+        var scope = angular.element($("#angularController")).scope();
         scope.$apply(function () {
             scope.startdate = startdate;
             scope.enddate = enddate;
+            scope.update_list(1);
         })
     }
 }
