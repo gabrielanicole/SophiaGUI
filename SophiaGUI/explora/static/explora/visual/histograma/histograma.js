@@ -228,8 +228,15 @@ function generate_histogram(width, height, data_json) {
         chart.select("g.y.axis").call(yAxis);
         chart.select("g.x.axis").call(xAxis);
 
+
         //brush brush_values converted into date format yyyy-MM-dd
         var startdate = brush_values[0].toISOString().slice(0, 10);
         var enddate = brush_values[1].toISOString().slice(0, 10);
+
+        var scope = angular.element($("#articlesController")).scope();
+        scope.$apply(function () {
+            scope.startdate = startdate;
+            scope.enddate = enddate;
+        })
     }
 }

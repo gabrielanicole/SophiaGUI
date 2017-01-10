@@ -131,11 +131,10 @@ def user_news_case(request):
 def articlesCountBy(request):
     if request.method == 'POST':
 
-        print request.POST
-
-        startdate = request.POST.get('startdate')
-        enddate = request.POST.get('enddate')
-        countby = request.POST.get('countby')
+        startdate = request.POST.get('startdate').encode('utf8')
+        enddate = request.POST.get('enddate').encode('utf8')
+        countby = request.POST.get('countby').encode('utf8')
+        search = request.POST.get('search').encode('utf8')
 
         file = json.loads(open("explora/static/user.json").read())
         api_user = file["user"]
@@ -148,11 +147,10 @@ def articlesCountBy(request):
        # cookies = dict(sessionid=client.cookies['sessionid'])
 
         api = u'http://{0}/v2/articles/from/{1}/to/{2}/countby/{3}'.format(api_url,startdate,enddate,countby)
-        print api
-
-        # response = requests.get(api,cookies=cookies)
+        
         try:
-            response = requests.get(api)
+            response = requests.post(api, data=search)
+            #response = requests.get(api)
 
         except Exception as e:
              return HttpResponse(e)
@@ -160,7 +158,6 @@ def articlesCountBy(request):
         data = json.loads(response.text.encode('utf8'))
 
         data = data['aggregations']['articles_over_time']['buckets']
-
         return JsonResponse(data,safe=False)
 
 
@@ -352,3 +349,36 @@ def getTweetsList(request, page=1):
         }
 
         return JsonResponse(json_response ,safe=False)
+
+@login_required(login_url='/login_required')
+def tweetsCountBy(request):
+    if request.method == 'POST':
+
+        startdate = request.POST.get('startdate').encode('utf8')
+        enddate = request.POST.get('enddate').encode('utf8')
+        countby = request.POST.get('countby').encode('utf8')
+        search = request.POST.get('search').encode('utf8')
+
+        file = json.loads(open("explora/static/user.json").read())
+        api_user = file["user"]
+        api_password = file["password"]
+        api_url = file["api_url"]
+
+       # client = requests.post('http://{0}/v2/login/'.format(api_url),
+       #      {'username': api_user, 'password': api_password})
+
+       # cookies = dict(sessionid=client.cookies['sessionid'])
+
+        api = u'http://{0}/v2/publications/from/{1}/to/{2}/countby/{3}'.format(api_url,startdate,enddate,countby)
+        
+        try:
+            response = requests.post(api, data=search)
+            #response = requests.get(api)
+
+        except Exception as e:
+             return HttpResponse(e)
+
+        data = json.loads(response.text.encode('utf8'))
+
+        data = data['aggregations']['publications_over_time']['buckets']
+        return JsonResponse(data,safe=False)

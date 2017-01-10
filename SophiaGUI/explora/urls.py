@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^get_data/articles/([0-9]*)/$',views.get_articles_list, name='get_articles_list'),
     url(r'^tweets$',views.tweets,name='tweets'),
     url(r'^get_data/tweets/([0-9]*)/$', views.getTweetsList, name='getTweetsList'),
+    url(r'^get_data/tweets/histogram/$', views.tweetsCountBy, name='tweetsCountBy'),
 ]
