@@ -4,7 +4,7 @@ from social.apps.django_app.default.models import UserSocialAuth
 # Create your models here.
 
 class Profile(models.Model):
-    user = models.OneToOneField(UserSocialAuth, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 class NewsCase(models.Model):
     name = models.CharField(max_length=150)

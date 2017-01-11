@@ -62,8 +62,8 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
 }
 
 #Save social auth users as Django default users
-#SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
-#SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
+SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
+SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,13 +78,18 @@ MIDDLEWARE_CLASSES = [
 ]
 
 SOCIAL_AUTH_PIPELINE = (
+   (
     'social.pipeline.social_auth.social_details',
     'social.pipeline.social_auth.social_uid',
     'social.pipeline.social_auth.auth_allowed',
     'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.user.create_user',
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
-    'explora.explora_pipeline.save_profile',
+    'social.pipeline.user.user_details',
+    'explora.explora_pipeline.save_profile'
+    )
 )
 
 ROOT_URLCONF = 'SophiaGUI.urls'
