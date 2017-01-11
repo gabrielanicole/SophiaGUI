@@ -39,15 +39,15 @@ def modal_new(request):
             api_password = file["password"]
             api_url = file["api_url"]
 
-            art_id = request.POST['art_id']
-
-            client = requests.post('http://{0}/v2/login/'.format(api_url),
-                 {'username': api_user, 'password': api_password})
-            cookies = dict(sessionid=client.cookies['sessionid'])
+            art_id = request.POST.get('art_id').encode('utf8')
+            #client = requests.post('http://{0}/v2/login/'.format(api_url),
+            #     {'username': api_user, 'password': api_password})
+            #cookies = dict(sessionid=client.cookies['sessionid'])
             #api_url = u'http://api.sophia-project.info/articles/{0}/'.format(news_pk)
             api_url = u'http://{0}/v2/articles/{1}/'.format(api_url,art_id)
 
-            response = requests.get(api_url ,cookies=cookies)
+            #response = requests.get(api_url ,cookies=cookies)
+            response = requests.get(api_url)
 
             data = json.loads(response.text.encode('utf8'))
 

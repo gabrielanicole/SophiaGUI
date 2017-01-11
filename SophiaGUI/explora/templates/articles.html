@@ -1,39 +1,5 @@
 {% extends 'base.html' %}
 {% block content %}
-<script type="text/javascript">
-		//Script called to open the modal window
-
-		$(document).ready(function(){
-
-			$(document).on('click','.news-data',function(){
-
-				var art_id = $(this).data('val');
-
-				$.ajax({
-				    url: '/articles/modal_new',
-				    type: 'POST',
-				    data:{art_id:art_id , csrfmiddlewaretoken: '{{ csrf_token }}'},
-				    success: function(data) {
-				    	//Find if the element already exist
-				    	if( $('#myModal').length )
-				    	{
-				    		$('#myModal').remove();
-				    	}
-				    	//In the tag <modal> then append the response from Django
-				        $('#modal').append(data);
-				    	//Then display the modal window
-				        $('#myModal').modal('show');
-				    },
-				    failure: function(data) {
-				        alert('Error de conexión');
-				    },
-				    crossDomain: true
-				});
-			});
-		});
-
-	</script>
-
 <div id="angularController" ng-controller="searchController">
 
 	 <div class=row>
@@ -137,7 +103,7 @@
 
                   <div class="row">
                     <span style="cursor:pointer">
-                      <h4 class="news-data" data-val="[[d.art_id]]"> [[d.art_title|limitTo:150]] </h4>
+                      <h4 class="news-data" ng-click="loadModal([[ d.art_id ]])"> [[d.art_title|limitTo:150]] </h4>
                     </span>
                   </div>
              </div>     
@@ -156,9 +122,10 @@
     </div>
       
   </div>
+	<!-- Here we put the rendered modal window code via AJAX-->
+  <div id="modal"> </div>
+  </div>
 
 </div>
-	<!-- Here we put the rendered modal window code via AJAX-->
-	<div id="modal"> </div>
-  </div>
+
 {% endblock content %}
