@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.shortcuts import HttpResponse
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
+from models import Profile
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
@@ -78,12 +79,10 @@ def user_not_logged(request):
         return render(request,'login_required.html')
 
 def index(request):
-
     if request.user.is_authenticated():
         return redirect('articles')
     else:
         return render(request,'home.html')
-
 
 ##@brief Function that  render the "articles" page.
 ##@param request Web request
