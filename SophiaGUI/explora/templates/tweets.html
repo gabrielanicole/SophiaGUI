@@ -5,26 +5,23 @@
     <div class=row>
         <form class="navbar-form navbar-left" role="search">
 
-            <div class="form-group">
-                <div class="selectContainer">
-                    <select class="form-control" name="medio">
-				            	<option value="null"> Cualquier medio</option>
-				                <option value="m1">Medio 1</option>
+			  <div class="form-group">
+				        <div class="selectContainer">
+				            <select class="form-control" name="medio" ng-model="selectedMedium" ng-options="x for x in press_source">
 				            </select>
-                </div>
-            </div>
+				        </div>
+		       </div>
 
-            <div class="form-group">
-                <div class="selectContainer">
-                    <select class="form-control" name="categoria">
-	   			            	<option value="null"> Cualquier categoria</option>
-		     		                <option value="c1">Categoria 1</option>
-		 		            </select>
-                </div>
-            </div>
+				<div class="form-group">
+				        <div class="selectContainer">
+				            <select class="form-control" name="categoria" ng-model="selectedCategory" ng-options="x for x in category">
+				            </select>
+				        </div>
+				</div>
             <button class="btn btn-default" ng-click="get_input_data()"> Buscar</button>
         </form>
     </div>
+
 
     <div class="row">
         <div class="col-md-4">

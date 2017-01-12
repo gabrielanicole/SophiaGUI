@@ -381,3 +381,33 @@ def tweetsCountBy(request):
 
         data = data['aggregations']['publications_over_time']['buckets']
         return JsonResponse(data,safe=False)
+
+@login_required(login_url='/login_required')
+def createNewsCase(request):
+    if request.method == 'POST':
+        try:
+
+            data = request.POST.get('data').encode('utf8')
+            data = json.loads(data)          
+            follow_new_feed = data['follow_new_feed']
+
+            elastic_data = {
+                "new_name":data['new_name'],
+                "new_date":data['new_date'],
+                "new_date_from":data['dates']['startdate'],
+                "new_date_to":data['dates']['startdate'],
+                "new_and":data['and'],
+                "new_or":data['or'],
+                "new_category":data['category'],
+                "new_press_source":data['press_source'],
+                "new_not":data['not_and'],
+                "new_art_yes":[],
+                "new_art_not":[],
+                "new_index":data['index'],
+                "new_fields":[data['fields'][0],data['fields'][1]]
+            }
+            userprofile = Profile.objects.get(user=request.user.pk)
+            print userprofile
+            return HttpResponse('ok')
+        except Exception as e:
+            return HttpResponse(e)

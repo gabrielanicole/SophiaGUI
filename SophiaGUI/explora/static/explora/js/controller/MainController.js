@@ -8,9 +8,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.max_page = 7;
     $scope.size = 3;
 
-    $scope.startdate;
-    $scope.enddate;
-
     //Section to control the TAG sistem
     var should_contain = new Taggle('should', { placeholder: 'Concepto o frase importante en mi búsqueda' });
     var must_contain = new Taggle('and', { placeholder: 'Concepto o frase fundamental en mi búsqueda' });
@@ -30,6 +27,12 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         return output;
     }
 
+    $scope.press_source = ["Cualquier Medio", "medioX", "medioY", "medioZ"];
+    $scope.category = ["Cualquier Categoría", "Category1", "Category2", "Category3"];
+    //Default values
+    $scope.selectedMedium = $scope.press_source[0];
+    $scope.selectedCategory = $scope.category[0];
+
     $scope.options = [
         { key: "Minuto", value: "minute" },
         { key: "Hora", value: "hour" },
@@ -46,6 +49,9 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     histogram_startdate = histogram_startdate.toISOString().slice(0, 10);
     $scope.windowsWidth = $window.innerWidth;
     $scope.granularity = 'day';
+
+    $scope.startdate = histogram_startdate;
+    $scope.enddate = histogram_enddate;
 
     $scope.selectedItem = function (selected) {
         $scope.granularity = selected;
@@ -144,6 +150,53 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         });
     }
 
+    $scope.createNewsCase = function (newsCaseName) {
+        //Format the necesary data for the newsCase
+        $scope.news_case_name = newsCaseName[0][0];
+        var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
+
+
+        var aux_category;
+        if ($scope.selectedCategory == 'Cualquier Categoría') { aux_category = ""; }
+        else { aux_category = $scope.selectedCategory; }
+
+        var aux_press_source;
+        if ($scope.selectedMedium == 'Cualquier Medio') { aux_press_source = ""; }
+        else { aux_press_source = $scope.selectedMedium; }
+
+        var today = new Date().toISOString().slice(0, 10)
+        var checked = $('#toogleCase').prop('checked');
+        var json_data = {
+            "index": "articles",
+            "fields": ["art_title", "art_content"],
+            "and": tag_values.must_contain_group,
+            "or": tag_values.should_contain_group,
+            "not_and": tag_values.not_contain_group,
+            "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
+            "category": aux_category,
+            "press_source": aux_press_source,
+            "new_name": $scope.news_case_name,
+            "new_date":today,
+            "follow_new_feed":checked
+        }
+
+        if ($scope.news_case_name.length > 0) {
+            $http({
+                method: 'POST',
+                url: '/create/newsCase/',
+                data: $.param({ data: JSON.stringify(json_data) })
+            }).then(function successCallback(response) {
+                console.log(response);
+            }, function errorCallback(response) {
+                return (response);
+            });
+        }
+        else {
+            console.log("No se ingresó nombre al caso");
+        }
+        $scope.news_case_name = "";
+    }
+
 }]);
 
 app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', function ($scope, $http, dataFormat, $window) {
@@ -174,6 +227,13 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
         }
         return output;
     }
+
+    $scope.press_source = ["Cualquier Medio", "medioX", "medioY", "medioZ"];
+    $scope.category = ["Cualquier Categoría", "Category1", "Category2", "Category3"];
+    //Default values
+    $scope.selectedMedium = $scope.press_source[0];
+    $scope.selectedCategory = $scope.category[0];
+
 
     $scope.options = [
         { key: "Minuto", value: "minute" },

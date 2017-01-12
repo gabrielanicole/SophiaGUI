@@ -7,22 +7,20 @@
 
 				    <div class="form-group">
 				        <div class="selectContainer">
-				            <select class="form-control" name="medio">
-				            	<option value="null"> Cualquier medio</option>
-				                <option value="m1">Medio 1</option>
+				            <select class="form-control" name="medio" ng-model="selectedMedium" ng-options="x for x in press_source">
 				            </select>
 				        </div>
-		    </div>
+		       </div>
 
 				    <div class="form-group">
 				        <div class="selectContainer">
-				            <select class="form-control" name="categoria">
-				            	<option value="null"> Cualquier categoria</option>
-				                <option value="c1">Categoria 1</option>
+				            <select class="form-control" name="categoria" ng-model="selectedCategory" ng-options="x for x in category">
 				            </select>
 				        </div>
 				    </div>
+
             <button class="btn btn-default" ng-click="get_input_data()"> Buscar</button>
+            <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal"> Crear Caso</button>
 					</form>
 
 		</div>
@@ -120,8 +118,40 @@
               <p style="color:white"><span id="date">0</span></p>
           </div>
     </div>
-      
   </div>
+
+  <!-- Modal For News Cases -->
+  <div id="newsCaseModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Crear Caso Noticioso</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12">
+            <p>Debe ingresar un nombre para su caso noticioso, de esta forma le será más fácil buscarlo después</p>
+            <div class="form-group">
+            <label>Nombre del Caso Noticioso:</label>
+            <input name="news_case_name" type="text" class="form-control" ng-model="news_case_name" ng-required="true">
+            <label>
+              <input id="toogleCase" checked data-toggle="toggle" data-onstyle="success" type="checkbox">
+              ¿Recolectar noticias automáticamente para este caso noticioso?</label>
+          </div>         
+        </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="createNewsCase([[news_case_name]])">Crear</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 	<!-- Here we put the rendered modal window code via AJAX-->
   <div id="modal"> </div>
   </div>

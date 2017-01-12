@@ -11,3 +11,4 @@ class NewsCase(models.Model):
     elastic_id = models.CharField   (primary_key=True, max_length=30)
     img_preview = models.CharField(max_length=300)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    follow_new_feed = models.BooleanField(default=True)

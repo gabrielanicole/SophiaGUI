@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^get_data/tweets/histogram/$',
         views.tweetsCountBy, name='tweetsCountBy'),
     url(r'^accounts/login/?next=/', views.index, name='index'),
+    url(r'^create/newsCase/',views.createNewsCase,name='createNewsCase'),
 ]
