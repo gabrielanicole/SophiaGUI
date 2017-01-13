@@ -215,7 +215,9 @@ def articlesByDates(request):
         data = results
         return JsonResponse(data, safe=False)
 
-
+# @brief Function get a List of Articles
+# @param request
+# @return JsonResponse with articles selected
 @login_required(login_url='/login_required')
 def advancedSearch(request, page=1):
     if request.method == 'POST':
@@ -262,53 +264,9 @@ def advancedSearch(request, page=1):
         return JsonResponse(json_response, safe=False)
 
 
-@login_required(login_url='/login_required')
-def get_articles_list(request, page=1):
-
-    if request.method == 'POST':
-
-        file = json.loads(open("explora/static/user.json").read())
-        api_user = file["user"]
-        api_password = file["password"]
-        api_url = file["api_url"]
-
-        # client = requests.post('http://{0}/v2/login/'.format(api_url),
-        #   {'username': api_user, 'password': api_password})
-
-       # cookies = dict(sessionid=client.cookies['sessionid'])
-
-        #response = requests.get(u'http://{0}/v2/articles/'.format(api_url), cookies=cookies)
-        response = requests.get(
-            u'http://{0}/v2/articles/page/{1}'.format(api_url, page))
-
-        data_array = json.loads(response.text.encode('utf8'))
-
-        total_pages = data_array['totalPages']
-
-        # give the format to the data
-        data = data_array['hits']['hits']
-
-        results = []
-        for key in data:
-            array_element = {
-                'art_id': key['_id'],
-                'art_title': key['_source']['art_title'],
-                'art_url': key['_source']['art_url'],
-                'art_image_link': key['_source']['art_image_link'],
-                'art_content': key['_source']['art_content'],
-                'art_name_press_source': key['_source']['art_name_press_source'],
-                'art_category': key['_source']['art_category'],
-                'art_date': key['_source']['art_date']
-            }
-
-            results.append(array_element)
-
-        json_response = {'totalpages': total_pages,
-                         'results': results}
-
-        return JsonResponse(json_response, safe=False)
-
-
+# @brief Function that renders Tweets Page
+# @param request
+# @return HttpResponse with Tweets Page
 @login_required(login_url='/login_required')
 def tweets(request):
 
@@ -322,6 +280,9 @@ def tweets(request):
                                                })
 
 
+# @brief Function that get Tweet List
+# @param request
+# @return JsonResponse with Tweets List
 @login_required(login_url='/login_required')
 def getTweetsList(request, page=1):
 
@@ -362,6 +323,9 @@ def getTweetsList(request, page=1):
         return JsonResponse(json_response, safe=False)
 
 
+# @brief Function that get histogram for Tweets
+# @param request
+# @return JsonResponse with histogram data
 @login_required(login_url='/login_required')
 def tweetsCountBy(request):
     if request.method == 'POST':
@@ -397,6 +361,10 @@ def tweetsCountBy(request):
         return JsonResponse(data, safe=False)
 
 
+
+# @brief Function that create a NewsCase
+# @param request
+# @return HttpResponse with status
 @login_required(login_url='/login_required')
 def createNewsCase(request):
     if request.method == 'POST':
