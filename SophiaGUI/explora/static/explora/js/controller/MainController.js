@@ -1,5 +1,21 @@
 app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', function ($scope, $http, $window, dataFormat) {
 
+    //Date Picker Setup
+    $("#datepicker1").datepicker({
+        format: "dd-mm-yyyy",
+        language: "es",
+        orientation: "bottom auto",
+    });
+
+    $("#datepicker2").datepicker({
+        format: "dd/mm/yyyy",
+        language: "es",
+        orientation: "bottom auto",
+    });
+
+    $("#datepicker1").datepicker('update','01-01-2016');
+    $("#datepicker2").datepicker('update','03-03-2016');
+
     $scope.total_pages;
     $scope.actual_page;
     $scope.articulos;
@@ -44,6 +60,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
 
     var histogram_enddate = new Date().toISOString().slice(0, 10);
+
     var histogram_startdate = new Date();
     histogram_startdate.setMonth(histogram_startdate.getMonth() - 6);
     histogram_startdate = histogram_startdate.toISOString().slice(0, 10);
@@ -90,6 +107,11 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
     $scope.update_list = function (page) {
 
+        var date1 = $("#datepicker1").datepicker('getDate');
+        var date2 = $("#datepicker2").datepicker('getDate');
+        console.log(date1.toISOString().slice(0, 10));
+        console.log(date2.toISOString().slice(0, 10));
+        
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "articles",
@@ -176,8 +198,8 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "category": aux_category,
             "press_source": aux_press_source,
             "new_name": $scope.news_case_name,
-            "new_date":today,
-            "follow_new_feed":checked
+            "new_date": today,
+            "follow_new_feed": checked
         }
 
         if ($scope.news_case_name.length > 0) {
@@ -245,6 +267,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     ];
 
     var histogram_enddate = new Date().toISOString().slice(0, 10);
+
     var histogram_startdate = new Date();
     histogram_startdate.setMonth(histogram_startdate.getMonth() - 6);
     histogram_startdate = histogram_startdate.toISOString().slice(0, 10);

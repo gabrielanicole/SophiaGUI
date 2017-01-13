@@ -2,6 +2,7 @@
 {% block content %}
 <div id="angularController" ng-controller="searchController">
 
+
 	 <div class=row>
 				<form class="navbar-form navbar-left" role="search">
 
@@ -19,8 +20,11 @@
 				        </div>
 				    </div>
 
+            <input type="text" class="form-control" id="datepicker1">
+            <input type="text" class="form-control" id="datepicker2">
             <button class="btn btn-default" ng-click="get_input_data()"> Buscar</button>
             <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal"> Crear Caso</button>
+        
 					</form>
 
 		</div>
