@@ -45,7 +45,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
     var histogram_enddate = new Date().toISOString().slice(0, 10);
     var histogram_startdate = new Date();
-    histogram_startdate.setMonth(histogram_startdate.getMonth() - 3);
+    histogram_startdate.setMonth(histogram_startdate.getMonth() - 6);
     histogram_startdate = histogram_startdate.toISOString().slice(0, 10);
     $scope.windowsWidth = $window.innerWidth;
     $scope.granularity = 'day';
@@ -244,10 +244,9 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
         { key: "Año", value: "year" }
     ];
 
-
     var histogram_enddate = new Date().toISOString().slice(0, 10);
     var histogram_startdate = new Date();
-    histogram_startdate.setMonth(histogram_startdate.getMonth() - 3);
+    histogram_startdate.setMonth(histogram_startdate.getMonth() - 6);
     histogram_startdate = histogram_startdate.toISOString().slice(0, 10);
     $scope.windowsWidth = $window.innerWidth;
     $scope.granularity = 'day';

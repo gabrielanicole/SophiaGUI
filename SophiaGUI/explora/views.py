@@ -248,7 +248,6 @@ def advancedSearch(request, page=1):
         json_response = {'totalpages': total_pages,
                          'page': actual_page,
                          'results': results}
-
         return JsonResponse(json_response,safe=False)
 
 @login_required(login_url='/login_required')
@@ -407,7 +406,7 @@ def createNewsCase(request):
                 "new_fields":[data['fields'][0],data['fields'][1]]
             }
             userprofile = Profile.objects.get(user=request.user.pk)
-            print userprofile
+            print userprofile.user
             return HttpResponse('ok')
         except Exception as e:
             return HttpResponse(e)
