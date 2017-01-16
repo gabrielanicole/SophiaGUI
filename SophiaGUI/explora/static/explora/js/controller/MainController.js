@@ -444,8 +444,9 @@ app.controller('newsCasesController', ['$scope', '$http', 'dataFormat', function
 
         var page = page_number;
         $http({
-            method: 'GET',
-            url: '/get_data/usernewscases/' + page + '/'
+            method: 'POST',
+            url: '/get_data/usernewscases/' + page + '/',
+            data: $.param({data: JSON.stringify(query)})
         }).then(function successCallback(response) {
             $scope.news_cases = response.data.data;
             $scope.totalpages = response.data.totalpages;

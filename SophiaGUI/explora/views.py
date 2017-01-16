@@ -14,6 +14,7 @@ from telnetlib import theNULL
 from pprint import pprint
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 
 
 # @brief Function that login the user to Sophia GUI.
@@ -459,10 +460,25 @@ def newsCases(request):
 
 @login_required(login_url='/login_required')
 def getUserNewsCases(request, page=1):
-    if request.method == 'GET':
+    if request.method == 'POST':
         userprofile = Profile.objects.get(user=request.user.pk)
-        user_news_cases = NewsCase.objects.filter(user=userprofile)
 
+
+        data = request.POST.get('data').encode('utf8')
+        data = json.loads(data)
+
+        search_and = data['and']
+        search_not = data['not_and']
+        search_or = data['or']
+
+        bus = []
+        q_objects = Q()
+        for item in bus:
+            q_objects.add(Q(name__contains=item),Q.AND)
+          
+        q_objects.add(Q(user=userprofile),Q.AND)
+
+        user_news_cases = NewsCase.objects.filter(q_objects)
         p = Paginator(user_news_cases,10)
         
         #print p.page(page).object_list
