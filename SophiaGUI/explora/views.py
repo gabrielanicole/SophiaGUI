@@ -12,6 +12,8 @@ import requests
 import simplejson as json
 from telnetlib import theNULL
 from pprint import pprint
+from django.core import serializers
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 # @brief Function that login the user to Sophia GUI.
@@ -447,14 +449,43 @@ def createNewsCase(request):
 def newsCases(request):
 
     my_user = request.user.social_auth.filter(provider='facebook').first()
-    userprofile = Profile.objects.get(user=request.user.pk)
-    user_news_cases = NewsCase.objects.filter(user=userprofile)
-    
     if my_user:
         url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
-        return render(request, 'newscase.html', {'user': request.user.get_full_name(), 'profile_pic': url, 'data':user_news_cases
+        return render(request, 'newscase.html', {'user': request.user.get_full_name(), 'profile_pic': url
                                                })
     else:
-        return render(request, 'newscase.html', {'user': request.user.get_full_name(),'data':user_news_cases
+        return render(request, 'newscase.html', {'user': request.user.get_full_name()
                                                })
 
+@login_required(login_url='/login_required')
+def getUserNewsCases(request, page=1):
+    if request.method == 'GET':
+        userprofile = Profile.objects.get(user=request.user.pk)
+        user_news_cases = NewsCase.objects.filter(user=userprofile)
+
+        p = Paginator(user_news_cases,10)
+        
+        #print p.page(page).object_list
+        try:
+            cases = p.page(page).object_list
+        except PageNotAnInteger:
+            cases = p.page(1).object_list
+        except EmptyPage:
+            cases = p.page(p.num_pages).object_list
+        
+        data = []
+        for x in cases:
+            d ={
+                'name':x.name,
+                'elastic_id':x.elastic_id,
+                'img_preview':x.img_preview,
+                'creation_date':x.creation_date,
+            }
+            data.append(d)
+
+        data_json ={ 
+            'page': page,
+            'totalpages':p.num_pages,
+            'data': data}
+        #data_json = serializers.serialize("json",user_news_cases)
+        return JsonResponse(data_json, safe=False)

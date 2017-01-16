@@ -392,3 +392,50 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     }
 
 }]);
+
+
+app.controller('newsCasesController', ['$scope', '$http', 'dataFormat', function ($scope, $http, dataFormat) {
+
+    $scope.page_init;
+    $scope.page_end;
+    $scope.size = 3;
+    $scope.news_cases;
+
+    $scope.range = function (min, max) {
+        var output = [];
+        for (var i = min; i <= max; i++) {
+            output.push(i);
+        }
+        return output;
+    }
+
+    $scope.page_number = function (page_number) {
+        //Function to get the page number from view
+        var page = page_number;
+        $http({
+            method: 'GET',
+            url: '/get_data/usernewscases/' + page + '/'
+        }).then(function successCallback(response) {
+            $scope.news_cases = response.data.data;
+            $scope.totalpages = response.data.totalpages;
+            $scope.actual_page = response.data.page;
+            if ($scope.totalpages == 1) {
+                $scope.page_init = 1;
+                $scope.page_end = 1;
+            }
+            else {
+                var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.totalpages);
+                $scope.page_init = range.page_init;
+                $scope.page_end = range.page_end;
+
+            }
+        }, function errorCallback(response) {
+            return (response);
+        });
+    }
+    $scope.page_number(1);
+
+
+
+
+}]);

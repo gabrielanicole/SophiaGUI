@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^accounts/login/?next=/', views.index, name='index'),
     url(r'^create/newsCase/',views.createNewsCase,name='createNewsCase'),
     url(r'^newscases', views.newsCases, name='newsCases'),
+    url(r'^get_data/usernewscases/([0-9]*)/$',views.getUserNewsCases, name='getUserNewsCases'),
 ]

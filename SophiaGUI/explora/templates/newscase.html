@@ -1,32 +1,46 @@
 {% extends 'base.html' %} {% block header %}
 <link rel="stylesheet" href="/static/explora/newscases.css" type="text/css"> {% endblock header %} {% block content %}
 
-<div id="news-cases-list">
+<div id="news-cases-list" ng-controller="newsCasesController">
 
     <div class="row">
-        {% for d in data %}
-        <div class="col-md-6 cases-box">
-            <div class="row">
-                <div class="col-md-4">
-                    <img class="cases-img" src="{{d.img_preview}}">
-                </div>
-                <div class="col-md-8 cases-content">
-                    <h5> <strong> Nombre del caso: </strong> {{d.name}} </h5>
-                    <h5> <strong> Fecha de creación: </strong> {{d.creation_date}} </h5>
-                </div>
+        <div class="col-md-3"></div>
+        <!-- Offset-->
+        <div class="col-md-6">
+            <ul class="pagination">
+                <li><a href="#">&laquo;</a></li>
+                <li ng-repeat="page in range(page_init,page_end)"><a ng-click="page_number([[page]])" href=""> [[page]]</a></li>
+                <li><a href="#">&raquo;</a></li>
+            </ul>
+        </div>
+        <div class="col-md-3"></div>
+        <!-- Offset-->
+    </div>
+
+    <div ng-repeat="d in news_cases">
+        <div ng-class="row|($index % 2 == 0)">
+
+            <div class="col-md-6 cases-box">
                 <div class="row">
-                    <div class="col-md-12">
-                        <button class="btn btn-default pull-right cases-button" ng-click=""> Ver</button>
-                        <button class="btn btn-default pull-right cases-button" ng-click=""> Eliminar</button>
+                    <div class="col-md-4">
+                        <img class="cases-img" src="[[d.img_preview]]">
+                    </div>
+                    <div class="col-md-8 cases-content">
+                        <h5> <strong> Nombre del caso: </strong> [[d.name]] </h5>
+                        <h5> <strong> Fecha de creación: </strong> [[d.creation_date]] </h5>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button class="btn btn-default pull-right cases-button" ng-click=""> Ver</button>
+                            <button class="btn btn-default pull-right cases-button" ng-click=""> Eliminar</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        {% if forloop.counter|divisibleby:"2" and not forloop.last %}
     </div>
-    <div class="row">
-        {% endif %} {% endfor %}
-    </div>
+
+
 </div>
 
 {% endblock content %}
