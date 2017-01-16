@@ -3,17 +3,38 @@
 
 <div id="news-cases-list" ng-controller="newsCasesController">
 
+
+    <div class=row>
+        <form class="navbar-form navbar-left" role="search">
+            <input type="text" class="form-control" id="datepicker1">
+            <input type="text" class="form-control" id="datepicker2">
+            <button class="btn btn-default" ng-click=""> Buscar</button>
+        </form>
+    </div>
+
     <div class="row">
-        <div class="col-md-3"></div>
+        <div class="col-md-4">
+            <div id="should" class="input textarea"></div>
+        </div>
+        <div class="col-md-4">
+            <div id="and" class="input textarea"></div>
+        </div>
+        <div class="col-md-4">
+            <div id="not" class="input textarea"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 col-centered"></div>
         <!-- Offset-->
-        <div class="col-md-6">
+        <div class="col-md-6 col-centered">
             <ul class="pagination">
                 <li><a href="#">&laquo;</a></li>
                 <li ng-repeat="page in range(page_init,page_end)"><a ng-click="page_number([[page]])" href=""> [[page]]</a></li>
                 <li><a href="#">&raquo;</a></li>
             </ul>
         </div>
-        <div class="col-md-3"></div>
+        <div class="col-md-3 col-centered"></div>
         <!-- Offset-->
     </div>
 
