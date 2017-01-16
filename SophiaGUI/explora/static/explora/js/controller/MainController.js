@@ -62,7 +62,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     var histogram_enddate = new Date().toISOString().slice(0, 10);
 
     var histogram_startdate = new Date();
-    histogram_startdate.setMonth(histogram_startdate.getMonth() - 6);
+    histogram_startdate.setDate(histogram_startdate.getDay() - 7);
     histogram_startdate = histogram_startdate.toISOString().slice(0, 10);
     $scope.windowsWidth = $window.innerWidth;
     $scope.granularity = 'day';
@@ -245,6 +245,19 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     $scope.startdate;
     $scope.enddate;
 
+    //Date Picker Setup
+    $("#datepicker1").datepicker({
+        format: "yyyy-mm-dd",
+        language: "es",
+        orientation: "bottom auto",
+    });
+
+    $("#datepicker2").datepicker({
+        format: "yyyy-mm-dd",
+        language: "es",
+        orientation: "bottom auto",
+    });
+
     var should_contain = new Taggle('should', { placeholder: 'Concepto o frase importante en mi búsqueda' });
     var must_contain = new Taggle('and', { placeholder: 'Concepto o frase fundamental en mi búsqueda' });
     var not_contain = new Taggle('not', { placeholder: 'Concepto o frase que permite excluir resultados' });
@@ -290,6 +303,13 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     $scope.startdate = histogram_startdate;
     $scope.enddate = histogram_enddate;
 
+    $scope.histogram_startdate = histogram_startdate;
+    $scope.histogram_enddate = histogram_enddate;
+
+    $("#datepicker1").datepicker('update', String($scope.histogram_startdate));
+    $("#datepicker2").datepicker('update', String($scope.histogram_enddate));
+
+
     $scope.selectedItem = function (selected) {
         $scope.granularity = selected;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
@@ -302,8 +322,8 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
         }
 
         var data = {
-            startdate: histogram_startdate,
-            enddate: histogram_enddate,
+            startdate: $scope.histogram_startdate,
+            enddate: $scope.histogram_enddate,
             countby: $scope.granularity,
             search: JSON.stringify(json_data)
         };
@@ -356,12 +376,22 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
         });
     }
 
+    $scope.update_histogram = function () {
+        var date1 = $("#datepicker1").datepicker('getDate');
+        var date2 = $("#datepicker2").datepicker('getDate');
+
+        $scope.histogram_startdate = date1.toISOString().slice(0, 10);
+        $scope.histogram_enddate = date2.toISOString().slice(0, 10);
+        $scope.selectedItem($scope.granularity);
+
+    }
+
     $scope.update_list(1);
     $scope.get_input_data = function () {
         $scope.granularity = 'day';
+        $scope.update_histogram();
         $scope.update_list(1);
         $scope.selectedItem($scope.granularity);
     }
-
 
 }]);
