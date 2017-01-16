@@ -12,3 +12,4 @@ class NewsCase(models.Model):
     img_preview = models.CharField(max_length=300)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     follow_new_feed = models.BooleanField(default=True)
+    creation_date = models.CharField(max_length=10)

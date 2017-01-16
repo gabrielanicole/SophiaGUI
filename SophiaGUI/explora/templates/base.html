@@ -35,7 +35,8 @@
   <script type="text/javascript" src="/static/explora/externalJS/bootstrap-datepicker.min.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="/static/explora/externalJS/bootstrap-datepicker.es.min.js" charset="UTF-8"></script>
   <link rel="stylesheet" href="/static/explora/externalCSS/bootstrap-datepicker.min.css" type="text/css">  
-
+  {% block header %}
+	{% endblock %}
 
 </head>
 
@@ -79,7 +80,7 @@
 			<ul class="nav nav-pills nav-stacked">
 			  <li role="presentation"><a href="/articles">Noticias</a></li>
 				<li role="presentation"><a href="/tweets">Tweets</a></li>
-				<li role="presentation"><a href="">Casos Noticiosos</a></li>
+				<li role="presentation"><a href="/newscases">Casos Noticiosos</a></li>
 			</ul>
 		</div>
 

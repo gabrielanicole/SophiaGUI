@@ -23,4 +23,5 @@ urlpatterns = [
         views.tweetsCountBy, name='tweetsCountBy'),
     url(r'^accounts/login/?next=/', views.index, name='index'),
     url(r'^create/newsCase/',views.createNewsCase,name='createNewsCase'),
+    url(r'^newscases', views.newsCases, name='newsCases'),
 ]

@@ -1,0 +1,24 @@
+.cases-box{
+   	border: 1px solid #cccccc;
+    border-radius: 1px;
+	background-color:WhiteSmoke;
+	}
+
+.cases-button{
+    margin-right: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.cases-img{
+    display: block;
+    padding-top: 20px;
+    height: auto;
+    max-width: 100%;
+    height: 100px;
+}
+
+.cases-content{
+    padding-top: 20px;
+}

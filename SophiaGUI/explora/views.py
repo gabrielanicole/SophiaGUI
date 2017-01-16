@@ -432,7 +432,8 @@ def createNewsCase(request):
                                elastic_id=elastic_id,
                                img_preview=img_preview,
                                user=userprofile,
-                               follow_new_feed=follow_new_feed
+                               follow_new_feed=follow_new_feed,
+                               creation_date=data['new_date']
                                )
             newCase.save()
             return HttpResponse('ok')
@@ -440,3 +441,20 @@ def createNewsCase(request):
         except Exception as e:
             print e
             return HttpResponse(e)
+
+
+@login_required(login_url='/login_required')
+def newsCases(request):
+
+    my_user = request.user.social_auth.filter(provider='facebook').first()
+    userprofile = Profile.objects.get(user=request.user.pk)
+    user_news_cases = NewsCase.objects.filter(user=userprofile)
+    
+    if my_user:
+        url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
+        return render(request, 'newscase.html', {'user': request.user.get_full_name(), 'profile_pic': url, 'data':user_news_cases
+                                               })
+    else:
+        return render(request, 'newscase.html', {'user': request.user.get_full_name(),'data':user_news_cases
+                                               })
+

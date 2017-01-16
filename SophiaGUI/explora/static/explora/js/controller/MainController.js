@@ -60,7 +60,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
 
     var histogram_enddate = new Date().toISOString().slice(0, 10);
-
     var histogram_startdate = new Date();
     histogram_startdate.setDate(histogram_startdate.getDay() - 7);
     histogram_startdate = histogram_startdate.toISOString().slice(0, 10);
@@ -190,7 +189,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         $scope.news_case_name = newsCaseName[0][0];
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
 
-
         var aux_category;
         if ($scope.selectedCategory == 'Cualquier Categoría') { aux_category = ""; }
         else { aux_category = $scope.selectedCategory; }
@@ -207,7 +205,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
-            "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
+            "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
             "category": aux_category,
             "press_source": aux_press_source,
             "new_name": $scope.news_case_name,
@@ -293,9 +291,8 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     ];
 
     var histogram_enddate = new Date().toISOString().slice(0, 10);
-
     var histogram_startdate = new Date();
-    histogram_startdate.setMonth(histogram_startdate.getMonth() - 6);
+    histogram_startdate.setDate(histogram_startdate.getDay() - 7);
     histogram_startdate = histogram_startdate.toISOString().slice(0, 10);
     $scope.windowsWidth = $window.innerWidth;
     $scope.granularity = 'day';
