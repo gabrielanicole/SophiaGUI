@@ -1,4 +1,10 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block header %}
+<link rel="stylesheet" href="/static/explora/tweets.css" type="text/css">
+<script type="text/javascript" src="/static/explora/js/controller/tweetsController.js"></script>
+{% endblock header %}
+
+{% block content %}
 
 <div id="angularController" ng-controller='tweetsController'>
 

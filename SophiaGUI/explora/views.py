@@ -465,7 +465,6 @@ def getUserNewsCases(request, page=1):
 
         data = request.POST.get('data').encode('utf8')
         data = json.loads(data)
-        print data
 
         search_and = data['and']
         search_not = data['not_and']
@@ -512,8 +511,10 @@ def getUserNewsCases(request, page=1):
             q_objects.add(~Q(name__contains=item),Q.OR)
 
         q_objects.add(Q(user=userprofile),Q.AND)
-        #q_objects.add(Q(creation_date__range=[startdate,enddate]))
 
+        #------------------------------------------#
+        #q_objects.add(Q(creation_date__range=[startdate,enddate]))
+        #------------------------------------------#
         user_news_cases = NewsCase.objects.filter(q_objects)
         p = Paginator(user_news_cases,10)
 
@@ -538,5 +539,5 @@ def getUserNewsCases(request, page=1):
             'page': page,
             'totalpages':p.num_pages,
             'data': data}
-            
+
         return JsonResponse(data_json, safe=False)

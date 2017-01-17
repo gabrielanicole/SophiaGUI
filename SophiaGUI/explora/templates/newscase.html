@@ -1,8 +1,9 @@
 {% extends 'base.html' %} {% block header %}
-<link rel="stylesheet" href="/static/explora/newscases.css" type="text/css"> {% endblock header %} {% block content %}
+<link rel="stylesheet" href="/static/explora/newscases.css" type="text/css">
+<script type="text/javascript" src="/static/explora/js/controller/newCasesController.js"></script>
+{% endblock header %} {% block content %}
 
 <div id="news-cases-list" ng-controller="newsCasesController">
-
 
     <div class=row>
         <form class="navbar-form navbar-left" role="search">
