@@ -463,25 +463,60 @@ def getUserNewsCases(request, page=1):
     if request.method == 'POST':
         userprofile = Profile.objects.get(user=request.user.pk)
 
-
         data = request.POST.get('data').encode('utf8')
         data = json.loads(data)
+        print data
 
         search_and = data['and']
         search_not = data['not_and']
         search_or = data['or']
+        startdate = data['startdate']
+        enddate = data['enddate']
+      
+        bus_and = []
+        for x in range(len(search_and)):
+            if search_and[x].get('match') != None:
+                aux = search_and[x].get('match').split()
+                for w in aux:
+                    bus_and.append(w)
+            if search_and[x].get('match_phrase') != None:
+                aux = search_and[x].get('match_phrase')
+                bus_and.append(aux) 
+        bus_or = []
+        for x in range(len(search_or)):
+            if search_or[x].get('match') != None:
+                aux = search_or[x].get('match').split()
+                for w in aux:
+                    bus_or.append(w)
+            if search_or[x].get('match_phrase') != None:
+                aux = search_or[x].get('match_phrase')
+                bus_or.append(aux) 
+        bus_not = []
+        for x in range(len(search_not)):
+            if search_not[x].get('match') != None:
+                aux = search_not[x].get('match').split()
+                for w in aux:
+                    bus_not.append(w)
+            if search_not[x].get('match_phrase') != None:
+                aux = search_not[x].get('match_phrase')
+                bus_not.append(aux)
 
-        bus = []
         q_objects = Q()
-        for item in bus:
+        for item in bus_and:
             q_objects.add(Q(name__contains=item),Q.AND)
-          
+
+        for item in bus_or:
+            q_objects.add(Q(name__contains=item),Q.OR)
+        
+        for item in bus_not:
+            q_objects.add(~Q(name__contains=item),Q.OR)
+
         q_objects.add(Q(user=userprofile),Q.AND)
+        #q_objects.add(Q(creation_date__range=[startdate,enddate]))
 
         user_news_cases = NewsCase.objects.filter(q_objects)
         p = Paginator(user_news_cases,10)
-        
-        #print p.page(page).object_list
+
         try:
             cases = p.page(page).object_list
         except PageNotAnInteger:
@@ -503,5 +538,5 @@ def getUserNewsCases(request, page=1):
             'page': page,
             'totalpages':p.num_pages,
             'data': data}
-        #data_json = serializers.serialize("json",user_news_cases)
+            
         return JsonResponse(data_json, safe=False)

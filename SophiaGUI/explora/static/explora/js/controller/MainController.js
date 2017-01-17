@@ -437,16 +437,15 @@ app.controller('newsCasesController', ['$scope', '$http', 'dataFormat', function
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
-            "startdate": $("#datepicker1").datepicker('getDate').toISOString().slice(0,10),
-            "endate": $("#datepicker2").datepicker('getDate').toISOString().slice(0,10),
+            "startdate": $("#datepicker1").datepicker('getDate').toISOString().slice(0, 10),
+            "enddate": $("#datepicker2").datepicker('getDate').toISOString().slice(0, 10),
         }
-        console.log(JSON.stringify(query));
 
         var page = page_number;
         $http({
             method: 'POST',
             url: '/get_data/usernewscases/' + page + '/',
-            data: $.param({data: JSON.stringify(query)})
+            data: $.param({ data: JSON.stringify(query) })
         }).then(function successCallback(response) {
             $scope.news_cases = response.data.data;
             $scope.totalpages = response.data.totalpages;
@@ -464,6 +463,10 @@ app.controller('newsCasesController', ['$scope', '$http', 'dataFormat', function
             return (response);
         });
     }
-    $scope.page_number(1);
+
+    $scope.search_cases = function () {
+        $scope.page_number(1);
+    }
+    $scope.search_cases();
 
 }]);
