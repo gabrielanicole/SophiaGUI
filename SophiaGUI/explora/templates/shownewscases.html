@@ -1,3 +1,134 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block header %}
+<script type="text/javascript" src="/static/explora/js/controller/showNewsCaseController.js"></script>
+{% endblock header %}
+
 {% block content %}
+
+<div id="angularController" ng-controller="showNewsCaseController">
+
+	 <div class=row>
+				<form class="navbar-form navbar-left" role="search">
+
+				    <div class="form-group">
+				        <div class="selectContainer">
+				            <select class="form-control" name="medio" ng-model="selectedMedium" ng-options="x for x in press_source">
+				            </select>
+				        </div>
+		       </div>
+
+				    <div class="form-group">
+				        <div class="selectContainer">
+				            <select class="form-control" name="categoria" ng-model="selectedCategory" ng-options="x for x in category">
+				            </select>
+				        </div>
+				    </div>
+
+            <input type="text" class="form-control" id="datepicker1">
+            <input type="text" class="form-control" id="datepicker2">
+            <button class="btn btn-default" ng-click=""> Buscar</button> 	
+               </form>
+
+		</div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <div id="should" class="input textarea"></div>
+      </div>
+      <div class="col-md-4">
+        <div id="and" class="input textarea"></div>
+      </div>
+      <div class="col-md-4">
+        <div id="not" class="input textarea"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Ver por
+                <span class="caret"></span>
+            </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li ng-repeat="option in options"><a ng-click="selectedItem(option.value)">[[option.key]]</a></li>
+             </ul>
+         </div>
+      </div>
+    </div>
+
+
+   <div class = "row">
+       <div id="histogram_container" style="width:100%">
+           <div id="histogram"></div>
+      </div>
+  </div>
+
+  <div id="articles-container">
+
+    <div class="row">
+        <div class="col-md-3"></div>
+        <!-- Offset-->
+        <div class="col-md-6">
+            <ul class="pagination">
+                <li><a href="#">&laquo;</a></li>
+                <li ng-repeat="page in range(page_init,page_end)"><a ng-click="page_number([[page]])" href=""> [[page]]</a></li>
+                <li><a href="#">&raquo;</a></li>
+            </ul>
+        </div>
+        <div class="col-md-3"></div>
+        <!-- Offset-->
+    </div>
+
+    <div ng-repeat="d in articulos">
+      <div ng-class="row|($index % 4 == 0)">
+
+         <div class="col-md-3 news-deploy">
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <h5 class="text-left"> [[d.art_date]]  </h5>
+                    </div>
+                      <div class="col-md-6">
+                        <h5 class="category text-right"> [[d.art_category|uppercase]]</h5>
+                      </div>
+                  </div>
+
+                  <div class="row">
+                      <div class="col-md-12 news-image">
+                        <img class="img-responsive" alt="image-not-found" src="[[d.art_image_link]]">
+                      </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                        <h5>[[d.art_name_press_source]] </h5>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <span style="cursor:pointer">
+                      <h4 class="news-data" ng-click="loadModal([[ d.art_id ]])"> [[d.art_title|limitTo:150]] </h4>
+                    </span>
+                  </div>
+             </div>
+                  
+       </div>
+    </div>
+
+    <div class="row">
+        <div class="hid" id="tip">
+              <p><strong style="color:red">Cantidad</strong>
+              </p>
+              <p style="color:white"><span id="value">100</span></p>
+              <p><strong style="color:red">Fecha</strong>
+              </p>
+              <p style="color:white"><span id="date">0</span></p>
+          </div>
+    </div>
+  </div>
+
+  <div id="modal"> </div>
+
+</div>
+
+
 {% endblock content %}

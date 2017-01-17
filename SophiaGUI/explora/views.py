@@ -541,3 +541,45 @@ def getUserNewsCases(request, page=1):
             'data': data}
 
         return JsonResponse(data_json, safe=False)
+
+@login_required(login_url='/login_required')
+def showNewsCase(request,elastic_id):
+
+    my_user = request.user.social_auth.filter(provider='facebook').first()
+    if my_user:
+        url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
+        return render(request, 'shownewscases.html', {'user': request.user.get_full_name(), 'profile_pic': url
+                                               })
+    else:
+        return render(request, 'shownewscases.html', {'user': request.user.get_full_name()
+                                               })
+
+@login_required(login_url='/login_required')
+def getNewCaseInfo(request):
+    if request.method == 'POST':
+        elastic_id = request.POST.get('elastic_id')
+        try:
+            userprofile = Profile.objects.get(user=request.user.pk)
+            newCase = NewsCase.objects.get(elastic_id=elastic_id)
+        except Exception as e:
+            print e
+            return HttpResponse("e")       
+        try:
+            file = json.loads(open("explora/static/user.json").read())
+            api_user = file["user"]
+            api_password = file["password"]
+            api_url = file["api_url"]
+            api = u'http://{0}/v2/newscases/{1}/'.format(api_url,elastic_id)
+            response = requests.get(api)
+            response = json.loads(response.content)
+            response = response['_source']
+
+            json_response = {
+                "follow_new_feed": newCase.follow_new_feed,
+                "news_case_data":response
+            }
+
+            return JsonResponse(json_response, safe=False)
+        except Exception as e:
+            print e
+            return HttpResponse(e)    

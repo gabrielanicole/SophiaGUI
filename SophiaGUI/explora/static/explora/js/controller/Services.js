@@ -59,4 +59,23 @@ app.service('dataFormat', function () {
             "not_contain_group": not_contain_group
         };
     }
+
+    this.getTagList = function (data) {
+        var results = [];
+        for (var a = 0; a < data.length; a++) {
+            if (data[a].match_phrase != null) {
+                results.push(data[a].match_phrase);
+            }
+            if (data[a].match != null) {
+                var words = String(data[a].match).split(" ");
+                for (var x in words) {
+                    if(words[x] != ""){
+                        results.push(words[x]);
+                    }
+                }
+            }
+        }
+        return results;
+    }
+    
 });

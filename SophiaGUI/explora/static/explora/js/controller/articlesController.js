@@ -21,7 +21,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.articulos;
     $scope.page_init;
     $scope.page_end;
-    $scope.max_page = 7;
     $scope.size = 3;
 
     //Section to control the TAG sistem
