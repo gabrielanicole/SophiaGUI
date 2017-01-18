@@ -54,7 +54,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.page_number = function (page_number) {
         //Function to get the page number from view
         var page = page_number[0][0];
-        $scope.update_list(page);
+        $scope.update_list(page, data);
     }
 
     $scope.range = function (min, max) {
@@ -73,7 +73,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         //console.log(response.data);
         $scope.restoreSession(response.data);
         $scope.restoreHistogram();
-        $scope.update_list(1);
+        $scope.update_list(1, data);
 
     }, function errorCallback(response) {
         console.log(response);
@@ -143,8 +143,19 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
 
     }
 
-    $scope.update_list = function (page) {
+    $scope.update_list = function (page, data) {
 
+        $http({
+            method: 'POST',
+            url: '/getNewsCaseInfo/',
+            data: $.param(data)
+        }).then(function (response) {
+            var idNot = response.data.news_case_data.new_art_not;
+            $scope.loadElements(idNot, page);
+        });
+    }
+
+    $scope.loadElements = function (idNot, page) {
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "articles",
@@ -152,7 +163,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
-            "idYes": [],
+            "idNot": idNot,
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
         }
         $http({
@@ -187,7 +198,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         //set day as default
         $scope.granularity = 'day';
         $scope.update_histogram();
-        $scope.update_list(1);
+        $scope.update_list(1, data);
         $scope.selectedItem($scope.granularity);
     }
 
@@ -234,15 +245,15 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
 
         data = {
             elastic_id: elastic_id,
-            article_id:id[0][0]
+            article_id: id[0][0]
         }
-        
+
         $http({
             method: 'POST',
             url: '/removeArticle/',
             data: $.param(data)
         }).then(function successCallback(response) {
-           console.log(response);
+            $scope.update_list($scope.actual_page, data);
         }, function errorCallback(response) {
             console.log(response);
         });
