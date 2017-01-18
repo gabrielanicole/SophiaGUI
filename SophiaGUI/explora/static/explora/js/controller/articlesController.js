@@ -152,6 +152,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         $scope.selectedItem($scope.granularity);
 
     }
+
     //Controler for advancesearch button.
     $scope.get_input_data = function () {
         //set day as default
@@ -220,7 +221,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             }).then(function successCallback(response) {
                 console.log(response);
             }, function errorCallback(response) {
-                return (response);
+                console.log (response);
             });
         }
         else {

@@ -582,4 +582,58 @@ def getNewCaseInfo(request):
             return JsonResponse(json_response, safe=False)
         except Exception as e:
             print e
-            return HttpResponse(e)    
+            return HttpResponse(e)
+
+@login_required(login_url='/login_required')
+def updateNewsCase(request):
+    if request.method == 'POST':
+        try:
+            data = request.POST.get('data').encode('utf8')
+            data = json.loads(data)
+            follow_new_feed = data['follow_new_feed']
+            elastic_id = data['elastic_id']
+
+            newCase = NewsCase.objects.get(elastic_id=elastic_id)
+                       
+            if len(data['new_name']) > 0:
+                newCase.name = data['new_name']
+                newCase.follow_new_feed = follow_new_feed
+                newCase.save()
+                elastic_data = {
+                    "new_name": data['new_name'],
+                    "new_date_from": data['dates']['startdate'] +" 00:00:00",
+                    "new_date_to": data['dates']['enddate'] +" 00:00:00",
+                    "new_and": data['and'],
+                    "new_or": data['or'],
+                    "new_category": data['category'],
+                    "new_press_source": data['press_source'],
+                    "new_not": data['not_and'],
+                }
+
+            else:
+                newCase.follow_new_feed = follow_new_feed
+                newCase.save()
+                elastic_data = {
+                    "new_date_from": data['dates']['startdate'] +" 00:00:00",
+                    "new_date_to": data['dates']['enddate'] +" 00:00:00",
+                    "new_and": data['and'],
+                    "new_or": data['or'],
+                    "new_category": data['category'],
+                    "new_press_source": data['press_source'],
+                    "new_not": data['not_and'],
+                }
+            
+            elastic_data = json.dumps(elastic_data)
+
+            file = json.loads(open("explora/static/user.json").read())
+            api_user = file["user"]
+            api_password = file["password"]
+            api_url = file["api_url"]
+            api = u'http://{0}/v2/newscases/{1}/'.format(api_url,elastic_id)
+            response = requests.put(api, data=elastic_data)
+
+            return HttpResponse("ok")
+
+        except Exception as e:
+            print e
+            return HttpResponse(e)

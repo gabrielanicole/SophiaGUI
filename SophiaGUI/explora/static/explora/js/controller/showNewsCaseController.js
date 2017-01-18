@@ -3,6 +3,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
 
     var absUrl = $location.absUrl().split("/");
     var elastic_id = absUrl[absUrl.length - 1];
+    var data = { 'elastic_id': elastic_id };
 
     $scope.histogram_startdate;
     $scope.histogram_enddate;
@@ -64,7 +65,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         return output;
     }
 
-    var data = { 'elastic_id': elastic_id };
     $http({
         method: 'POST',
         url: '/getNewsCaseInfo/',
@@ -80,6 +80,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     });
 
     $scope.restoreSession = function (data) {
+        //Restore what the user searched
         histogram_startdate = String(data.news_case_data.new_date_from.slice(0, 10));
         histogram_enddate = String(data.news_case_data.new_date_to.slice(0, 10));
         $("#datepicker1").datepicker('update', histogram_startdate);
@@ -92,8 +93,41 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         not_contain.add(new_not);
     }
 
-    $scope.restoreHistogram = function () {
+    $scope.selectedItem = function (selected) {
+        $scope.granularity = selected;
+        var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
+        var json_data = {
+            "index": "articles",
+            "fields": ["art_title", "art_content"],
+            "and": tag_values.must_contain_group,
+            "or": tag_values.should_contain_group,
+            "not_and": tag_values.not_contain_group,
+        }
 
+        var data = {
+            startdate: $scope.histogram_startdate,
+            enddate: $scope.histogram_enddate,
+            countby: $scope.granularity,
+            search: JSON.stringify(json_data)
+        };
+        $http({
+            method: 'POST',
+            url: '/get_data/articles/histogram',
+            data: $.param(data)
+
+        }).then(function successCallback(response) {
+            //Delete the histogram
+            $("#histogram").empty();
+            //Add the new histogram
+            var histograma = generate_histogram(width = ($scope.windowsWidth - 300), height = 300, data_json = response.data);
+
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+
+    }
+
+    $scope.restoreHistogram = function () {
         var date1 = $("#datepicker1").datepicker('getDate');
         var date2 = $("#datepicker2").datepicker('getDate');
         $scope.histogram_startdate = date1.toISOString().slice(0, 10);
@@ -104,40 +138,9 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
 
         $scope.windowsWidth = $window.innerWidth;
         $scope.granularity = 'day';
-
-        $scope.selectedItem = function (selected) {
-            $scope.granularity = selected;
-            var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
-            var json_data = {
-                "index": "articles",
-                "fields": ["art_title", "art_content"],
-                "and": tag_values.must_contain_group,
-                "or": tag_values.should_contain_group,
-                "not_and": tag_values.not_contain_group,
-            }
-
-            var data = {
-                startdate: $scope.histogram_startdate,
-                enddate: $scope.histogram_enddate,
-                countby: $scope.granularity,
-                search: JSON.stringify(json_data)
-            };
-            $http({
-                method: 'POST',
-                url: '/get_data/articles/histogram',
-                data: $.param(data)
-
-            }).then(function successCallback(response) {
-                $("#histogram").empty();
-                var histograma = generate_histogram(width = ($scope.windowsWidth - 300), height = 300, data_json = response.data);
-
-            }, function errorCallback(response) {
-                console.log(response);
-            });
-
-        }
         //Draw Histogram for first time
         $scope.selectedItem($scope.granularity);
+
     }
 
     $scope.update_list = function (page) {
@@ -167,6 +170,61 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         }, function errorCallback(response) {
             return (response);
         });
+    }
+
+    $scope.update_histogram = function () {
+        var date1 = $("#datepicker1").datepicker('getDate');
+        var date2 = $("#datepicker2").datepicker('getDate');
+
+        $scope.histogram_startdate = date1.toISOString().slice(0, 10);
+        $scope.histogram_enddate = date2.toISOString().slice(0, 10);
+        $scope.selectedItem($scope.granularity);
+    }
+    //Controler for advancesearch button.
+    $scope.get_input_data = function () {
+        //set day as default
+        $scope.granularity = 'day';
+        $scope.update_histogram();
+        $scope.update_list(1);
+        $scope.selectedItem($scope.granularity);
+    }
+
+    $scope.update_news_case = function (newsCaseName) {
+        $scope.news_case_name = newsCaseName[0][0];
+        var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
+
+        var aux_category;
+        if ($scope.selectedCategory == 'Cualquier Categoría') { aux_category = ""; }
+        else { aux_category = $scope.selectedCategory; }
+
+        var aux_press_source;
+        if ($scope.selectedMedium == 'Cualquier Medio') { aux_press_source = ""; }
+        else { aux_press_source = $scope.selectedMedium; }
+
+        var checked = $('#toogleCase').prop('checked');
+
+        var json_data = {
+            "elastic_id": elastic_id,
+            "and": tag_values.must_contain_group,
+            "or": tag_values.should_contain_group,
+            "not_and": tag_values.not_contain_group,
+            "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
+            "category": aux_category,
+            "press_source": aux_press_source,
+            "new_name": $scope.news_case_name,
+            "follow_new_feed": checked
+        }
+
+        $http({
+            method: 'POST',
+            url: '/updateNewsCase/',
+            data: $.param({ data: JSON.stringify(json_data) })
+        }).then(function successCallback(response) {
+            console.log(response);
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+        $scope.news_case_name = "";
     }
 
 }]);

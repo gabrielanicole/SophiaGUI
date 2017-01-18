@@ -25,7 +25,8 @@
 
             <input type="text" class="form-control" id="datepicker1">
             <input type="text" class="form-control" id="datepicker2">
-            <button class="btn btn-default" ng-click=""> Buscar</button> 	
+            <button class="btn btn-default" ng-click="get_input_data()"> Buscar</button>
+            <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal"> Actualizar Caso</button> 	 	
                </form>
 
 		</div>
@@ -126,7 +127,36 @@
     </div>
   </div>
 
-  <div id="modal"> </div>
+  <div id="newsCaseModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Actualizar Caso Noticioso</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-12">
+              <p>Puede cambiar el nombre del caso noticioso si lo desea</p>
+              <div class="form-group">
+              <label>Nombre del Caso Noticioso:</label>
+              <input name="news_case_name" type="text" class="form-control" ng-model="news_case_name" ng-init="news_case_name=''">
+              <label>
+                <input id="toogleCase" checked data-toggle="toggle" data-onstyle="success" type="checkbox">
+                ¿Recolectar noticias automáticamente para este caso noticioso?</label>
+            </div>         
+          </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="update_news_case([[news_case_name]])">Actualizar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 </div>
 

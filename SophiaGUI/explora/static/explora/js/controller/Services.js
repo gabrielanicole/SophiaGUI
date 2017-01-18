@@ -69,7 +69,7 @@ app.service('dataFormat', function () {
             if (data[a].match != null) {
                 var words = String(data[a].match).split(" ");
                 for (var x in words) {
-                    if(words[x] != ""){
+                    if (words[x] != "") {
                         results.push(words[x]);
                     }
                 }
@@ -77,5 +77,5 @@ app.service('dataFormat', function () {
         }
         return results;
     }
-    
+
 });
