@@ -517,7 +517,6 @@ def getUserNewsCases(request, page=1):
         #------------------------------------------#
         user_news_cases = NewsCase.objects.filter(q_objects)
         p = Paginator(user_news_cases,10)
-
         try:
             cases = p.page(page).object_list
         except PageNotAnInteger:
@@ -540,6 +539,7 @@ def getUserNewsCases(request, page=1):
             'totalpages':p.num_pages,
             'data': data}
 
+        print JsonResponse(data_json, safe=False)
         return JsonResponse(data_json, safe=False)
 
 @login_required(login_url='/login_required')
@@ -634,6 +634,37 @@ def updateNewsCase(request):
 
             return HttpResponse("ok")
 
+        except Exception as e:
+            print e
+            return HttpResponse(e)
+
+@login_required(login_url='/login_required')
+def removeArticle(request):
+    if request.method == 'POST':
+        try:
+            elastic_id = request.POST.get('elastic_id')
+            article_id = request.POST.get('article_id')
+            try:
+                userprofile = Profile.objects.get(user=request.user.pk)
+                newCase = NewsCase.objects.get(elastic_id=elastic_id)
+            except Exception as e:
+                return HttpResponse("The newscase was from another persona")
+            
+            file = json.loads(open("explora/static/user.json").read())
+            api_user = file["user"]
+            api_password = file["password"]
+            api_url = file["api_url"]
+            api = u'http://{0}/v2/newscases/{1}/'.format(api_url,elastic_id)
+            response = requests.get(api)
+            response = json.loads(response.content)
+            new_art_not = response['_source']['new_art_not']
+            new_art_not.append(article_id)
+            response_data = {
+                "new_art_not":new_art_not
+            }
+            response_data = json.dumps(response_data)
+            response = requests.put(api, data=response_data)
+            return HttpResponse("ok")
         except Exception as e:
             print e
             return HttpResponse(e)

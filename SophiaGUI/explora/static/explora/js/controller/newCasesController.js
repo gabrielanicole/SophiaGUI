@@ -54,14 +54,21 @@ app.controller('newsCasesController', ['$scope', '$http', 'dataFormat', function
             $scope.news_cases = response.data.data;
             $scope.totalpages = response.data.totalpages;
             $scope.actual_page = response.data.page;
-            if ($scope.totalpages == 1) {
-                $scope.page_init = 1;
-                $scope.page_end = 1;
+
+            if ($scope.news_cases.length == 0) {
+                $(".pagination_container").empty();
             }
+            
             else {
-                var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.totalpages);
-                $scope.page_init = range.page_init;
-                $scope.page_end = range.page_end;
+                if ($scope.totalpages == 1) {
+                    $scope.page_init = 1;
+                    $scope.page_end = 1;
+                }
+                else {
+                    var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.totalpages);
+                    $scope.page_init = range.page_init;
+                    $scope.page_end = range.page_end;
+                }
             }
         }, function errorCallback(response) {
             return (response);

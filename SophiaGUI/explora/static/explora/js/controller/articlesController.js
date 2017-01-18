@@ -149,8 +149,11 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
         $scope.histogram_startdate = date1.toISOString().slice(0, 10);
         $scope.histogram_enddate = date2.toISOString().slice(0, 10);
-        $scope.selectedItem($scope.granularity);
 
+        $scope.startdate = $scope.histogram_startdate;
+        $scope.enddate = $scope.histogram_enddate;
+
+        $scope.selectedItem($scope.granularity);
     }
 
     //Controler for advancesearch button.

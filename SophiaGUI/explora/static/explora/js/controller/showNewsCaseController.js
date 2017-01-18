@@ -152,6 +152,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
+            "idYes": [],
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
         }
         $http({
@@ -178,6 +179,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
 
         $scope.histogram_startdate = date1.toISOString().slice(0, 10);
         $scope.histogram_enddate = date2.toISOString().slice(0, 10);
+
         $scope.selectedItem($scope.granularity);
     }
     //Controler for advancesearch button.
@@ -224,7 +226,27 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         }, function errorCallback(response) {
             console.log(response);
         });
+
         $scope.news_case_name = "";
+    }
+
+    $scope.removeArticle = function (id) {
+
+        data = {
+            elastic_id: elastic_id,
+            article_id:id[0][0]
+        }
+        
+        $http({
+            method: 'POST',
+            url: '/removeArticle/',
+            data: $.param(data)
+        }).then(function successCallback(response) {
+           console.log(response);
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+        console.log($scope.actual_page);
     }
 
 }]);
