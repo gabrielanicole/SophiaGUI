@@ -228,6 +228,10 @@ function generate_histogram(width, height, data_json) {
         chart.select("g.x.axis").call(xAxis);
 
         //brush brush_values converted into date format yyyy-MM-dd
+
+        console.log(brush_values[0]);
+        console.log(brush_values[1]);
+
         var startdate = brush_values[0].toISOString().slice(0, 10);
         var enddate = brush_values[1].toISOString().slice(0, 10);
 

@@ -1,3 +1,109 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'base.html' %} {% block header %}
+<script type="text/javascript" src="/static/explora/js/controller/pressMediaController.js"></script>
+<link rel="stylesheet" href="/static/explora/pressMedia.css" type="text/css"> {% endblock header %}{% block content %}
+<div id="angularController" ng-controller="pressMediaController">
+
+    <div class=row>
+        <form class="navbar-form navbar-left" role="search">
+
+            <div class="form-group">
+                <div class="selectContainer">
+                    <select class="form-control" name="medio" ng-model="selectedMedium" ng-options="x for x in press_source">
+				            </select>
+                </div>
+            </div>
+            <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal">Agregar Medio</button>
+            <button class="btn btn-default">Editar Medio</button>
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Dueño del medio</div>
+                <div class="panel-body">
+                    <h5> <strong>Nombre del dueño:</strong> [[pressMedia.pre_owner]] </h5>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Medio de prensa</div>
+                <div class="panel-body">
+                    <h5> <strong>Nombre del medio:</strong> [[pressMedia.pre_name]] </h5>
+                    <h5> <strong>Fecha de Creación: </strong> [[pressMedia.pre_date]] </h5>
+                    <h5> <strong>Lenguaje: </strong> [[pressMedia.pre_language]] </h5>
+                    <h5> <strong>Sitio Web: </strong> [[pressMedia.pre_url]] </h5>
+                    <h5> <strong>País: </strong> [[pressMedia.pre_country]] </h5>
+                    <h5> <strong>Región: </strong> [[pressMedia.pre_region]] </h5>                   
+                    <h5> <strong>Ciudad: </strong> [[pressMedia.pre_city]] </h5>
+                    <h5> <strong>Facebook: </strong> [[pressMedia.pre_facebook]] </h5>
+                    <h5> <strong>Twitter: </strong> [[pressMedia.pre_twitter]] </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+            <div id="newsCaseModal" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Ingresar nuevo medio de prensa</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                             <form name="ownerform">
+                                <h4 style="text-align:center">Dueño de prensa</h4>
+                                <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Nombre del dueño" ng-model="Media.pre_owner" required>
+                                </div>
+                               </form>    
+                            </div>
+                            <div class="col-md-6">
+                                <h4 style="text-align:center">Medio de prensa</h4>
+                                <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Nombre del medio" ng-model="Media.pre_name" required>
+                                </div>
+                                <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Fecha de Creación"  ng-model="Media.pre_date" required>
+                                </div>
+                                <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Lenguaje"  ng-model="Media.pre_language" required>
+                                </div>
+                                <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Sitio Web"  ng-model="Media.pre_url" required>
+                                </div>
+                                <div class="form-group">
+                                <input type="text" class="form-control" placeholder="País"  ng-model="Media.pre_country" required>
+                                </div>
+                                <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Region"  ng-model="Media.pre_region" required>
+                                </div>      
+                                <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Ciudad"  ng-model="Media.pre_city" required>
+                                </div>
+                                <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Facebook"  ng-model="Media.pre_facebook" required>
+                                </div>
+                                <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Twitter"  ng-model="Media.pre_twitter" required>
+                                </div>                    
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="insertMedia()">Ingresar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>
+
 {% endblock content %}

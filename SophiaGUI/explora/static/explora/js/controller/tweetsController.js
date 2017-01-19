@@ -57,11 +57,10 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     ];
 
     var histogram_enddate = new Date().toISOString().slice(0, 10);
-    var histogram_startdate = new Date();
-    histogram_startdate.setDate(histogram_startdate.getDay() - 7);
-    histogram_startdate = histogram_startdate.toISOString().slice(0, 10);
+    var histogram_startdate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
     $scope.windowsWidth = $window.innerWidth;
-    $scope.granularity = 'day';
+    $scope.granularity = 'hour';
+
 
     $scope.startdate = histogram_startdate;
     $scope.enddate = histogram_enddate;

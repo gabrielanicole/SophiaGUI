@@ -40,7 +40,7 @@
 
 </head>
 
-<body ng-app="explora">
+<body>
 
 	<nav id="custom-bootstrap-menu" class="navbar navbar-default">
 	  <div class="container-fluid">
@@ -61,7 +61,6 @@
 	      	<li>
 	      		<a>{{user}}</a>
 	      	</li>
-
     	  <li>
 		    <p style="padding-right:10px" class = "navbar-btn">
 		       <a href="#" class="btn btn-default" role="button"><span class="glyphicon glyphicon-cog"></span> Configuración</a>
@@ -82,11 +81,12 @@
 			  <li role="presentation"><a href="/articles"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Noticias</a></li>
 				<li role="presentation"><a href="/tweets"><i class="fa fa-twitter" aria-hidden="true"></i> Tweets</a></li>
 				<li role="presentation"><a href="/newscases"><i class="fa fa-file" aria-hidden="true"></i> Casos Noticiosos</a></li>
-			  <li role="presentation"><a href="/pressmedia"><i class="fa fa-file" aria-hidden="true"></i> Medios de Prensa</a></li>
+			  <li role="presentation"><a href="/pressmedia"><i class="fa fa-address-card" aria-hidden="true"></i>
+</i> Medios de Prensa</a></li>
 			</ul>
 		</div>
 
-		<div id="main-content" class="col-md-10">
+		<div id="main-content" class="col-md-10" ng-app="explora">
         {% block content %}
         {% endblock %}
        </div>

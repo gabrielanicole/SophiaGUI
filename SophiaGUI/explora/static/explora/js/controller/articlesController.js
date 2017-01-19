@@ -59,11 +59,12 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
 
     var histogram_enddate = new Date().toISOString().slice(0, 10);
-    var histogram_startdate = new Date();
-    histogram_startdate.setDate(histogram_startdate.getDay() - 7);
-    histogram_startdate = histogram_startdate.toISOString().slice(0, 10);
+    var histogram_startdate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
     $scope.windowsWidth = $window.innerWidth;
-    $scope.granularity = 'day';
+    $scope.granularity = 'hour';
+
+    console.log(histogram_enddate);
+    console.log(histogram_startdate);
 
     $scope.histogram_startdate = histogram_startdate;
     $scope.histogram_enddate = histogram_enddate;
@@ -224,7 +225,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             }).then(function successCallback(response) {
                 console.log(response);
             }, function errorCallback(response) {
-                console.log (response);
+                console.log(response);
             });
         }
         else {

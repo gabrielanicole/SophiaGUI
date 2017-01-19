@@ -147,7 +147,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.enddate = $scope.histogram_enddate;
 
         $scope.windowsWidth = $window.innerWidth;
-        $scope.granularity = 'day';
+        $scope.granularity = 'hour';
         //Draw Histogram for first time
         $scope.selectedItem($scope.granularity);
 
