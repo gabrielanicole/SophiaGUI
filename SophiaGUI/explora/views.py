@@ -10,8 +10,6 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.http import JsonResponse
 import requests
 import simplejson as json
-from telnetlib import theNULL
-from pprint import pprint
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q

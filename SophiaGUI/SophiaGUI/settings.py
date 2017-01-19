@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'explora',
+    'pressmedia',
      # Add the python social auth
     'social.apps.django_app.default',
 ]
@@ -145,6 +146,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
+TEMPLATE_DIRS = (
+    os.path.join(SETTINGS_PATH, 'templates'),
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
@@ -165,15 +170,17 @@ USE_TZ = True
 
 #STATIC_URL = '/static/'
 
-#STATICFILES_DIRS = (
-#                    os.path.join(BASE_DIR,'static'),
-#                    )
+STATIC_URL = '/static/'
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATICFILES_DIRS = (
+                    os.path.join(BASE_DIR, STATIC_URL),
+                    )
 
 #PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 #STATIC_ROOT = os.path.join(PROJECT_ROOT, '/explora/static')
 
-STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROJECT_DIR=os.path.dirname(__file__)
-STATIC_ROOT = os.path.join(PROJECT_DIR, '../explora/static/')
+#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#PROJECT_DIR=os.path.dirname(__file__)
+#STATIC_ROOT = os.path.join(PROJECT_DIR, '../explora/static/')
