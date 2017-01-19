@@ -254,7 +254,6 @@ def advancedSearch(request, page=1):
                 'art_title': key['_source']['art_title'],
                 'art_url': key['_source']['art_url'],
                 'art_image_link': key['_source']['art_image_link'],
-                'art_content': key['_source']['art_content'],
                 'art_name_press_source': key['_source']['art_name_press_source'],
                 'art_category': key['_source']['art_category'],
                 'art_date': key['_source']['art_date']
@@ -511,6 +510,7 @@ def getUserNewsCases(request, page=1):
             q_objects.add(~Q(name__contains=item),Q.OR)
 
         q_objects.add(Q(user=userprofile),Q.AND)
+        q_objects.add(Q(visible = True),Q.AND)
 
         #------------------------------------------#
         #q_objects.add(Q(creation_date__range=[startdate,enddate]))
@@ -539,7 +539,6 @@ def getUserNewsCases(request, page=1):
             'totalpages':p.num_pages,
             'data': data}
 
-        print JsonResponse(data_json, safe=False)
         return JsonResponse(data_json, safe=False)
 
 @login_required(login_url='/login_required')
@@ -648,7 +647,7 @@ def removeArticle(request):
                 userprofile = Profile.objects.get(user=request.user.pk)
                 newCase = NewsCase.objects.get(elastic_id=elastic_id)
             except Exception as e:
-                return HttpResponse("The newscase was from another persona")
+                return HttpResponse("The newscase was from another person")
             
             file = json.loads(open("explora/static/user.json").read())
             api_user = file["user"]
@@ -668,3 +667,16 @@ def removeArticle(request):
         except Exception as e:
             print e
             return HttpResponse(e)
+
+@login_required(login_url='/login_required')
+def removeNewsCase(request):
+    if request.method == 'POST':
+            elastic_id = request.POST.get('elastic_id')
+            try:
+                userprofile = Profile.objects.get(user=request.user.pk)
+                newCase = NewsCase.objects.get(elastic_id=elastic_id)
+            except Exception as e:
+                return HttpResponse("The newscase was from another person")
+            newCase.visible = False
+            newCase.save()
+            return HttpResponse('')

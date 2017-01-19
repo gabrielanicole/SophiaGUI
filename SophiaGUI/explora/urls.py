@@ -31,4 +31,5 @@ urlpatterns = [
     url(r'^getNewsCaseInfo/$', views.getNewCaseInfo, name='getNewCaseInfo'),
     url(r'^updateNewsCase/$', views.updateNewsCase, name='updateNewsCase'),
     url(r'^removeArticle/$', views.removeArticle, name='removeArticle'),
+    url(r'^removeNewsCase/$', views.removeNewsCase,name='removeNewsCase'),
 ]

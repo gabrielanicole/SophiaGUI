@@ -54,8 +54,33 @@
                     <div class="row">
                         <div class="col-md-12">
                             <a ng-href="/showNewsCase/[[d.elastic_id]]" class="btn btn-default pull-right cases-button" role="button">Ver Caso</a>
-                            <button class="btn btn-default pull-right cases-button" ng-click=""> Eliminar</button>
+                            <button class="btn btn-default pull-right cases-button" data-toggle="modal"
+                                    data-target="#newsCaseModal" ng-click="get_case_id([[d.elastic_id]])">Eliminar</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="newsCaseModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Eliminar Caso Noticioso</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>¿Está seguro que desea eliminar su caso noticioso?</h4>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="delete_case()">Eliminar</button>
                     </div>
                 </div>
             </div>

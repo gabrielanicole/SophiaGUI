@@ -81,10 +81,20 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
 
     $scope.restoreSession = function (data) {
         //Restore what the user searched
-        histogram_startdate = String(data.news_case_data.new_date_from.slice(0, 10));
-        histogram_enddate = String(data.news_case_data.new_date_to.slice(0, 10));
-        $("#datepicker1").datepicker('update', histogram_startdate);
-        $("#datepicker2").datepicker('update', histogram_enddate);
+        if (data.follow_new_feed == 'true') {
+            histogram_startdate = String(data.news_case_data.new_date_from.slice(0, 10));
+            histogram_enddate = new Date().toISOString().slice(0, 10);
+            $("#datepicker1").datepicker('update', histogram_startdate);
+            $("#datepicker2").datepicker('update', histogram_enddate);
+
+        }
+        else {
+            histogram_startdate = String(data.news_case_data.new_date_from.slice(0, 10));
+            histogram_enddate = String(data.news_case_data.new_date_to.slice(0, 10));
+            $("#datepicker1").datepicker('update', histogram_startdate);
+            $("#datepicker2").datepicker('update', histogram_enddate);
+
+        }
         var new_or = dataFormat.getTagList(data.news_case_data.new_or);
         var new_and = dataFormat.getTagList(data.news_case_data.new_and);
         var new_not = dataFormat.getTagList(data.news_case_data.new_not);

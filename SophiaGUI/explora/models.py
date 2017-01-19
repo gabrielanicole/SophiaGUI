@@ -13,3 +13,4 @@ class NewsCase(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     follow_new_feed = models.BooleanField(default=True)
     creation_date = models.DateField()
+    visible = models.BooleanField(default=True)

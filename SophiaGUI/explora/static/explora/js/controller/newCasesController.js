@@ -54,11 +54,10 @@ app.controller('newsCasesController', ['$scope', '$http', 'dataFormat', function
             $scope.news_cases = response.data.data;
             $scope.totalpages = response.data.totalpages;
             $scope.actual_page = response.data.page;
-
             if ($scope.news_cases.length == 0) {
                 $(".pagination_container").empty();
             }
-            
+
             else {
                 if ($scope.totalpages == 1) {
                     $scope.page_init = 1;
@@ -79,5 +78,20 @@ app.controller('newsCasesController', ['$scope', '$http', 'dataFormat', function
         $scope.page_number(1);
     }
     $scope.search_cases();
+
+    $scope.elastic_id;
+    $scope.get_case_id = function (id) {
+        $scope.elastic_id = id[0][0];
+    }
+
+    $scope.delete_case = function () {
+        $http({
+            method: 'POST',
+            url: '/removeNewsCase/',
+            data: $.param({ elastic_id: $scope.elastic_id })
+        }).then(function successCallback(response) {
+            $scope.search_cases();
+        });
+    }
 
 }]);
