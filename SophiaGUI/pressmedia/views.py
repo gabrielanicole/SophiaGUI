@@ -5,6 +5,8 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 import simplejson as json
 import requests
+import tweepy
+from twitter import addFriend, removeFriend
 
 # Create your views here.
 @login_required(login_url='/login_required')
@@ -27,9 +29,23 @@ def insertPressMedia(request):
             api_user = file["user"]
             api_password = file["password"]
             api_url = file["api_url"]
-            #api = u'http://{0}/v2/pressmedia/'.format(api_url)
-            #response = requests.post(api, data=data)
-            return HttpResponse('Se ha insertado un nuevo medio de prensa')
+            data = json.loads(data)
+
+            consumer_key = 'wHpPsl5nuZXEyJU6fgqPzvs3V'
+            consumer_secret = 'zqDiIsAMGaCvuQpwYFZCawLGjRWHH9UNW6iPq9lXdY3PEvmYTk'
+            access_token = '822060303907176448-YYFVabdPAF8Fw8JbB7bM2out2RUFTvn'
+            access_token_secret = 'ctFi2JCDuI80e6lYCZDzKu3OYTBhvzAXeS1bCfO7aKMtn'
+            auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+            auth.set_access_token(access_token, access_token_secret)
+            t_api = tweepy.API(auth)
+            addFriend(t_api,data['pre_twitter'])
+            if addFriend == '200':
+                data = json.dumps(data)
+                api = u'http://{0}/v2/pressmedia/'.format(api_url)
+                response = requests.post(api, data=data)
+                return HttpResponse('Se ha insertado un nuevo medio de prensa')
+            else:
+                return HttpResponse('No se ha insertado un nuevo usuario')
         except Exception as e:
             print e
             return HttpResponse('Ha ocurrido un error durante el proceso')
@@ -80,7 +96,8 @@ def getListPressMedia(request):
             for x in data:
                 media = {
                     'media_id':x['_id'],
-                    'media_name':x['fields']['pre_name']    
+                    'media_name':x['fields']['pre_name'],
+                    'media_twitter':x['fields']['pre_twitter']    
                 }
                 results.append(media)
             return JsonResponse(results,safe=False)

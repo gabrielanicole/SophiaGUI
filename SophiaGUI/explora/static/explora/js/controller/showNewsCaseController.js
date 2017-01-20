@@ -17,8 +17,24 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.page_end;
     $scope.size = 3;
 
-    $scope.press_source = ["Cualquier Medio", "medioX", "medioY", "medioZ"];
-    $scope.category = ["Cualquier Categoría", "Category1", "Category2", "Category3"];
+    $scope.press_source = [""];
+    $scope.category = ["Categoría"];
+    //Default values
+    $scope.selectedMedium = [];
+    $scope.selectedCategory = $scope.category[0];
+
+    $http({
+        method: 'GET',
+        url: '/pressmedia/getlist/',
+    }).then(function successCallback(response) {
+        for (x in response.data) {
+            $scope.press_source.push(response.data[x].media_name);
+        }
+        $scope.selectedMedium = $scope.press_source[0];
+    }, function errorCallback(response) {
+        console.log(response.data);
+    });
+
     $scope.options = [
         { key: "Minuto", value: "minute" },
         { key: "Hora", value: "hour" },
@@ -112,6 +128,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
+            "art_name_press_source":$scope.selectedMedium[0],
         }
 
         var data = {
@@ -228,6 +245,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
 
         var json_data = {
             "elastic_id": elastic_id,
+            "art_name_press_source":$scope.selectedMedium[0],
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,

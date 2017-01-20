@@ -15,8 +15,10 @@
 				    </select>
                 </div>
             </div>
-            <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal">Agregar Medio</button>
-            <button class="btn btn-default">Editar Medio</button>
+            {% if request.user.is_staff %}
+            <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal" ng-click="clearPress()">Agregar Medio</button>
+            <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal" ng-click="editMedia()">Editar Medio</button>
+            {% endif %}
         </form>
     </div>
 
@@ -63,7 +65,7 @@
                              <form name="ownerform">
                                 <h4 style="text-align:center">Dueño de prensa</h4>
                                 <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Nombre del dueño" ng-model="Media.pre_owner" required>
+                                <input type="text" class="form-control" placeholder="Nombre del dueño" ng-model="pressMedia.pre_owner" required>
                                 </div>
                                </form>    
                             </div>
@@ -71,31 +73,31 @@
                                 <h4 style="text-align:center">Medio de prensa</h4>
                                 <form name"pressmediaform">
                                     <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Nombre del medio" ng-model="Media.pre_name" required>
+                                    <input type="text" class="form-control" placeholder="Nombre del medio" ng-model="pressMedia.pre_name" required>
                                     </div>
                                     <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Fecha de Creación"  ng-model="Media.pre_date" required>
+                                    <input type="text" class="form-control" placeholder="Fecha de Creación"  ng-model="pressMedia.pre_date" required>
                                     </div>
                                     <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Lenguaje"  ng-model="Media.pre_language" required>
+                                    <input type="text" class="form-control" placeholder="Lenguaje"  ng-model="pressMedia.pre_language" required>
                                     </div>
                                     <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Sitio Web"  ng-model="Media.pre_url" required>
+                                    <input type="text" class="form-control" placeholder="Sitio Web"  ng-model="pressMedia.pre_url" required>
                                     </div>
                                     <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="País"  ng-model="Media.pre_country" required>
+                                    <input type="text" class="form-control" placeholder="País"  ng-model="pressMedia.pre_country" required>
                                     </div>
                                     <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Region"  ng-model="Media.pre_region" required>
+                                    <input type="text" class="form-control" placeholder="Region"  ng-model="pressMedia.pre_region" required>
                                     </div>      
                                     <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Ciudad"  ng-model="Media.pre_city" required>
+                                    <input type="text" class="form-control" placeholder="Ciudad"  ng-model="pressMedia.pre_city" required>
                                     </div>
                                     <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Facebook"  ng-model="Media.pre_facebook" required>
+                                    <input type="text" class="form-control" placeholder="Facebook"  ng-model="pressMedia.pre_facebook" required>
                                     </div>
                                     <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Twitter"  ng-model="Media.pre_twitter" required>
+                                    <input type="text" class="form-control" placeholder="Twitter"  ng-model="pressMedia.pre_twitter" required>
                                     </div>
                                 </form>                    
                             </div>

@@ -40,12 +40,29 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
         return output;
     }
 
-    $scope.press_source = ["Cualquier Medio", "medioX", "medioY", "medioZ"];
-    $scope.category = ["Cualquier Categoría", "Category1", "Category2", "Category3"];
+    $scope.press_source = [];
+    $scope.category = ["Categoría"];
     //Default values
-    $scope.selectedMedium = $scope.press_source[0];
+    $scope.selectedMedium = [];
     $scope.selectedCategory = $scope.category[0];
 
+    $http({
+        method: 'GET',
+        url: '/pressmedia/getlist/',
+    }).then(function successCallback(response) {
+        for (x in response.data) {
+            $scope.press_source = response.data;
+            $scope.selectedMedium = $scope.press_source[0];
+            //$scope.press_source.push(response.data[x].media_name);
+        }
+        $scope.selectedMedium = $scope.press_source[0];
+    }, function errorCallback(response) {
+        console.log(response.data);
+    });
+
+    $scope.mediaChange = function (media) {
+        $scope.selectedMedium = media;
+    }
 
     $scope.options = [
         { key: "Minuto", value: "minute" },
@@ -71,8 +88,16 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     $("#datepicker1").datepicker('update', String($scope.histogram_startdate));
     $("#datepicker2").datepicker('update', String($scope.histogram_enddate));
 
-
     $scope.selectedItem = function (selected) {
+
+        var twitter;
+        try {
+            twitter = $scope.selectedMedium.media_twitter[0];
+        }
+        catch (err) {
+            twitter = "";
+        }
+
         $scope.granularity = selected;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
@@ -81,8 +106,10 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
+            "pub_username": twitter
         }
-
+        
+        console.log(JSON.stringify(json_data));
         var data = {
             startdate: $scope.histogram_startdate,
             enddate: $scope.histogram_enddate,
@@ -104,15 +131,21 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
         });
 
     }
-    //Draw Histogram for first time
-    $scope.selectedItem($scope.granularity);
-
 
     $scope.update_list = function (page) {
+
+        var twitter;
+        try {
+            twitter = $scope.selectedMedium.media_twitter[0];
+        }
+        catch (err) {
+            twitter = "";
+        }
 
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "publications",
+            "pub_username": twitter,
             "fields": ["pub_content"],
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
@@ -120,6 +153,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
         }
 
+        console.log(JSON.stringify(json_data));
         $http({
             method: 'POST',
             url: '/get_data/tweets/' + page + '/',
@@ -148,12 +182,15 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
 
     }
 
-    $scope.update_list(1);
     $scope.get_input_data = function () {
-        $scope.granularity = 'day';
+        $scope.granularity = 'hour';
         $scope.update_histogram();
         $scope.update_list(1);
         $scope.selectedItem($scope.granularity);
     }
+
+    $scope.update_list(1);
+    //Draw Histogram for first time
+    $scope.selectedItem($scope.granularity);
 
 }]);
