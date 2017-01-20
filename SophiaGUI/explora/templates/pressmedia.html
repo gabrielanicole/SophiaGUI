@@ -1,6 +1,9 @@
 {% extends 'base.html' %} {% block header %}
 <script type="text/javascript" src="/static/explora/js/controller/pressMediaController.js"></script>
-<link rel="stylesheet" href="/static/explora/pressMedia.css" type="text/css"> {% endblock header %}{% block content %}
+<link rel="stylesheet" href="/static/explora/pressMedia.css" type="text/css">
+<link rel="stylesheet" href="/static/explora/externalCSS/toastr.min.css" type="text/css">
+<script type="text/javascript" src="/static/explora/externalJS/toastr.min.js"></script>
+{% endblock header %}{% block content %}
 <div id="angularController" ng-controller="pressMediaController">
 
     <div class=row>
@@ -8,8 +11,8 @@
 
             <div class="form-group">
                 <div class="selectContainer">
-                    <select class="form-control" name="medio" ng-model="selectedMedium" ng-options="x for x in press_source">
-				            </select>
+                    <select class="form-control" name="medio" ng-model="selectedMedium" ng-change="getMediaData(selectedMedium)" ng-options="x.media_name for x in press_source | orderBy:'media_name'">
+				    </select>
                 </div>
             </div>
             <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal">Agregar Medio</button>
@@ -66,38 +69,40 @@
                             </div>
                             <div class="col-md-6">
                                 <h4 style="text-align:center">Medio de prensa</h4>
-                                <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Nombre del medio" ng-model="Media.pre_name" required>
-                                </div>
-                                <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Fecha de Creación"  ng-model="Media.pre_date" required>
-                                </div>
-                                <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Lenguaje"  ng-model="Media.pre_language" required>
-                                </div>
-                                <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Sitio Web"  ng-model="Media.pre_url" required>
-                                </div>
-                                <div class="form-group">
-                                <input type="text" class="form-control" placeholder="País"  ng-model="Media.pre_country" required>
-                                </div>
-                                <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Region"  ng-model="Media.pre_region" required>
-                                </div>      
-                                <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Ciudad"  ng-model="Media.pre_city" required>
-                                </div>
-                                <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Facebook"  ng-model="Media.pre_facebook" required>
-                                </div>
-                                <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Twitter"  ng-model="Media.pre_twitter" required>
-                                </div>                    
+                                <form name"pressmediaform">
+                                    <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Nombre del medio" ng-model="Media.pre_name" required>
+                                    </div>
+                                    <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Fecha de Creación"  ng-model="Media.pre_date" required>
+                                    </div>
+                                    <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Lenguaje"  ng-model="Media.pre_language" required>
+                                    </div>
+                                    <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Sitio Web"  ng-model="Media.pre_url" required>
+                                    </div>
+                                    <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="País"  ng-model="Media.pre_country" required>
+                                    </div>
+                                    <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Region"  ng-model="Media.pre_region" required>
+                                    </div>      
+                                    <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Ciudad"  ng-model="Media.pre_city" required>
+                                    </div>
+                                    <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Facebook"  ng-model="Media.pre_facebook" required>
+                                    </div>
+                                    <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Twitter"  ng-model="Media.pre_twitter" required>
+                                    </div>
+                                </form>                    
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="insertMedia()">Ingresar</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="!ownerform.$valid && !pressmediaform.$valid" ng-click="insertMedia()">Ingresar</button>
                         </div>
                     </div>
                 </div>
