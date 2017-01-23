@@ -1,5 +1,5 @@
-app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataFormat', '$window','staticData', function (
-    $scope, $http, $location, dataFormat, $window,staticData) {
+app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataFormat', '$window', 'staticData', 'pressMediaManager', function (
+    $scope, $http, $location, dataFormat, $window, staticData, pressMediaManager) {
 
     var absUrl = $location.absUrl().split("/");
     var elastic_id = absUrl[absUrl.length - 1];
@@ -17,23 +17,24 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.page_end;
     $scope.size = 3;
 
-    $scope.press_source = [""];
+    $scope.press_source = [];
     $scope.category = staticData.getCategoryList();
     //Default values
     $scope.selectedMedium = [];
     $scope.selectedCategory = $scope.category[0];
+    $scope.twitter = "";
 
-    function loadPressMedia() {
+    $scope.loadPressMedia = function () {
         $http({
             method: 'GET',
             url: '/pressmedia/getlist/',
         }).then(function successCallback(response) {
             for (x in response.data) {
                 $scope.press_source = response.data;
-                //$scope.press_source.push(response.data[x].media_name);
             }
             var empty = { media_id: "", media_name: "", media_twitter: "" };
             $scope.press_source.unshift(empty);
+            $scope.selectedMedium = empty;
 
         }, function errorCallback(response) {
             console.log(response.data);
@@ -49,8 +50,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         { key: "Año", value: "year" }
     ];
 
-    //Default values
-    $scope.selectedMedium = $scope.press_source[0];
     $scope.selectedCategory = $scope.category[0];
 
     //Adding widgets setup
@@ -86,14 +85,20 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         return output;
     }
 
-    loadPressMedia();
+    $scope.mediaChange = function (media) {
+        $scope.selectedMedium = media;
+    }
+
+    $scope.categoryChange = function (category) {
+        $scope.selectedCategory = category;
+    }
 
     $http({
         method: 'POST',
         url: '/getNewsCaseInfo/',
         data: $.param(data)
     }).then(function successCallback(response) {
-        //console.log(response.data);
+        $scope.loadPressMedia();
         $scope.restoreSession(response.data);
         $scope.restoreHistogram();
         $scope.update_list(1, data);
@@ -109,8 +114,8 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             histogram_enddate = new Date().toISOString().slice(0, 10);
             $("#datepicker1").datepicker('update', histogram_startdate);
             $("#datepicker2").datepicker('update', histogram_enddate);
-
         }
+
         else {
             histogram_startdate = String(data.news_case_data.new_date_from.slice(0, 10));
             histogram_enddate = String(data.news_case_data.new_date_to.slice(0, 10));
@@ -118,24 +123,32 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             $("#datepicker2").datepicker('update', histogram_enddate);
 
         }
+
         var new_or = dataFormat.getTagList(data.news_case_data.new_or);
         var new_and = dataFormat.getTagList(data.news_case_data.new_and);
         var new_not = dataFormat.getTagList(data.news_case_data.new_not);
         should_contain.add(new_or);
         must_contain.add(new_and);
         not_contain.add(new_not);
+
+        $scope.twitter = data.news_case_data.new_category;
+        $scope.selectedCategory = data.news_case_data.new_category;
+        $scope.selectedMedium.media_twitter = data.news_case_data.new_press_source;
     }
+
 
     $scope.selectedItem = function (selected) {
         $scope.granularity = selected;
+        $scope.twitter = $scope.selectedMedium.media_twitter;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "articles",
-            "fields": ["art_title", "art_content"],
+            "fields": ["art_content"],
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
-            "art_name_press_source":$scope.selectedMedium[0],
+            "art_name_press_source": $scope.twitter,
+            "art_category": $scope.selectedCategory
         }
 
         var data = {
@@ -144,6 +157,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             countby: $scope.granularity,
             search: JSON.stringify(json_data)
         };
+
         $http({
             method: 'POST',
             url: '/get_data/articles/histogram',
@@ -174,7 +188,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.granularity = 'hour';
         //Draw Histogram for first time
         $scope.selectedItem($scope.granularity);
-
     }
 
     $scope.update_list = function (page, data) {
@@ -193,12 +206,14 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "articles",
-            "fields": ["art_title", "art_content"],
+            "fields": ["art_content"],
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
             "idNot": idNot,
-            "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
+            "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
+            "art_name_press_source": $scope.twitter,
+            "art_category": $scope.selectedCategory
         }
         $http({
             method: 'POST',
@@ -230,7 +245,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     //Controler for advancesearch button.
     $scope.get_input_data = function () {
         //set day as default
-        $scope.granularity = 'day';
+        $scope.granularity = 'hour';
         $scope.update_histogram();
         $scope.update_list(1, data);
         $scope.selectedItem($scope.granularity);
@@ -239,26 +254,19 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.update_news_case = function (newsCaseName) {
         $scope.news_case_name = newsCaseName[0][0];
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
-
-        var aux_category;
-        if ($scope.selectedCategory == 'Cualquier Categoría') { aux_category = ""; }
-        else { aux_category = $scope.selectedCategory; }
-
-        var aux_press_source;
-        if ($scope.selectedMedium == 'Cualquier Medio') { aux_press_source = ""; }
-        else { aux_press_source = $scope.selectedMedium; }
+        $scope.twitter = $scope.selectedMedium.media_twitter;
 
         var checked = $('#toogleCase').prop('checked');
 
         var json_data = {
             "elastic_id": elastic_id,
-            "art_name_press_source":$scope.selectedMedium[0],
+            "art_name_press_source": $scope.selectedMedium[0],
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
             "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
-            "category": aux_category,
-            "press_source": aux_press_source,
+            "category": $scope.selectedCategory,
+            "press_source": $scope.twitter,
             "new_name": $scope.news_case_name,
             "follow_new_feed": checked
         }

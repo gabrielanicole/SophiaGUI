@@ -10,15 +10,15 @@
 				<form class="navbar-form navbar-left" role="search">
 
 				    <div class="form-group">
-				        <div class="selectContainer">
-				            <select class="form-control" name="medio" ng-model="selectedMedium" ng-options="x.media_name for x in press_source">
+				        <div id="mediaContainer" class="selectContainer">
+				            <select class="form-control" name="medio" ng-model="selectedMedium"  ng-change="mediaChange(selectedMedium)" ng-options="x.media_name for x in press_source | orderBy:'media_name'">
 				            </select>
 				        </div>
 		       </div>
 
 				    <div class="form-group">
 				        <div class="selectContainer">
-				            <select class="form-control" name="categoria" ng-model="selectedCategory" ng-options="x for x in category">
+				            <select class="form-control" name="categoria" ng-change="categoryChange(selectedCategory)" ng-model="selectedCategory" ng-options="x for x in category">
 				            </select>
 				        </div>
 				    </div>
@@ -32,10 +32,10 @@
 
     <div class="row">
       <div class="col-md-4">
-        <div id="should" class="input textarea"></div>
+        <div id="and" class="input textarea"></div>
       </div>
       <div class="col-md-4">
-        <div id="and" class="input textarea"></div>
+        <div id="should" class="input textarea"></div>
       </div>
       <div class="col-md-4">
         <div id="not" class="input textarea"></div>

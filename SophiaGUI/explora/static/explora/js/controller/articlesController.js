@@ -113,7 +113,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "articles",
-            "fields": ["art_title", "art_content"],
+            "fields": ["art_content"],
             "art_name_press_source": twitter,
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
@@ -150,7 +150,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "articles",
-            "fields": ["art_title", "art_content"],
+            "fields": ["art_content"],
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
@@ -224,16 +224,12 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         //Format the necesary data for the newsCase
         $scope.news_case_name = newsCaseName[0][0];
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
-
         var twitter = $scope.selectedMedium.media_twitter;
-
-        console.log($scope.selectedCategory);
-
         var today = new Date().toISOString().slice(0, 10)
         var checked = $('#toogleCase').prop('checked');
         var json_data = {
             "index": "articles",
-            "fields": ["art_title", "art_content"],
+            "fields": ["art_content"],
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
@@ -252,12 +248,13 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
                 data: $.param({ data: JSON.stringify(json_data) })
             }).then(function successCallback(response) {
                 console.log(response);
+                toastr.success("Caso noticioso creado con éxito");
             }, function errorCallback(response) {
                 console.log(response);
             });
         }
         else {
-            console.log("No se ingresó nombre al caso");
+            toastr.error("No ingresó nombre al caso noticioso");
         }
         $scope.news_case_name = "";
     }

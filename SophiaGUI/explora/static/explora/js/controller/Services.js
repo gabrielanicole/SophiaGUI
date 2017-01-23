@@ -86,3 +86,15 @@ app.service('staticData', function () {
             "entretenimiento", "judicial", "politica", "salud", "tecnologia"];
     }
 });
+
+app.service('pressMediaManager', function ($http) {
+    this.getPressList = function getPressMediaList() {
+        return $http({
+            method: 'GET',
+            url: '/pressmedia/getlist/',
+        }).then(function (response) {
+            press_source = response.data;
+            return press_source;
+        })
+    }
+})
