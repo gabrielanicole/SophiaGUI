@@ -1,4 +1,5 @@
-app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', function ($scope, $http, $window, dataFormat) {
+app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', "staticData", function (
+    $scope, $http, $window, dataFormat, staticData) {
 
     //Date Picker Setup
     $("#datepicker1").datepicker({
@@ -12,6 +13,9 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         language: "es",
         orientation: "bottom auto",
     });
+
+    $("#mediaContainer").tooltip();
+    $("#categoryContainer").tooltip();
 
     $scope.options = [
         { key: "Minuto", value: "minute" },
@@ -52,7 +56,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.size = 3;
 
     $scope.press_source = [];
-    $scope.category = ["","accidentes","deporte","ecologia","economia","entretenimiento","judicial","politica","salud","tecnologia"];
+    $scope.category = staticData.getCategoryList();
     //Default values
     $scope.selectedMedium = [];
     $scope.selectedCategory = $scope.category[0];
@@ -84,6 +88,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             }
             var empty = { media_id: "", media_name: "", media_twitter: "" };
             $scope.press_source.unshift(empty);
+            $scope.selectedMedium = empty;
 
         }, function errorCallback(response) {
             console.log(response.data);
@@ -94,7 +99,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         $scope.selectedMedium = media;
     }
 
-    $scope.categoryChange = function(category){
+    $scope.categoryChange = function (category) {
         $scope.selectedCategory = category;
     }
 
@@ -114,7 +119,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
-            "art_category":$scope.selectedCategory
+            "art_category": $scope.selectedCategory
 
         }
 
@@ -151,7 +156,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "not_and": tag_values.not_contain_group,
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
             "art_name_press_source": twitter,
-            "art_category":$scope.selectedCategory
+            "art_category": $scope.selectedCategory
         }
 
         $http({
@@ -220,13 +225,9 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         $scope.news_case_name = newsCaseName[0][0];
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
 
-        var aux_category;
-        if ($scope.selectedCategory == '') { aux_category = ""; }
-        else { aux_category = $scope.selectedCategory; }
+        var twitter = $scope.selectedMedium.media_twitter;
 
-        var aux_press_source;
-        if ($scope.selectedMedium == '') { aux_press_source = ""; }
-        else { aux_press_source = $scope.selectedMedium[0]; }
+        console.log($scope.selectedCategory);
 
         var today = new Date().toISOString().slice(0, 10)
         var checked = $('#toogleCase').prop('checked');
@@ -237,8 +238,8 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
             "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
-            "category": aux_category,
-            "press_source": aux_press_source,
+            "category": $scope.selectedCategory,
+            "press_source": twitter,
             "new_name": $scope.news_case_name,
             "new_date": today,
             "follow_new_feed": checked

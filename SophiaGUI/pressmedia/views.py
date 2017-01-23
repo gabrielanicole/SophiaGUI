@@ -59,7 +59,6 @@ def getPressMedia(request):
             api_url = file["api_url"]
             api = u'http://{0}/v2/pressmedia/'.format(api_url) 
             response = requests.get(api)
-            print response.content
             return HttpResponse('')
         except Exception as e:
             print e
@@ -99,7 +98,6 @@ def getListPressMedia(request):
                     'media_name':x['fields']['pre_name'][0],
                     'media_twitter':x['fields']['pre_twitter'] [0]   
                 }
-                print media
                 results.append(media)
             return JsonResponse(results,safe=False)
         except Exception as e:

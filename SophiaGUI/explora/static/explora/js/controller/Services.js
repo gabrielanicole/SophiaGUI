@@ -79,3 +79,10 @@ app.service('dataFormat', function () {
     }
 
 });
+
+app.service('staticData', function () {
+    this.getCategoryList = function () {
+        return ["", "accidentes", "deporte", "ecologia", "economia",
+            "entretenimiento", "judicial", "politica", "salud", "tecnologia"];
+    }
+});

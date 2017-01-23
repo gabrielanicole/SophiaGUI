@@ -1,5 +1,5 @@
-app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataFormat', '$window', function (
-    $scope, $http, $location, dataFormat, $window) {
+app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataFormat', '$window','staticData', function (
+    $scope, $http, $location, dataFormat, $window,staticData) {
 
     var absUrl = $location.absUrl().split("/");
     var elastic_id = absUrl[absUrl.length - 1];
@@ -18,22 +18,27 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.size = 3;
 
     $scope.press_source = [""];
-    $scope.category = ["Categoría"];
+    $scope.category = staticData.getCategoryList();
     //Default values
     $scope.selectedMedium = [];
     $scope.selectedCategory = $scope.category[0];
 
-    $http({
-        method: 'GET',
-        url: '/pressmedia/getlist/',
-    }).then(function successCallback(response) {
-        for (x in response.data) {
-            $scope.press_source.push(response.data[x].media_name);
-        }
-        $scope.selectedMedium = $scope.press_source[0];
-    }, function errorCallback(response) {
-        console.log(response.data);
-    });
+    function loadPressMedia() {
+        $http({
+            method: 'GET',
+            url: '/pressmedia/getlist/',
+        }).then(function successCallback(response) {
+            for (x in response.data) {
+                $scope.press_source = response.data;
+                //$scope.press_source.push(response.data[x].media_name);
+            }
+            var empty = { media_id: "", media_name: "", media_twitter: "" };
+            $scope.press_source.unshift(empty);
+
+        }, function errorCallback(response) {
+            console.log(response.data);
+        });
+    }
 
     $scope.options = [
         { key: "Minuto", value: "minute" },
@@ -80,6 +85,8 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         }
         return output;
     }
+
+    loadPressMedia();
 
     $http({
         method: 'POST',
