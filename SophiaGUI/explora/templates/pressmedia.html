@@ -37,14 +37,22 @@
                 <div class="panel-heading">Medio de prensa</div>
                 <div class="panel-body">
                     <h5> <strong>Nombre del medio:</strong> [[pressMedia.pre_name]] </h5>
+                    <h5> <strong>Representante Legal: </strong> [[pressMedia.pre_persona_property]] </h5>
                     <h5> <strong>Fecha de Creación: </strong> [[pressMedia.pre_date]] </h5>
                     <h5> <strong>Lenguaje: </strong> [[pressMedia.pre_language]] </h5>
-                    <h5> <strong>Sitio Web: </strong> [[pressMedia.pre_url]] </h5>
                     <h5> <strong>País: </strong> [[pressMedia.pre_country]] </h5>
                     <h5> <strong>Región: </strong> [[pressMedia.pre_region]] </h5>                   
                     <h5> <strong>Ciudad: </strong> [[pressMedia.pre_city]] </h5>
-                    <h5> <strong>Facebook: </strong> [[pressMedia.pre_facebook]] </h5>
+                    <h5> <strong>Tipo: </strong> [[pressMedia.pre_type]] </h5>
+                    <h5> <strong>Origen del medio: </strong> [[pressMedia.pre_media_origin]] </h5>
+                    <h5> <strong>Plataformas: </strong> [[pressMedia.pre_medial_plataforms]] </h5>
+                    <h5> <strong>Sitio Web: </strong><a href="[[pressMedia.pre_url]]">[[pressMedia.pre_url]]</a> </h5>
+                    <h5> <strong>Redes Sociales: </strong> [[pressMedia.pre_social_networks]] </h5>
+                    <h5> <strong>Facebook: </strong><a href="[[pressMedia.pre_facebook]]">[[pressMedia.pre_facebook]]</a> </h5>
                     <h5> <strong>Twitter: </strong> [[pressMedia.pre_twitter]] </h5>
+                    <h5> <strong>Youtube: </strong><a href="[[pressMedia.pre_youtube]]">[[pressMedia.pre_youtube]]</a> </h5>
+                    <h5> <strong>Instagram: </strong><a href="[[pressMedia.pre_instagram]]">[[pressMedia.pre_instagram]]</a> </h5>
+                    <h5> <strong>Google+: </strong><a href="[[pressMedia.pre_google]] ">[[pressMedia.pre_google]] </a>  </h5>
                 </div>
             </div>
         </div>
@@ -76,13 +84,13 @@
                                     <input type="text" class="form-control" placeholder="Nombre del medio" ng-model="pressMedia.pre_name" required>
                                     </div>
                                     <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Representante legal" ng-model="pressMedia.pre_persona_property" required>
+                                    </div>                                    
+                                    <div class="form-group">
                                     <input type="text" class="form-control" placeholder="Fecha de Creación"  ng-model="pressMedia.pre_date" required>
                                     </div>
                                     <div class="form-group">
                                     <input type="text" class="form-control" placeholder="Lenguaje"  ng-model="pressMedia.pre_language" required>
-                                    </div>
-                                    <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Sitio Web"  ng-model="pressMedia.pre_url" required>
                                     </div>
                                     <div class="form-group">
                                     <input type="text" class="form-control" placeholder="País"  ng-model="pressMedia.pre_country" required>
@@ -94,10 +102,34 @@
                                     <input type="text" class="form-control" placeholder="Ciudad"  ng-model="pressMedia.pre_city" required>
                                     </div>
                                     <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Tipo"  ng-model="pressMedia.pre_type" required>
+                                    </div>
+                                    <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Origen del medio"  ng-model="pressMedia.pre_media_origin" required>
+                                    </div>
+                                    <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Plataformas"  ng-model="pressMedia.pre_medial_plataforms" required>
+                                    </div>
+                                    <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Sitio Web"  ng-model="pressMedia.pre_url" required>
+                                    </div>
+                                    <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Redes Sociales"  ng-model="pressMedia.pre_social_networks" required>
+                                    </div>
+                                    <div class="form-group">
                                     <input type="text" class="form-control" placeholder="Facebook"  ng-model="pressMedia.pre_facebook" required>
                                     </div>
                                     <div class="form-group">
                                     <input type="text" class="form-control" placeholder="Twitter"  ng-model="pressMedia.pre_twitter" required>
+                                    </div>
+                                    <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Youtube"  ng-model="pressMedia.pre_youtube" required>
+                                    </div>
+                                    <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Instagram"  ng-model="pressMedia.pre_instagram" required>
+                                    </div>
+                                    <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Google+"  ng-model="pressMedia.pre_google" required>
                                     </div>
                                 </form>                    
                             </div>

@@ -78,7 +78,6 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     $scope.windowsWidth = $window.innerWidth;
     $scope.granularity = 'hour';
 
-
     $scope.startdate = histogram_startdate;
     $scope.enddate = histogram_enddate;
 
@@ -136,7 +135,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
 
         var twitter;
         try {
-            twitter = $scope.selectedMedium.media_twitter[0];
+            twitter = $scope.selectedMedium.media_twitter;
         }
         catch (err) {
             twitter = "";
@@ -153,7 +152,6 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
         }
 
-        console.log(JSON.stringify(json_data));
         $http({
             method: 'POST',
             url: '/get_data/tweets/' + page + '/',

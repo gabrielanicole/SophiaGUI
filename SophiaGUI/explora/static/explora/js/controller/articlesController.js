@@ -22,20 +22,11 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         { key: "Año", value: "year" }
     ];
 
-    $scope.histogram_startdate;
-    $scope.histogram_enddate;
-
-    $scope.total_pages;
-    $scope.actual_page;
-    $scope.articulos;
-    $scope.page_init;
-    $scope.page_end;
-    $scope.size = 3;
-
     //Section to control the TAG sistem
     var should_contain = new Taggle('should', { placeholder: 'Concepto o frase importante en mi búsqueda' });
     var must_contain = new Taggle('and', { placeholder: 'Concepto o frase fundamental en mi búsqueda' });
     var not_contain = new Taggle('not', { placeholder: 'Concepto o frase que permite excluir resultados' });
+
 
     $scope.page_number = function (page_number) {
         //Function to get the page number from view
@@ -51,29 +42,22 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         return output;
     }
 
+    $scope.histogram_startdate;
+    $scope.histogram_enddate;
+    $scope.total_pages;
+    $scope.actual_page;
+    $scope.articulos;
+    $scope.page_init;
+    $scope.page_end;
+    $scope.size = 3;
+
     $scope.press_source = [];
     $scope.category = ["Categoría"];
     //Default values
     $scope.selectedMedium = [];
     $scope.selectedCategory = $scope.category[0];
 
-    $http({
-        method: 'GET',
-        url: '/pressmedia/getlist/',
-    }).then(function successCallback(response) {
-        for (x in response.data) {
-            $scope.press_source = response.data;
-            //$scope.press_source.push(response.data[x].media_name);
-        }
-
-    }, function errorCallback(response) {
-        console.log(response.data);
-    });
-
-    $scope.mediaChange = function (media) {
-        $scope.selectedMedium = media;
-    }
-
+    //Set Intial Variables
     var histogram_enddate = new Date().toISOString().slice(0, 10);
     var histogram_startdate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
     $scope.windowsWidth = $window.innerWidth;
@@ -88,18 +72,35 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $("#datepicker1").datepicker('update', String($scope.histogram_startdate));
     $("#datepicker2").datepicker('update', String($scope.histogram_enddate));
 
+
+    function loadPressMedia() {
+        $http({
+            method: 'GET',
+            url: '/pressmedia/getlist/',
+        }).then(function successCallback(response) {
+            for (x in response.data) {
+                $scope.press_source = response.data;
+                //$scope.press_source.push(response.data[x].media_name);
+            }
+            var empty = { media_id: "", media_name: "", media_twitter: "" };
+            $scope.press_source.unshift(empty);
+
+        }, function errorCallback(response) {
+            console.log(response.data);
+        });
+    }
+
+    $scope.mediaChange = function (media) {
+        $scope.selectedMedium = media;
+    }
+
     $scope.selectedItem = function (selected) {
-
-        var twitter;
-        try {
-            twitter = $scope.selectedMedium.media_twitter[0];
-        }
-        catch (err) {
-            twitter = "";
-        }
-
-        console.log(twitter);
         $scope.granularity = selected;
+        loadHistogram($scope.granularity);
+    }
+
+    function loadHistogram(granularity) {
+        var twitter = $scope.selectedMedium.media_twitter;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "articles",
@@ -115,7 +116,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         var data = {
             startdate: $scope.histogram_startdate,
             enddate: $scope.histogram_enddate,
-            countby: $scope.granularity,
+            countby: granularity,
             search: JSON.stringify(json_data)
         };
 
@@ -135,14 +136,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
     $scope.update_list = function (page) {
 
-        var twitter;
-        try {
-            twitter = $scope.selectedMedium.media_twitter[0];
-        }
-        catch (err) {
-            twitter = "";
-        }
-
+        var twitter = $scope.selectedMedium.media_twitter;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "articles",
@@ -182,7 +176,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         $scope.startdate = $scope.histogram_startdate;
         $scope.enddate = $scope.histogram_enddate;
 
-        $scope.selectedItem($scope.granularity);
     }
 
     //Controler for advancesearch button.
@@ -190,6 +183,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         //set day as default
         $scope.granularity = 'hour';
         $scope.update_histogram();
+        loadHistogram($scope.granularity);
         $scope.update_list(1);
     }
 
@@ -261,9 +255,11 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         $scope.news_case_name = "";
     }
 
-    //Draw Histogram for first time
-    $scope.selectedItem($scope.granularity);
-    //load the first page
-    $scope.update_list(1);
+    function run() {
+        loadHistogram($scope.granularity)
+        $scope.update_list(1);
+    }
+    loadPressMedia();
+    run();
 
 }]);

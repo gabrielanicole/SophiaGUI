@@ -96,9 +96,10 @@ def getListPressMedia(request):
             for x in data:
                 media = {
                     'media_id':x['_id'],
-                    'media_name':x['fields']['pre_name'],
-                    'media_twitter':x['fields']['pre_twitter']    
+                    'media_name':x['fields']['pre_name'][0],
+                    'media_twitter':x['fields']['pre_twitter'] [0]   
                 }
+                print media
                 results.append(media)
             return JsonResponse(results,safe=False)
         except Exception as e:
