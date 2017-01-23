@@ -52,7 +52,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.size = 3;
 
     $scope.press_source = [];
-    $scope.category = ["Categoría"];
+    $scope.category = ["","accidentes","deporte","ecologia","economia","entretenimiento","judicial","politica","salud","tecnologia"];
     //Default values
     $scope.selectedMedium = [];
     $scope.selectedCategory = $scope.category[0];
@@ -94,6 +94,10 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         $scope.selectedMedium = media;
     }
 
+    $scope.categoryChange = function(category){
+        $scope.selectedCategory = category;
+    }
+
     $scope.selectedItem = function (selected) {
         $scope.granularity = selected;
         loadHistogram($scope.granularity);
@@ -110,6 +114,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
+            "art_category":$scope.selectedCategory
 
         }
 
@@ -145,7 +150,8 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
-            "art_name_press_source": twitter
+            "art_name_press_source": twitter,
+            "art_category":$scope.selectedCategory
         }
 
         $http({

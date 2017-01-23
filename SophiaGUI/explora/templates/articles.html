@@ -20,7 +20,7 @@
 
 				    <div class="form-group">
 				        <div class="selectContainer">
-				            <select class="form-control" name="categoria" ng-model="selectedCategory" ng-options="x for x in category">
+				            <select class="form-control" name="categoria" ng-model="selectedCategory" ng-change="categoryChange(selectedCategory)" ng-options="x for x in category">
 				            </select>
 				        </div>
 				    </div>
