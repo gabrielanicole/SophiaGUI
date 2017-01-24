@@ -678,3 +678,8 @@ def removeNewsCase(request):
             newCase.visible = False
             newCase.save()
             return HttpResponse('')
+
+@login_required(login_url='/login_required')
+def exportData(request):
+    if request.method == 'POST':
+        return HttpResponse('')

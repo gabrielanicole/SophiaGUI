@@ -217,6 +217,9 @@ function generate_histogram(width, height, data_json) {
                     .style("top", 2000 + "px")
                     .style("opacity", 0);
             })
+            .on("click", function(d){
+                console.log(d);
+            })
             .style("fill", "#078770");
 
         chart.select("g.y.axis").call(yAxis);

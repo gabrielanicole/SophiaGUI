@@ -16,6 +16,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
     $("#mediaContainer").tooltip();
     $("#categoryContainer").tooltip();
+    $("#exportButton").tooltip();
 
     $scope.options = [
         { key: "Minuto", value: "minute" },
@@ -25,6 +26,39 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         { key: "Mes", value: "month" },
         { key: "Año", value: "year" }
     ];
+
+
+    $scope.checkbox = {
+        art_tittle: false,
+        art_content: false,
+        art_date: false,
+        art_name_press_source: false,
+        art_category: false,
+        art_url: false,
+        format: ""
+    };
+
+    $scope.exportData = function () {
+        console.log($scope.histogram_startdate);
+        console.log($$scope.histogram_enddate);
+        console.log($scope.checkbox);
+    }
+
+    $scope.validateExport = function () {
+        if (($scope.checkbox.art_tittle == true ||
+            $scope.checkbox.art_content == true ||
+            $scope.checkbox.art_date == true ||
+            $scope.checkbox.art_name_press_source == true ||
+            $scope.checkbox.art_category == true ||
+            $scope.checkbox.art_url == true) &&
+            $scope.checkbox.format != "") {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 
     //Section to control the TAG sistem
     var should_contain = new Taggle('should', { placeholder: 'Concepto o frase importante en mi búsqueda' });
@@ -68,9 +102,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     var histogram_startdate = new Date(new Date().setMonth(new Date().getMonth() - 6)).toISOString().slice(0, 10);
     $scope.windowsWidth = $window.innerWidth;
     $scope.granularity = 'hour';
-
-    console.log(histogram_startdate);
-    console.log(histogram_enddate);
 
     $scope.histogram_startdate = histogram_startdate;
     $scope.histogram_enddate = histogram_enddate;
