@@ -28,7 +28,6 @@ function generate_histogram(width, height, data_json) {
     var x = d3.time.scale()
         .range([0, w]);
 
-
     var y = d3.scale.linear()
         .range([h, 0]);
 
@@ -127,12 +126,6 @@ function generate_histogram(width, height, data_json) {
     chart.select("g.x.axis").call(xAxis);
 
 
-    minichart.append("g")
-        .attr("class", "brush")
-        .call(brush)
-        .selectAll('rect')
-        .attr("height", h2);
-
     minichart.selectAll(".bar")
         .data(data)
         .enter()
@@ -149,9 +142,6 @@ function generate_histogram(width, height, data_json) {
         .attr("height", function (d) { return h2 - y2(d.doc_count); })
         .style("fill", "#078770");
 
-    minichart.select("g.y.axis").call(yAxis2);
-    minichart.select("g.x.axis").call(xAxis2);
-
     minichart.append("g")
         .attr("class", "brush")
         .call(brush)
@@ -159,10 +149,19 @@ function generate_histogram(width, height, data_json) {
         .attr("height", h2);
 
 
+    minichart.select("g.y.axis").call(yAxis2);
+    minichart.select("g.x.axis").call(xAxis2);
+
+    function default_brush() {
+        brush.extent([new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000), new Date()]);
+        brush(d3.select(".brush"));
+        brushed();
+    }
+    default_brush();
+
     function brushed() {
 
         var brush_values = brush.extent();
-
         //Cambiar el dominio para que sean solo dentro de los valores del selected data
         //x.domain([brush_values[0],brush_values[1]]);
 
@@ -172,11 +171,8 @@ function generate_histogram(width, height, data_json) {
 
         var n_e = selected_data.length;
 
-
-
         x.domain([d3.min(selected_data, function (d) { return d.key_as_string; }),
         d3.max(selected_data, function (d) { return d.key_as_string; })]);
-
 
         chart.selectAll(".bar2").remove();
 
@@ -205,7 +201,6 @@ function generate_histogram(width, height, data_json) {
             .attr("y", function (d) { return y(d.doc_count); })
             .attr("height", function (d) { return h - y(d.doc_count); })
             .on("mouseover", function (d) {
-
                 cord = d3.mouse(this);
                 d3.select(this).style("fill", "#66cdaa");
                 d3.select("#tip")
@@ -226,11 +221,6 @@ function generate_histogram(width, height, data_json) {
 
         chart.select("g.y.axis").call(yAxis);
         chart.select("g.x.axis").call(xAxis);
-
-        //brush brush_values converted into date format yyyy-MM-dd
-
-        console.log(brush_values[0]);
-        console.log(brush_values[1]);
 
         var startdate = brush_values[0].toISOString().slice(0, 10);
         var enddate = brush_values[1].toISOString().slice(0, 10);

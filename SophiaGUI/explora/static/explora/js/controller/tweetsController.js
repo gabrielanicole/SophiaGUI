@@ -74,7 +74,9 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     ];
 
     var histogram_enddate = new Date().toISOString().slice(0, 10);
-    var histogram_startdate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    //var histogram_startdate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    //var histogram_startdate = new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString().slice(0, 10);
+    var histogram_startdate = new Date(new Date().setMonth(new Date().getMonth() - 6)).toISOString().slice(0, 10);
     $scope.windowsWidth = $window.innerWidth;
     $scope.granularity = 'hour';
 
@@ -107,7 +109,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             "not_and": tag_values.not_contain_group,
             "pub_username": twitter
         }
-        
+
         console.log(JSON.stringify(json_data));
         var data = {
             startdate: $scope.histogram_startdate,

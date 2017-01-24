@@ -290,7 +290,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             elastic_id: elastic_id,
             article_id: id[0][0]
         }
-
         $http({
             method: 'POST',
             url: '/removeArticle/',

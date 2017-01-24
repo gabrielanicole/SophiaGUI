@@ -63,9 +63,14 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
     //Set Intial Variables
     var histogram_enddate = new Date().toISOString().slice(0, 10);
-    var histogram_startdate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    //var histogram_startdate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    //var histogram_startdate = new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString().slice(0, 10);
+    var histogram_startdate = new Date(new Date().setMonth(new Date().getMonth() - 6)).toISOString().slice(0, 10);
     $scope.windowsWidth = $window.innerWidth;
     $scope.granularity = 'hour';
+
+    console.log(histogram_startdate);
+    console.log(histogram_enddate);
 
     $scope.histogram_startdate = histogram_startdate;
     $scope.histogram_enddate = histogram_enddate;
@@ -75,7 +80,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
     $("#datepicker1").datepicker('update', String($scope.histogram_startdate));
     $("#datepicker2").datepicker('update', String($scope.histogram_enddate));
-
 
     function loadPressMedia() {
         $http({
