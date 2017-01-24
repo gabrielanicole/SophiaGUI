@@ -13,7 +13,7 @@ import simplejson as json
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
-
+import cStringIO
 
 # @brief Function that login the user to Sophia GUI.
 # @param request Web request with login data (username, password)
@@ -682,4 +682,57 @@ def removeNewsCase(request):
 @login_required(login_url='/login_required')
 def exportData(request):
     if request.method == 'POST':
-        return HttpResponse('')
+        try:
+            data = request.POST.get('data').encode('utf8')
+            data = json.loads(data)
+            search = data['search']
+            options = data['checkbox']
+
+            file = json.loads(open("explora/static/user.json").read())
+            api_user = file["user"]
+            api_password = file["password"]
+            api_url = file["api_url"]
+
+            corpusFields = []
+            if(options['art_title'] == True):
+                corpusFields.append('art_title')
+            if(options['art_date'] == True):
+                corpusFields.append('art_date')
+            if(options['art_url'] == True):
+                corpusFields.append('art_url')
+            if(options['art_name_press_source'] == True):
+                corpusFields.append('art_name_press_source')
+            if(options['art_content'] == True):
+                corpusFields.append('art_content')
+            if(options['art_category'] == True):
+                corpusFields.append('art_category')
+
+            #file = open('txt.json','w+')
+            #file.write(json.dumps(data))
+            #file.close()
+
+            search['corpusFields']=corpusFields
+            search = json.dumps(search)
+            api = u'http://{0}/v2/corpus/'.format(api_url)
+            response = requests.post(api,data=search)
+            response = json.loads(response.content)
+            response = response['hits']['hits']
+
+            results = []
+            for x in response:
+                results.append(x['fields'])
+
+            r = {
+                "data":results
+            }
+
+            content = json.dumps(r)
+            myfile = cStringIO.StringIO(content)
+
+            response = HttpResponse(myfile, content_type='text/plain')
+            response['Content-Disposition'] = 'attachment; filename="file.json"'
+            return response
+
+        except Exception as e:
+            print e
+            return HttpResponse('Error')

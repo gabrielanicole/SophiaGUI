@@ -1,0 +1,1 @@
+{"search": {"and": [], "index": "articles", "dates": {"startdate": "2016-07-24", "enddate": "2017-01-24"}, "fields": ["art_content"], "not_and": [], "art_name_press_source": "", "or": [], "art_category": ""}, "checkbox": {"art_date": true, "format": "JSON", "art_title": true, "art_url": true, "art_name_press_source": true, "art_content": true, "art_category": true}}

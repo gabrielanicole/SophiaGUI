@@ -29,7 +29,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
 
     $scope.checkbox = {
-        art_tittle: false,
+        art_title: false,
         art_content: false,
         art_date: false,
         art_name_press_source: false,
@@ -39,13 +39,38 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     };
 
     $scope.exportData = function () {
-        console.log($scope.histogram_startdate);
-        console.log($$scope.histogram_enddate);
-        console.log($scope.checkbox);
+
+        var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
+        var json_data = {
+            search: {
+                "index": "articles",
+                "fields": ["art_content"],
+                "art_name_press_source": $scope.selectedMedium.media_twitter,
+                "and": tag_values.must_contain_group,
+                "or": tag_values.should_contain_group,
+                "not_and": tag_values.not_contain_group,
+                "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
+                "art_category": $scope.selectedCategory
+            },
+            "checkbox": $scope.checkbox
+        }
+
+        $http({
+            method: 'POST',
+            url: '/exportData/',
+            data: $.param({ data: JSON.stringify(json_data) })
+        }).then(function successCallback(response) {
+            console.log(response);
+
+
+        }, function errorCallback(response) {
+            console.log("Error Callback");
+        });
+
     }
 
     $scope.validateExport = function () {
-        if (($scope.checkbox.art_tittle == true ||
+        if (($scope.checkbox.art_title == true ||
             $scope.checkbox.art_content == true ||
             $scope.checkbox.art_date == true ||
             $scope.checkbox.art_name_press_source == true ||
@@ -58,7 +83,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             return false;
         }
     }
-
 
     //Section to control the TAG sistem
     var should_contain = new Taggle('should', { placeholder: 'Concepto o frase importante en mi búsqueda' });
