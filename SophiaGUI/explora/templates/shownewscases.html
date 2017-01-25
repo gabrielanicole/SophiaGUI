@@ -1,5 +1,6 @@
 {% extends 'base.html' %} {% block header %}
 <script type="text/javascript" src="/static/explora/js/controller/showNewsCaseController.js"></script>
+<script type="text/javascript" src="/static/explora/externalJS/filesaver.min.js"></script>
 {% endblock header %}
 
 {% block content %}
@@ -26,7 +27,9 @@
             <input type="text" class="form-control" id="datepicker1">
             <input type="text" class="form-control" id="datepicker2">
             <button class="btn btn-default" ng-click="get_input_data()"> Buscar</button>
-            <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal"> Actualizar Caso</button> 	 	
+            <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal"> Actualizar Caso</button>
+            <button id="exportButton" class="btn btn-default" data-toggle="modal" data-target="#exportDataModal" data-toggle="tooltip" title="Exportar el resultado de la búsqueda">Exportar</button>
+ 	
                </form>
 		  </div>
 
@@ -159,6 +162,61 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="update_news_case([[news_case_name]])">Actualizar</button>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="exportDataModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header" style="background-color:#078770">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" style="text-align:center; color:White">Exportar datos</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+              <div class="col-md-6">
+                  <p><strong>Campos a exportar:</strong></p>
+                  <div class="checkbox">
+                    <label><input type="checkbox" ng-model="checkbox.art_title">Titular de la noticia</label>
+                  </div>
+                  <div class="checkbox">
+                    <label><input type="checkbox" ng-model="checkbox.art_content" >Contenido de la noticia</label>
+                  </div>
+                  <div class="checkbox">
+                    <label><input type="checkbox" ng-model="checkbox.art_date">Fecha de publicación</label>
+                  </div>
+                  <div class="checkbox">
+                    <label><input type="checkbox" ng-model="checkbox.art_name_press_source">Nombre del medio</label>
+                  </div>   
+                  <div class="checkbox">
+                    <label><input type="checkbox" ng-model="checkbox.art_category">Categoría</label>
+                  </div>
+                  <div class="checkbox">
+                    <label><input type="checkbox" ng-model="checkbox.art_url">Url de la noticia</label>
+                  </div>      
+              </div>
+
+              <div class="col-md-6">
+                  <p><strong>Formato de salida:</strong></p>
+                  <div class="radio">
+                    <label><input type="radio" name="format" ng-click="checkbox.format='CSV'">CSV</label>
+                  </div>
+                  <div class="radio">
+                    <label><input type="radio" name="format" ng-click="checkbox.format='JSON'">JSON</label>
+                  </div>
+                  <div class="radio">
+                    <label><input type="radio" name="format" ng-click="checkbox.format='XML'" disabled>XML</label>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-default" ng-click="exportData()"  ng-disabled="!validateExport()">Exportar</button>
         </div>
       </div>
     </div>

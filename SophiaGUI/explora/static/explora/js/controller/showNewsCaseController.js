@@ -7,6 +7,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
 
     $scope.histogram_startdate;
     $scope.histogram_enddate;
+    $scope.idNot;
 
     $scope.startdate;
     $scope.enddate;
@@ -83,6 +84,66 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             output.push(i);
         }
         return output;
+    }
+
+    $scope.checkbox = {
+        art_title: false,
+        art_content: false,
+        art_date: false,
+        art_name_press_source: false,
+        art_category: false,
+        art_url: false,
+        format: ""
+    };
+
+    $scope.exportData = function () {
+
+        var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
+        var json_data = {
+            search: {
+                "index": "articles",
+                "fields": ["art_content"],
+                "art_name_press_source": $scope.selectedMedium.media_twitter,
+                "and": tag_values.must_contain_group,
+                "or": tag_values.should_contain_group,
+                "not_and": tag_values.not_contain_group,
+                "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
+                "art_category": $scope.selectedCategory,
+                "idNot": $scope.idNot,
+            },
+            "checkbox": $scope.checkbox
+        }
+
+        $http({
+            method: 'POST',
+            url: '/exportData/',
+            data: $.param({ data: JSON.stringify(json_data) })
+        }).then(function successCallback(response, headers) {
+            if (response.headers()['content-type'] == 'text/json') {
+                var blob = new Blob([JSON.stringify(response.data)], { type: response.headers()['content-type'] });
+            }
+            else {
+                var blob = new Blob([String(response.data)], { type: response.headers()['content-type'] });
+            }
+            saveAs(blob, response.headers()['file-name']);
+        }, function errorCallback(response) {
+            console.log("Error Callback");
+        });
+    }
+
+    $scope.validateExport = function () {
+        if (($scope.checkbox.art_title == true ||
+            $scope.checkbox.art_content == true ||
+            $scope.checkbox.art_date == true ||
+            $scope.checkbox.art_name_press_source == true ||
+            $scope.checkbox.art_category == true ||
+            $scope.checkbox.art_url == true) &&
+            $scope.checkbox.format != "") {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     $scope.mediaChange = function (media) {
@@ -203,6 +264,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     }
 
     $scope.loadElements = function (idNot, page) {
+        $scope.idNot = idNot;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "articles",
