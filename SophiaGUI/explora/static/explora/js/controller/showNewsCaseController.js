@@ -346,6 +346,28 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.news_case_name = "";
     }
 
+    $scope.loadModal = function (article_id) {
+
+        var data = { art_id: article_id[0][0] };
+        $http({
+            method: 'POST',
+            url: '/articles/modal_new',
+            data: $.param(data)
+        }).then(function successCallback(response) {
+            console.log(response)
+            if ($('#myModal').length) {
+                $('#myModal').remove();
+            }
+            //In the tag <modal> then append the response from Django
+            $('#modal').append(response.data);
+            //Then display the modal window
+            $('#myModal').modal('show');
+
+        }, function errorCallback(response) {
+            console.log(response);
+        });
+    }
+    
     $scope.removeArticle = function (id) {
 
         data = {
