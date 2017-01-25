@@ -708,11 +708,7 @@ def exportData(request):
                 corpusFields.append('art_content')
             if(options['art_category'] == True):
                 corpusFields.append('art_category')
-
-            #file = open('txt.json','w+')
-            #file.write(json.dumps(data))
-            #file.close()
-
+            
             search['corpusFields']=corpusFields
             search = json.dumps(search)
             api = u'http://{0}/v2/corpus/'.format(api_url)
@@ -723,17 +719,13 @@ def exportData(request):
             results = []
             for x in response:
                 results.append(x['_source'])
- 
-            json_file = return_json_file(results)
-            csv_file = return_csv_file(results)
 
-           # myfile = csv.writer(cStringIO.StringIO())
-           # for x in results:
-           #     myfile.writerow(str([x['art_title']]).enconde('utf8'))
-            
-            response = HttpResponse(csv_file, content_type='text/plain')
-            response['file-name'] = 'nombreDelArchivo'
-            return response
+            if(options['format'] == 'CSV'):
+                csv_file = return_csv_file(results)
+                return csv_file
+            else:
+                json_file = return_json_file(results)
+                return json_file
 
         except Exception as e:
             print e
@@ -748,6 +740,7 @@ def exportData(request):
             corpusFields = []
             corpusFields.append('art_title')
             corpusFields.append('art_date')
+            corpusFields.append('art_name_press_source')
             
             search = {'and': [],
                       'index': 'articles',
@@ -768,20 +761,10 @@ def exportData(request):
             results = []
             for x in response:
                 results.append(x['_source'])
-
-            r = {
-                "data":results
-            }
-
-            json_file = return_json_file(r)
-
-           # myfile = csv.writer(cStringIO.StringIO())
-           # for x in results:
-           #     myfile.writerow(str([x['art_title']]).enconde('utf8'))
-
-            response = HttpResponse(json_file, content_type='text/plain')
-            response['Content-Disposition'] = 'attachment; filename="exportData.json"'
-            return response
+        
+            json_file = return_json_file(results)
+            csv_file = return_csv_file(results)
+            return csv_file
 
         except Exception as e:
             print e

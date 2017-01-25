@@ -59,13 +59,17 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             method: 'POST',
             url: '/exportData/',
             data: $.param({ data: JSON.stringify(json_data) })
-        }).then(function successCallback(response) {
-            var blob = new Blob([JSON.stringify(response.data)], { type: 'text/plain' });
-            saveAs(blob, "file");
+        }).then(function successCallback(response, headers) {
+            if (response.headers()['content-type'] == 'text/json') {
+                var blob = new Blob([JSON.stringify(response.data)], { type: response.headers()['content-type'] });
+            }
+            else {
+                var blob = new Blob([String(response.data)], { type: response.headers()['content-type'] });
+            }
+            saveAs(blob, response.headers()['file-name']);
         }, function errorCallback(response) {
             console.log("Error Callback");
         });
-
     }
 
     $scope.validateExport = function () {

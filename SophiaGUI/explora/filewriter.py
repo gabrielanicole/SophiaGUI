@@ -2,18 +2,30 @@ import cStringIO
 import csv
 import simplejson as json
 import unicodedata
+from django.shortcuts import HttpResponse
 
 def return_json_file(data):
     r = {
         "data":data
         }
-    content = json.dumps(data)
+
+    content = json.dumps(r)
     file = cStringIO.StringIO(content)
-    return file
+    response = HttpResponse(file, content_type='text/json')
+    response['File-Name'] = "exportdata.json"
+    response['Content-Disposition'] = 'attachment; filename="exportdata.json"'
+    return response
 
 def return_csv_file(data):
     my_file = cStringIO.StringIO();
     writer = csv.writer(my_file)
     for x in data:
-        writer.writerow(x['art_title'].encode('utf8','ignore'))
-    return my_file
+        e = []
+        for key,value in x.items():
+            e.append(x[key].encode('utf8'))
+        writer.writerow(e)
+
+    response = HttpResponse(my_file.getvalue(), content_type='text/csv')
+    response['File-Name'] = "exportdata.csv"
+    response['Content-Disposition'] = 'attachment; filename="exportdata.csv"'
+    return response
