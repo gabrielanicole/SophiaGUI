@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="/static/explora/externalCSS/toastr.min.css" type="text/css">
 <script type="text/javascript" src="/static/explora/externalJS/toastr.min.js"></script>
 <script type="text/javascript" src="/static/explora/js/controller/articlesController.js"></script>
+<script type="text/javascript" src="/static/explora/externalJS/filesaver.min.js"></script>
 {% endblock header %}
 
 {% block content %}
@@ -186,7 +187,7 @@
                     <label><input type="checkbox" ng-model="checkbox.art_title">Titular de la noticia</label>
                   </div>
                   <div class="checkbox">
-                    <label><input type="checkbox" ng-model="checkbox.art_content">Contenido de la noticia</label>
+                    <label><input type="checkbox" ng-model="checkbox.art_content" disabled>Contenido de la noticia</label>
                   </div>
                   <div class="checkbox">
                     <label><input type="checkbox" ng-model="checkbox.art_date">Fecha de publicación</label>
@@ -211,10 +212,9 @@
                     <label><input type="radio" name="format" ng-click="checkbox.format='JSON'">JSON</label>
                   </div>
                   <div class="radio">
-                    <label><input type="radio" name="format" ng-click="checkbox.format='XML'">XML</label>
+                    <label><input type="radio" name="format" ng-click="checkbox.format='XML'" disabled>XML</label>
                   </div>
               </div>
-
           </div>
         </div>
         <div class="modal-footer">

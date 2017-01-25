@@ -33,4 +33,5 @@ urlpatterns = [
     url(r'^removeArticle/$', views.removeArticle, name='removeArticle'),
     url(r'^removeNewsCase/$', views.removeNewsCase, name='removeNewsCase'),
     url(r'^exportData/$', views.exportData, name='exportData'),
+    url(r'^testExport/$', views.exportData, name='exportData'),
 ]

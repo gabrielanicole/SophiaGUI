@@ -60,9 +60,8 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             url: '/exportData/',
             data: $.param({ data: JSON.stringify(json_data) })
         }).then(function successCallback(response) {
-            console.log(response);
-
-
+            var blob = new Blob([JSON.stringify(response.data)], { type: 'text/plain' });
+            saveAs(blob, "file");
         }, function errorCallback(response) {
             console.log("Error Callback");
         });

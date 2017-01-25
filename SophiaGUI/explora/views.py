@@ -14,6 +14,8 @@ from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 import cStringIO
+import csv
+from filewriter import return_json_file, return_csv_file
 
 # @brief Function that login the user to Sophia GUI.
 # @param request Web request with login data (username, password)
@@ -720,19 +722,67 @@ def exportData(request):
 
             results = []
             for x in response:
-                results.append(x['fields'])
+                results.append(x['_source'])
+ 
+            json_file = return_json_file(results)
+            csv_file = return_csv_file(results)
 
-            r = {
-                "data":results
-            }
-
-            content = json.dumps(r)
-            myfile = cStringIO.StringIO(content)
-
-            response = HttpResponse(myfile, content_type='text/plain')
-            response['Content-Disposition'] = 'attachment; filename="file.json"'
+           # myfile = csv.writer(cStringIO.StringIO())
+           # for x in results:
+           #     myfile.writerow(str([x['art_title']]).enconde('utf8'))
+            
+            response = HttpResponse(csv_file, content_type='text/plain')
+            response['file-name'] = 'nombreDelArchivo'
             return response
 
         except Exception as e:
             print e
             return HttpResponse('Error')
+
+    if request.method == 'GET':
+        try:
+            file = json.loads(open("explora/static/user.json").read())
+            api_user = file["user"]
+            api_password = file["password"]
+            api_url = file["api_url"]
+            corpusFields = []
+            corpusFields.append('art_title')
+            corpusFields.append('art_date')
+            
+            search = {'and': [],
+                      'index': 'articles',
+                      'dates': {'startdate': '2016-11-01', 'enddate': '2017-01-25'},
+                      'fields': ['art_content'],
+                      'not_and': [],
+                      'art_name_press_source':"",
+                      'or': [{'match': 'cholito '}],
+                      'art_category': ""}
+            
+            search['corpusFields']=corpusFields
+            search = json.dumps(search)
+            api = u'http://{0}/v2/corpus/'.format(api_url)
+            response = requests.post(api,data=search)
+            response = json.loads(response.content)
+            response = response['hits']['hits']
+
+            results = []
+            for x in response:
+                results.append(x['_source'])
+
+            r = {
+                "data":results
+            }
+
+            json_file = return_json_file(r)
+
+           # myfile = csv.writer(cStringIO.StringIO())
+           # for x in results:
+           #     myfile.writerow(str([x['art_title']]).enconde('utf8'))
+
+            response = HttpResponse(json_file, content_type='text/plain')
+            response['Content-Disposition'] = 'attachment; filename="exportData.json"'
+            return response
+
+        except Exception as e:
+            print e
+            return HttpResponse('')
