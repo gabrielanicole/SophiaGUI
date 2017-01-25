@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'explora',
     'pressmedia',
+    'newscases',
      # Add the python social auth
     'social.apps.django_app.default',
 ]
