@@ -111,10 +111,11 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.histogram_enddate;
     $scope.total_pages;
     $scope.actual_page;
-    $scope.articulos;
+    $scope.articulos = [];
     $scope.page_init;
     $scope.page_end;
     $scope.size = 3;
+    $scope.busy = false;
 
     $scope.press_source = [];
     $scope.category = staticData.getCategoryList();
@@ -155,6 +156,10 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         }, function errorCallback(response) {
             console.log(response.data);
         });
+    }
+
+    $scope.loadNextItems = function (){
+        //$scope.update_list($scope.actual_page + 1);
     }
 
     $scope.mediaChange = function (media) {
@@ -208,6 +213,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
     $scope.update_list = function (page) {
 
+        $scope.busy = true;
         var twitter = $scope.selectedMedium.media_twitter;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
@@ -226,13 +232,15 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             url: '/get_data/articles/articles_advance_search/' + page + '/',
             data: $.param({ data: JSON.stringify(json_data) })
         }).then(function successCallback(response) {
-            $scope.articulos = response.data.results;
+            console.log(response.data.results);
+            $scope.articulos.push();
             $scope.total_pages = parseInt(response.data.totalpages);
             $scope.actual_page = parseInt(response.data.page);
 
             var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
             $scope.page_init = range.page_init;
             $scope.page_end = range.page_end;
+            $scope.busy = false;
 
         }, function errorCallback(response) {
             return (response);

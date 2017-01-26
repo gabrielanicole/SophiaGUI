@@ -5,13 +5,14 @@ app.service('dataFormat', function () {
             var match = "";
             for (i = 0; i < data_array.length; i++) {
                 if (data_array[i].indexOf(" ") == -1) {
-                    match = match + data_array[i] + " ";
+                    if (match == "") { match = data_array[i]; }
+                    else { match = match + " " + data_array[i]; }
                 }
                 else {
                     results.push({ "match_phrase": data_array[i] });
                 }
             }
-            results.push({ "match": match });
+            if (match != "") { results.push({ "match": match }); }
         }
         else {
             return results;

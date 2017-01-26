@@ -182,7 +182,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             histogram_enddate = String(data.news_case_data.new_date_to.slice(0, 10));
             $("#datepicker1").datepicker('update', histogram_startdate);
             $("#datepicker2").datepicker('update', histogram_enddate);
-
+            
         }
 
         var new_or = dataFormat.getTagList(data.news_case_data.new_or);
@@ -367,7 +367,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             console.log(response);
         });
     }
-    
+
     $scope.removeArticle = function (id) {
 
         data = {

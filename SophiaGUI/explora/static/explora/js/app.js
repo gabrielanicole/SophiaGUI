@@ -1,4 +1,4 @@
-var app = angular.module("explora", []);
+var app = angular.module("explora", ['infinite-scroll']);
 
 
 app.config(function ($locationProvider) {
