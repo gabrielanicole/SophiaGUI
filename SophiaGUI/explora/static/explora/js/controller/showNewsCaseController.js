@@ -253,7 +253,8 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
             "art_name_press_source": $scope.twitter,
-            "art_category": $scope.selectedCategory
+            "art_category": $scope.selectedCategory,
+            "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
         }
 
         var data = {
@@ -349,7 +350,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.histogram_startdate = date1.toISOString().slice(0, 10)+ " 00:00:00";
         $scope.histogram_enddate = date2.toISOString().slice(0, 10)+ " 23:59:59";
 
-        $scope.selectedItem($scope.granularity);
     }
     //Controler for advancesearch button.
     $scope.get_input_data = function () {

@@ -223,13 +223,11 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
-            "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
+            "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
             "art_category": $scope.selectedCategory
         }
 
         var data = {
-            startdate: $scope.histogram_startdate,
-            enddate: $scope.histogram_enddate,
             countby: granularity,
             search: JSON.stringify(json_data)
         };

@@ -128,17 +128,13 @@ def logout(request):
 def articlesCountBy(request):
     if request.method == 'POST':
 
-        startdate = request.POST.get('startdate').encode('utf8')
-        enddate = request.POST.get('enddate').encode('utf8')
         countby = request.POST.get('countby').encode('utf8')
         search = request.POST.get('search').encode('utf8')
         
         search = json.loads(search)
-        search['startdate']=startdate
-        search['enddate']=enddate
         search['countby']=countby
         search = json.dumps(search)
-        print search
+
 
         file = json.loads(open("explora/static/user.json").read())
         api_user = file["user"]
@@ -159,7 +155,7 @@ def articlesCountBy(request):
             return HttpResponse(e)
 
         data = json.loads(response.text.encode('utf8'))
-
+        print data
         data = data['aggregations']['result_over_time']['buckets']
         return JsonResponse(data, safe=False)
 
@@ -328,8 +324,6 @@ def getTweetsList(request, page=1):
 def tweetsCountBy(request):
     if request.method == 'POST':
 
-        startdate = request.POST.get('startdate').encode('utf8')
-        enddate = request.POST.get('enddate').encode('utf8')
         countby = request.POST.get('countby').encode('utf8')
         search = request.POST.get('search').encode('utf8')
 
@@ -338,14 +332,16 @@ def tweetsCountBy(request):
         api_password = file["password"]
         api_url = file["api_url"]
 
+        search = json.loads(search)
+        search['countby']=countby
+        search = json.dumps(search)
+
        # client = requests.post('http://{0}/v2/login/'.format(api_url),
        #      {'username': api_user, 'password': api_password})
 
        # cookies = dict(sessionid=client.cookies['sessionid'])
 
-        api = u'http://{0}/v2/publications/from/{1}/to/{2}/countby/{3}'.format(
-            api_url, startdate, enddate, countby)
-
+        api = u'http://{0}/v2/countby/'.format(api_url)
         try:
             response = requests.post(api, data=search)
             #response = requests.get(api)
@@ -355,7 +351,7 @@ def tweetsCountBy(request):
 
         data = json.loads(response.text.encode('utf8'))
 
-        data = data['aggregations']['publications_over_time']['buckets']
+        data = data['aggregations']['result_over_time']['buckets']
         return JsonResponse(data, safe=False)
 
 

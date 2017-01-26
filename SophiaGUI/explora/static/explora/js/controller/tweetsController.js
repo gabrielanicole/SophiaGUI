@@ -127,14 +127,14 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     $scope.windowsWidth = $window.innerWidth;
     $scope.granularity = 'hour';
 
-    $scope.startdate = histogram_startdate;
-    $scope.enddate = histogram_enddate;
+    $scope.startdate = histogram_startdate+ " 00:00:00";
+    $scope.enddate = histogram_enddate+ " 23:59:59";
 
-    $scope.histogram_startdate = histogram_startdate;
-    $scope.histogram_enddate = histogram_enddate;
+    $scope.histogram_startdate = histogram_startdate+ " 00:00:00";
+    $scope.histogram_enddate = histogram_enddate+ " 23:59:59";
 
-    $("#datepicker1").datepicker('update', String($scope.histogram_startdate));
-    $("#datepicker2").datepicker('update', String($scope.histogram_enddate));
+    $("#datepicker1").datepicker('update', String($scope.histogram_startdate).slice(0,10));
+    $("#datepicker2").datepicker('update', String($scope.histogram_enddate).slice(0,10));
 
     $scope.selectedItem = function (selected) {
 
@@ -154,13 +154,11 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
-            "pub_username": twitter
+            "pub_username": twitter,
+            "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
         }
 
-        console.log(JSON.stringify(json_data));
         var data = {
-            startdate: $scope.histogram_startdate,
-            enddate: $scope.histogram_enddate,
             countby: $scope.granularity,
             search: JSON.stringify(json_data)
         };
@@ -224,8 +222,8 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
         var date1 = $("#datepicker1").datepicker('getDate');
         var date2 = $("#datepicker2").datepicker('getDate');
 
-        $scope.histogram_startdate = date1.toISOString().slice(0, 10);
-        $scope.histogram_enddate = date2.toISOString().slice(0, 10);
+        $scope.histogram_startdate = date1.toISOString().slice(0, 10)+ " 00:00:00";
+        $scope.histogram_enddate = date2.toISOString().slice(0, 10)+ " 23:59:59";
         $scope.selectedItem($scope.granularity);
 
     }
