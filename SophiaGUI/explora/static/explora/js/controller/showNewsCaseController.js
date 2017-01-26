@@ -241,7 +241,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.selectedMedium.media_twitter = data.news_case_data.new_press_source;
     }
 
-
     $scope.selectedItem = function (selected) {
         $scope.granularity = selected;
         $scope.twitter = $scope.selectedMedium.media_twitter;
