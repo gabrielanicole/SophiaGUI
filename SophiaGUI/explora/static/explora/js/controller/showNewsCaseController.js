@@ -13,10 +13,11 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.enddate;
     $scope.articulos;
     $scope.total_pages;
-    $scope.actual_page;
+    $scope.actual_page = 1;
     $scope.page_init;
     $scope.page_end;
     $scope.size = 3;
+    $scope.busy = true;
 
     $scope.press_source = [];
     $scope.category = staticData.getCategoryList();
@@ -75,6 +76,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.page_number = function (page_number) {
         //Function to get the page number from view
         var page = page_number[0][0];
+        $scope.actual_page = page;
         $scope.update_list(page, data);
     }
 
@@ -154,6 +156,44 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.selectedCategory = category;
     }
 
+    $scope.loadNextItems = function () {
+        page = $scope.actual_page + 1;
+        $scope.busy = true;
+        if (page <= $scope.total_pages) {
+            var twitter = $scope.selectedMedium.media_twitter;
+            var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
+            var json_data = {
+                "index": "articles",
+                "fields": ["art_content"],
+                "and": tag_values.must_contain_group,
+                "or": tag_values.should_contain_group,
+                "not_and": tag_values.not_contain_group,
+                "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
+                "art_name_press_source": twitter,
+                "art_category": $scope.selectedCategory
+            }
+
+            $http({
+                method: 'POST',
+                url: '/get_data/articles/articles_advance_search/' + page + '/',
+                data: $.param({ data: JSON.stringify(json_data) })
+            }).then(function successCallback(response) {
+                for (var x = 0; x < response.data.results.length; x++) {
+                    $scope.articulos.push(response.data.results[x]);
+                }
+                $scope.total_pages = parseInt(response.data.totalpages);
+                $scope.actual_page = parseInt(response.data.page);
+
+                var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
+                $scope.page_init = range.page_init;
+                $scope.page_end = range.page_end;
+                $scope.busy = false;
+            }, function errorCallback(response) {
+                return (response);
+            });
+        }
+    }
+
     $http({
         method: 'POST',
         url: '/getNewsCaseInfo/',
@@ -182,7 +222,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             histogram_enddate = String(data.news_case_data.new_date_to.slice(0, 10));
             $("#datepicker1").datepicker('update', histogram_startdate);
             $("#datepicker2").datepicker('update', histogram_enddate);
-            
+
         }
 
         var new_or = dataFormat.getTagList(data.news_case_data.new_or);
@@ -264,6 +304,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     }
 
     $scope.loadElements = function (idNot, page) {
+        $scope.actual_page = page;
         $scope.idNot = idNot;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
@@ -277,9 +318,10 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "art_name_press_source": $scope.twitter,
             "art_category": $scope.selectedCategory
         }
+        $scope.busy = true;
         $http({
             method: 'POST',
-            url: '/get_data/articles/articles_advance_search/' + page + '/',
+            url: '/get_data/articles/articles_advance_search/' + $scope.actual_page + '/',
             data: $.param({ data: JSON.stringify(json_data) })
         }).then(function successCallback(response) {
             $scope.articulos = response.data.results;
@@ -289,6 +331,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
             $scope.page_init = range.page_init;
             $scope.page_end = range.page_end;
+            $scope.busy = false;
 
         }, function errorCallback(response) {
             return (response);

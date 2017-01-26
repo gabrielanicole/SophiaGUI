@@ -158,8 +158,42 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         });
     }
 
-    $scope.loadNextItems = function (){
-        //$scope.update_list($scope.actual_page + 1);
+    $scope.loadNextItems = function () {
+        page = $scope.actual_page + 1;
+        $scope.busy = true;
+        if (page < $scope.total_pages) {
+            var twitter = $scope.selectedMedium.media_twitter;
+            var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
+            var json_data = {
+                "index": "articles",
+                "fields": ["art_content"],
+                "and": tag_values.must_contain_group,
+                "or": tag_values.should_contain_group,
+                "not_and": tag_values.not_contain_group,
+                "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
+                "art_name_press_source": twitter,
+                "art_category": $scope.selectedCategory
+            }
+
+            $http({
+                method: 'POST',
+                url: '/get_data/articles/articles_advance_search/' + page + '/',
+                data: $.param({ data: JSON.stringify(json_data) })
+            }).then(function successCallback(response) {
+                for (var x = 0; x < response.data.results.length; x++) {
+                    $scope.articulos.push(response.data.results[x]);
+                }
+                $scope.total_pages = parseInt(response.data.totalpages);
+                $scope.actual_page = parseInt(response.data.page);
+
+                var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
+                $scope.page_init = range.page_init;
+                $scope.page_end = range.page_end;
+                $scope.busy = false;
+            }, function errorCallback(response) {
+                return (response);
+            });
+        }
     }
 
     $scope.mediaChange = function (media) {
@@ -187,7 +221,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "not_and": tag_values.not_contain_group,
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
             "art_category": $scope.selectedCategory
-
         }
 
         var data = {
@@ -212,7 +245,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     }
 
     $scope.update_list = function (page) {
-
         $scope.busy = true;
         var twitter = $scope.selectedMedium.media_twitter;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
@@ -232,8 +264,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             url: '/get_data/articles/articles_advance_search/' + page + '/',
             data: $.param({ data: JSON.stringify(json_data) })
         }).then(function successCallback(response) {
-            console.log(response.data.results);
-            $scope.articulos.push();
+            $scope.articulos = response.data.results;
             $scope.total_pages = parseInt(response.data.totalpages);
             $scope.actual_page = parseInt(response.data.page);
 
@@ -241,7 +272,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             $scope.page_init = range.page_init;
             $scope.page_end = range.page_end;
             $scope.busy = false;
-
         }, function errorCallback(response) {
             return (response);
         });
