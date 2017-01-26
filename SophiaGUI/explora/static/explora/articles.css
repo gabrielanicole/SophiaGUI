@@ -84,3 +84,13 @@ body{
 .dropdown:hover .dropdown-content {
     display: block;
 }
+
+.back-to-top {
+    cursor: pointer;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+	opacity: 0.5;
+	background-color: #078770;
+	border-color:#078770;
+}

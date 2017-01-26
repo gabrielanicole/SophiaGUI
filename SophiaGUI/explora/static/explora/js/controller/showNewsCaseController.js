@@ -148,6 +148,10 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         }
     }
 
+    $scope.backToTop = function(){
+        window.scrollTo(0, 0);
+    }
+
     $scope.mediaChange = function (media) {
         $scope.selectedMedium = media;
     }

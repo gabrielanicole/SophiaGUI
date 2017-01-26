@@ -158,6 +158,10 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         });
     }
 
+    $scope.backToTop = function(){
+        window.scrollTo(0, 0);
+    }
+    
     $scope.loadNextItems = function () {
         page = $scope.actual_page + 1;
         $scope.busy = true;
