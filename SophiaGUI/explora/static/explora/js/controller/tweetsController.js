@@ -63,7 +63,54 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     $scope.mediaChange = function (media) {
         $scope.selectedMedium = media;
     }
+    
+    $scope.backToTop = function () {
+        window.scrollTo(0, 0);
+    }
 
+    $scope.loadNextItems = function () {
+
+        page = $scope.actual_page + 1;
+        if (page <= $scope.total_pages) {
+            var twitter;
+            try {
+                twitter = $scope.selectedMedium.media_twitter;
+            }
+            catch (err) {
+                twitter = "";
+            }
+
+            var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
+            var json_data = {
+                "index": "publications",
+                "pub_username": twitter,
+                "fields": ["pub_content"],
+                "and": tag_values.must_contain_group,
+                "or": tag_values.should_contain_group,
+                "not_and": tag_values.not_contain_group,
+                "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
+            }
+
+            $http({
+                method: 'POST',
+                url: '/get_data/tweets/' + page + '/',
+                data: $.param({ data: JSON.stringify(json_data) })
+            }).then(function successCallback(response) {
+                for (var x = 0; x < response.data.results.length; x++) {
+                    $scope.tweets.push(response.data.results[x]);
+                }
+                $scope.total_pages = parseInt(response.data.totalPages);
+                $scope.actual_page = parseInt(response.data.page);
+
+                var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
+                $scope.page_init = range.page_init;
+                $scope.page_end = range.page_end;
+
+            }, function errorCallback(response) {
+                return (response);
+            });
+        }
+    }
     $scope.options = [
         { key: "Minuto", value: "minute" },
         { key: "Hora", value: "hour" },
