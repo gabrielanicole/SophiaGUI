@@ -230,6 +230,7 @@ def advancedSearch(request, page=1):
 
         data_array = json.loads(response.content.encode('utf8'))
 
+        total_search = data_array['hits']['total'] 
         total_pages = data_array['totalPages']
         actual_page = data_array['page']
         data = data_array['hits']['hits']
@@ -249,6 +250,7 @@ def advancedSearch(request, page=1):
 
         json_response = {'totalpages': total_pages,
                          'page': actual_page,
+                         'total':total_search,
                          'results': results}
         return JsonResponse(json_response, safe=False)
 
@@ -289,6 +291,7 @@ def getTweetsList(request, page=1):
         data = request.POST.get('data').encode('utf8')
         response = requests.post(api, data=data)
         data_array = json.loads(response.text.encode('utf8'))
+        total = data_array['hits']['total']
         totalPages = data_array['totalPages']
         actual_page = data_array['page']
         data_array = data_array['hits']['hits']
@@ -306,6 +309,7 @@ def getTweetsList(request, page=1):
         json_response = {
             'totalPages': totalPages,
             'results': results,
+            'total':total,
             'page': actual_page
         }
 

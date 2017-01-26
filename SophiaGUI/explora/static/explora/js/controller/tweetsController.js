@@ -63,7 +63,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     $scope.mediaChange = function (media) {
         $scope.selectedMedium = media;
     }
-    
+
     $scope.backToTop = function () {
         window.scrollTo(0, 0);
     }
@@ -209,6 +209,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             $scope.tweets = response.data.results;
             $scope.total_pages = parseInt(response.data.totalPages);
             $scope.actual_page = parseInt(response.data.page);
+            $scope.total_found = response.data.total;
 
             var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
             $scope.page_init = range.page_init;

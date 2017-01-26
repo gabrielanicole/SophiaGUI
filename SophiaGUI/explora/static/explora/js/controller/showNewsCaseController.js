@@ -331,6 +331,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             $scope.articulos = response.data.results;
             $scope.total_pages = parseInt(response.data.totalpages);
             $scope.actual_page = parseInt(response.data.page);
+            $scope.total_found = parseInt(response.data.total);
 
             var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
             $scope.page_init = range.page_init;
