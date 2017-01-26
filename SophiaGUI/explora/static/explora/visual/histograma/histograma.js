@@ -217,7 +217,7 @@ function generate_histogram(width, height, data_json) {
                     .style("top", 2000 + "px")
                     .style("opacity", 0);
             })
-            .on("click", function(d){
+            .on("click", function (d) {
                 console.log(d);
             })
             .style("fill", "#078770");
@@ -225,8 +225,8 @@ function generate_histogram(width, height, data_json) {
         chart.select("g.y.axis").call(yAxis);
         chart.select("g.x.axis").call(xAxis);
 
-        var startdate = brush_values[0].toISOString().slice(0, 10);
-        var enddate = brush_values[1].toISOString().slice(0, 10);
+        var startdate = String(brush_values[0].toISOString().slice(0, 19)).replace("T", " ");
+        var enddate = String(brush_values[1].toISOString().slice(0, 19)).replace("T", " ");
 
         var scope = angular.element($("#angularController")).scope();
         scope.$apply(function () {

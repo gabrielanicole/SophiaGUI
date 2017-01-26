@@ -131,14 +131,14 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.windowsWidth = $window.innerWidth;
     $scope.granularity = 'hour';
 
-    $scope.histogram_startdate = histogram_startdate;
-    $scope.histogram_enddate = histogram_enddate;
+    $scope.histogram_startdate = histogram_startdate + " 00:00:00";
+    $scope.histogram_enddate = histogram_enddate + " 23:59:59";
 
-    $scope.startdate = histogram_startdate;
-    $scope.enddate = histogram_enddate;
+    $scope.startdate = $scope.histogram_startdate;
+    $scope.enddate = $scope.histogram_enddate;
 
-    $("#datepicker1").datepicker('update', String($scope.histogram_startdate));
-    $("#datepicker2").datepicker('update', String($scope.histogram_enddate));
+    $("#datepicker1").datepicker('update', String($scope.histogram_startdate.slice(0,10)));
+    $("#datepicker2").datepicker('update', String($scope.histogram_enddate.slice(0,10)));
 
     function loadPressMedia() {
         $http({
@@ -285,13 +285,10 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.update_histogram = function () {
         var date1 = $("#datepicker1").datepicker('getDate');
         var date2 = $("#datepicker2").datepicker('getDate');
-
-        $scope.histogram_startdate = date1.toISOString().slice(0, 10);
-        $scope.histogram_enddate = date2.toISOString().slice(0, 10);
-
+        $scope.histogram_startdate = date1.toISOString().slice(0, 10)+ " 00:00:00";
+        $scope.histogram_enddate = date2.toISOString().slice(0, 10)+ " 23:59:59";
         $scope.startdate = $scope.histogram_startdate;
         $scope.enddate = $scope.histogram_enddate;
-
     }
 
     //Controler for advancesearch button.

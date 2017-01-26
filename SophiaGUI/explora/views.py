@@ -132,6 +132,13 @@ def articlesCountBy(request):
         enddate = request.POST.get('enddate').encode('utf8')
         countby = request.POST.get('countby').encode('utf8')
         search = request.POST.get('search').encode('utf8')
+        
+        search = json.loads(search)
+        search['startdate']=startdate
+        search['enddate']=enddate
+        search['countby']=countby
+        search = json.dumps(search)
+        print search
 
         file = json.loads(open("explora/static/user.json").read())
         api_user = file["user"]
@@ -143,9 +150,7 @@ def articlesCountBy(request):
 
        # cookies = dict(sessionid=client.cookies['sessionid'])
 
-        api = u'http://{0}/v2/articles/from/{1}/to/{2}/countby/{3}'.format(
-            api_url, startdate, enddate, countby)
-
+        api = u'http://{0}/v2/countby/'.format(api_url)
         try:
             response = requests.post(api, data=search)
             #response = requests.get(api)
@@ -155,7 +160,7 @@ def articlesCountBy(request):
 
         data = json.loads(response.text.encode('utf8'))
 
-        data = data['aggregations']['articles_over_time']['buckets']
+        data = data['aggregations']['result_over_time']['buckets']
         return JsonResponse(data, safe=False)
 
 

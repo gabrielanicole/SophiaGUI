@@ -277,14 +277,13 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         }, function errorCallback(response) {
             console.log(response);
         });
-
     }
 
     $scope.restoreHistogram = function () {
         var date1 = $("#datepicker1").datepicker('getDate');
         var date2 = $("#datepicker2").datepicker('getDate');
-        $scope.histogram_startdate = date1.toISOString().slice(0, 10);
-        $scope.histogram_enddate = date2.toISOString().slice(0, 10);
+        $scope.histogram_startdate = date1.toISOString().slice(0, 10)+ " 00:00:00";
+        $scope.histogram_enddate = date2.toISOString().slice(0, 10)+ " 23:59:59";
 
         $scope.startdate = $scope.histogram_startdate;
         $scope.enddate = $scope.histogram_enddate;
@@ -347,8 +346,8 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         var date1 = $("#datepicker1").datepicker('getDate');
         var date2 = $("#datepicker2").datepicker('getDate');
 
-        $scope.histogram_startdate = date1.toISOString().slice(0, 10);
-        $scope.histogram_enddate = date2.toISOString().slice(0, 10);
+        $scope.histogram_startdate = date1.toISOString().slice(0, 10)+ " 00:00:00";
+        $scope.histogram_enddate = date2.toISOString().slice(0, 10)+ " 23:59:59";
 
         $scope.selectedItem($scope.granularity);
     }
