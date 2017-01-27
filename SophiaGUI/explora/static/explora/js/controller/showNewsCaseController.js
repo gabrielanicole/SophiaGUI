@@ -18,6 +18,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.page_end;
     $scope.size = 3;
     $scope.busy = true;
+    $scope.id_not;
 
     $scope.press_source = [];
     $scope.category = staticData.getCategoryList();
@@ -171,16 +172,12 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         }
     }
 
-    $http({
-        method: 'POST',
-        url: '/getNewsCaseInfo/',
-        data: $.param(data)
-    }).then(function successCallback(response) {
+    NewsCases.getNewsCaseInfo(data).then(function (response) {
         $scope.loadPressMedia();
         $scope.restoreSession(response.data);
         $scope.restoreHistogram();
         $scope.update_list(1);
-    });
+    })
 
     $scope.restoreSession = function (data) {
         //Restore what the user searched
@@ -211,7 +208,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.selectedMedium.media_twitter = data.news_case_data.new_press_source;
     }
 
-    $scope.selectedItem = function (selected) {
+    $scope.loadHistogram = function (selected) {
         $scope.granularity = selected;
         $scope.twitter = $scope.selectedMedium.media_twitter;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
@@ -253,16 +250,11 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.windowsWidth = $window.innerWidth;
         $scope.granularity = 'hour';
         //Draw Histogram for first time
-        $scope.selectedItem($scope.granularity);
+        $scope.loadHistogram($scope.granularity);
     }
 
     $scope.update_list = function (page) {
-
-        $http({
-            method: 'POST',
-            url: '/getNewsCaseInfo/',
-            data: $.param(data)
-        }).then(function (response) {
+        NewsCases.getRemovedArticles(data).then(function (response) {
             var idNot = response.data.news_case_data.new_art_not;
             $scope.loadElements(idNot, page);
         });
@@ -312,8 +304,8 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         //set day as default
         $scope.granularity = 'hour';
         $scope.update_histogram();
-        $scope.update_list(1, data);
-        $scope.selectedItem($scope.granularity);
+        $scope.update_list(1);
+        $scope.loadHistogram($scope.granularity);
     }
 
     $scope.update_news_case = function (newsCaseName) {

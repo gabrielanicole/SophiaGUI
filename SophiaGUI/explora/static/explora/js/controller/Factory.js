@@ -109,6 +109,24 @@ app.factory('NewsCases', function ($http) {
             }).then(function successCallback(response) {
                 return response;
             });
+        },
+        getRemovedArticles: function (data) {
+            return $http({
+                method: 'POST',
+                url: '/getNewsCaseInfo/',
+                data: $.param(data)
+            }).then(function (response) {
+                return response;
+            });
+        },
+        getNewsCaseInfo: function (data) {
+            return $http({
+                method: 'POST',
+                url: '/getNewsCaseInfo/',
+                data: $.param(data)
+            }).then(function (response) {
+                return response;
+            });
         }
     }
 })
