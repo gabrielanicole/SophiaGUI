@@ -203,6 +203,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         must_contain.add(new_and);
         not_contain.add(new_not);
 
+
         $scope.twitter = data.news_case_data.new_category;
         $scope.selectedCategory = data.news_case_data.new_category;
         $scope.selectedMedium.media_twitter = data.news_case_data.new_press_source;

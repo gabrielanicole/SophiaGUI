@@ -96,7 +96,7 @@ app.factory('NewsCases', function ($http) {
             return $http({
                 method: 'POST',
                 url: '/updateNewsCase/',
-                data: $.param({ data: JSON.stringify(json_data) })
+                data: $.param({ data: JSON.stringify(data) })
             }).then(function successCallback(response) {
                 return response;
             });
