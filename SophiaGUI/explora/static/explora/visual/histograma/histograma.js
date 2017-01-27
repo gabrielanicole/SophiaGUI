@@ -153,7 +153,19 @@ function generate_histogram(width, height, data_json) {
     minichart.select("g.x.axis").call(xAxis2);
 
     function default_brush() {
-        brush.extent([new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000), new Date()]);
+        date1 = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000);
+        date2 = new Date();
+
+        dif = Math.abs(date2.getTime() - date1.getTime());
+        days = Math.ceil(dif / (1000 * 3600 * 24));
+
+        if (days <= 7) {
+            date1 = new Date(new Date().getTime() - 1 * 24 * 60 * 60 * 1000);
+            brush.extent([date1, date2]);
+        }
+        else {
+            brush.extent([date1, date2]);
+        }
         brush(d3.select(".brush"));
         brushed();
     }
