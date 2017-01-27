@@ -155,7 +155,6 @@ def articlesCountBy(request):
             return HttpResponse(e)
 
         data = json.loads(response.text.encode('utf8'))
-        print data
         data = data['aggregations']['result_over_time']['buckets']
         return JsonResponse(data, safe=False)
 

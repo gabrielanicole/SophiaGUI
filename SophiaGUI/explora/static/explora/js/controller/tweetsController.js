@@ -1,4 +1,5 @@
-app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', function ($scope, $http, dataFormat, $window) {
+app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 'Tweets', function (
+    $scope, $http, dataFormat, $window, Tweets) {
 
     $scope.total_pages;
     $scope.actual_page;
@@ -91,23 +92,17 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
                 "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
             }
 
-            $http({
-                method: 'POST',
-                url: '/get_data/tweets/' + page + '/',
-                data: $.param({ data: JSON.stringify(json_data) })
-            }).then(function successCallback(response) {
-                for (var x = 0; x < response.data.results.length; x++) {
-                    $scope.tweets.push(response.data.results[x]);
+            Tweets.getTweetList(json_data, page).then(function (data) {
+                for (var x = 0; x < data.results.length; x++) {
+                    $scope.tweets.push(data.results[x]);
                 }
-                $scope.total_pages = parseInt(response.data.totalPages);
-                $scope.actual_page = parseInt(response.data.page);
+                $scope.total_pages = parseInt(data.totalPages);
+                $scope.actual_page = parseInt(data.page);
 
                 var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
                 $scope.page_init = range.page_init;
                 $scope.page_end = range.page_end;
 
-            }, function errorCallback(response) {
-                return (response);
             });
         }
     }
@@ -127,14 +122,14 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     $scope.windowsWidth = $window.innerWidth;
     $scope.granularity = 'hour';
 
-    $scope.startdate = histogram_startdate+ " 00:00:00";
-    $scope.enddate = histogram_enddate+ " 23:59:59";
+    $scope.startdate = histogram_startdate + " 00:00:00";
+    $scope.enddate = histogram_enddate + " 23:59:59";
 
-    $scope.histogram_startdate = histogram_startdate+ " 00:00:00";
-    $scope.histogram_enddate = histogram_enddate+ " 23:59:59";
+    $scope.histogram_startdate = histogram_startdate + " 00:00:00";
+    $scope.histogram_enddate = histogram_enddate + " 23:59:59";
 
-    $("#datepicker1").datepicker('update', String($scope.histogram_startdate).slice(0,10));
-    $("#datepicker2").datepicker('update', String($scope.histogram_enddate).slice(0,10));
+    $("#datepicker1").datepicker('update', String($scope.histogram_startdate).slice(0, 10));
+    $("#datepicker2").datepicker('update', String($scope.histogram_enddate).slice(0, 10));
 
     $scope.selectedItem = function (selected) {
 
@@ -163,19 +158,10 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             search: JSON.stringify(json_data)
         };
 
-        $http({
-            method: 'POST',
-            url: '/get_data/tweets/histogram/',
-            data: $.param(data)
-
-        }).then(function successCallback(response) {
+        Tweets.getTweetsCountBy(data).then(function (response) {
             $("#histogram").empty();
             var histograma = generate_histogram(width = ($scope.windowsWidth - 300), height = 300, data_json = response.data);
-
-        }, function errorCallback(response) {
-            console.log(response);
         });
-
     }
 
     $scope.update_list = function (page) {
@@ -199,31 +185,24 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
         }
 
-        $http({
-            method: 'POST',
-            url: '/get_data/tweets/' + page + '/',
-            data: $.param({ data: JSON.stringify(json_data) })
-        }).then(function successCallback(response) {
-            $scope.tweets = response.data.results;
-            $scope.total_pages = parseInt(response.data.totalPages);
-            $scope.actual_page = parseInt(response.data.page);
-            $scope.total_found = response.data.total;
-
+        Tweets.getTweetList(json_data, page).then(function (data) {
+            $scope.tweets = data.results;
+            $scope.total_pages = parseInt(data.totalPages);
+            $scope.actual_page = parseInt(data.page);
+            $scope.total_found = data.total;
             var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
             $scope.page_init = range.page_init;
             $scope.page_end = range.page_end;
+        })
 
-        }, function errorCallback(response) {
-            return (response);
-        });
     }
 
     $scope.update_histogram = function () {
         var date1 = $("#datepicker1").datepicker('getDate');
         var date2 = $("#datepicker2").datepicker('getDate');
 
-        $scope.histogram_startdate = date1.toISOString().slice(0, 10)+ " 00:00:00";
-        $scope.histogram_enddate = date2.toISOString().slice(0, 10)+ " 23:59:59";
+        $scope.histogram_startdate = date1.toISOString().slice(0, 10) + " 00:00:00";
+        $scope.histogram_enddate = date2.toISOString().slice(0, 10) + " 23:59:59";
         $scope.selectedItem($scope.granularity);
 
     }

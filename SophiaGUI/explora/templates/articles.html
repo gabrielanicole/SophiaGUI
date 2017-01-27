@@ -94,7 +94,7 @@
     </div>
 
     <div infinite-scroll='loadNextItems()' infinite-scroll-disabled='busy' infinite-scroll-distance='0' infinite-scroll-use-document-bottom='true'>
-        <div ng-repeat="d in articulos">
+        <div ng-repeat="d in articulos track by d.art_id">
           <div ng-class="row|($index % 4 == 0)">
 
             <div class="col-md-3 news-deploy">

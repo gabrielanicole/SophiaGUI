@@ -1,5 +1,5 @@
-app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', "staticData", function (
-    $scope, $http, $window, dataFormat, staticData) {
+app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', "staticData", "Articles", "ExportData", "PressMedia", function (
+    $scope, $http, $window, dataFormat, staticData, Articles, ExportData, PressMedia) {
 
     //Date Picker Setup
     $("#datepicker1").datepicker({
@@ -54,22 +54,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             },
             "checkbox": $scope.checkbox
         }
-
-        $http({
-            method: 'POST',
-            url: '/exportData/',
-            data: $.param({ data: JSON.stringify(json_data) })
-        }).then(function successCallback(response, headers) {
-            if (response.headers()['content-type'] == 'text/json') {
-                var blob = new Blob([JSON.stringify(response.data)], { type: response.headers()['content-type'] });
-            }
-            else {
-                var blob = new Blob([String(response.data)], { type: response.headers()['content-type'] });
-            }
-            saveAs(blob, response.headers()['file-name']);
-        }, function errorCallback(response) {
-            console.log("Error Callback");
-        });
+        ExportData.save(json_data);
     }
 
     $scope.validateExport = function () {
@@ -137,24 +122,17 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.startdate = $scope.histogram_startdate;
     $scope.enddate = $scope.histogram_enddate;
 
-    $("#datepicker1").datepicker('update', String($scope.histogram_startdate.slice(0,10)));
-    $("#datepicker2").datepicker('update', String($scope.histogram_enddate.slice(0,10)));
+    $("#datepicker1").datepicker('update', String($scope.histogram_startdate.slice(0, 10)));
+    $("#datepicker2").datepicker('update', String($scope.histogram_enddate.slice(0, 10)));
 
     function loadPressMedia() {
-        $http({
-            method: 'GET',
-            url: '/pressmedia/getlist/',
-        }).then(function successCallback(response) {
+        PressMedia.getPressMediaList().then(function (response) {
             for (x in response.data) {
                 $scope.press_source = response.data;
-                //$scope.press_source.push(response.data[x].media_name);
             }
             var empty = { media_id: "", media_name: "", media_twitter: "" };
             $scope.press_source.unshift(empty);
             $scope.selectedMedium = empty;
-
-        }, function errorCallback(response) {
-            console.log(response.data);
         });
     }
 
@@ -179,23 +157,18 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
                 "art_category": $scope.selectedCategory
             }
 
-            $http({
-                method: 'POST',
-                url: '/get_data/articles/articles_advance_search/' + page + '/',
-                data: $.param({ data: JSON.stringify(json_data) })
-            }).then(function successCallback(response) {
-                for (var x = 0; x < response.data.results.length; x++) {
-                    $scope.articulos.push(response.data.results[x]);
+            Articles.getArticlesList(json_data, page).then(function (data) {
+                for (var x = 0; x < data.results.length; x++) {
+                    $scope.articulos.push(data.results[x]);
                 }
-                $scope.total_pages = parseInt(response.data.totalpages);
-                $scope.actual_page = parseInt(response.data.page);
+                $scope.total_pages = parseInt(data.totalpages);
+                $scope.actual_page = parseInt(data.page);
 
                 var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
                 $scope.page_init = range.page_init;
                 $scope.page_end = range.page_end;
                 $scope.busy = false;
-            }, function errorCallback(response) {
-                return (response);
+
             });
         }
     }
@@ -232,18 +205,10 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             search: JSON.stringify(json_data)
         };
 
-        $http({
-            method: 'POST',
-            url: '/get_data/articles/histogram',
-            data: $.param(data)
-
-        }).then(function successCallback(response) {
+        Articles.getArticlesCountBy(data).then(function (data) {
             $("#histogram").empty();
-            var histograma = generate_histogram(width = ($scope.windowsWidth - 300), height = 300, data_json = response.data);
-
-        }, function errorCallback(response) {
-            console.log(response);
-        });
+            var histograma = generate_histogram(width = ($scope.windowsWidth - 300), height = 300, data_json = data);
+        })
     }
 
     $scope.update_list = function (page) {
@@ -261,30 +226,23 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "art_category": $scope.selectedCategory
         }
 
-        $http({
-            method: 'POST',
-            url: '/get_data/articles/articles_advance_search/' + page + '/',
-            data: $.param({ data: JSON.stringify(json_data) })
-        }).then(function successCallback(response) {
-            $scope.articulos = response.data.results;
-            $scope.total_pages = parseInt(response.data.totalpages);
-            $scope.actual_page = parseInt(response.data.page);
-            $scope.total_found = parseInt(response.data.total);
-
+        Articles.getArticlesList(json_data, page).then(function (data) {
+            $scope.articulos = data.results;
+            $scope.total_pages = parseInt(data.totalpages);
+            $scope.actual_page = parseInt(data.page);
+            $scope.total_found = parseInt(data.total);
             var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
             $scope.page_init = range.page_init;
             $scope.page_end = range.page_end;
             $scope.busy = false;
-        }, function errorCallback(response) {
-            return (response);
         });
     }
 
     $scope.update_histogram = function () {
         var date1 = $("#datepicker1").datepicker('getDate');
         var date2 = $("#datepicker2").datepicker('getDate');
-        $scope.histogram_startdate = date1.toISOString().slice(0, 10)+ " 00:00:00";
-        $scope.histogram_enddate = date2.toISOString().slice(0, 10)+ " 23:59:59";
+        $scope.histogram_startdate = date1.toISOString().slice(0, 10) + " 00:00:00";
+        $scope.histogram_enddate = date2.toISOString().slice(0, 10) + " 23:59:59";
         $scope.startdate = $scope.histogram_startdate;
         $scope.enddate = $scope.histogram_enddate;
     }
@@ -342,16 +300,10 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         }
 
         if ($scope.news_case_name.length > 0) {
-            $http({
-                method: 'POST',
-                url: '/create/newsCase/',
-                data: $.param({ data: JSON.stringify(json_data) })
-            }).then(function successCallback(response) {
+            Articles.createNewsCases(json_data).then(function (response) {
                 console.log(response);
                 toastr.success("Caso noticioso creado con éxito");
-            }, function errorCallback(response) {
-                console.log(response);
-            });
+            })
         }
         else {
             toastr.error("No ingresó nombre al caso noticioso");

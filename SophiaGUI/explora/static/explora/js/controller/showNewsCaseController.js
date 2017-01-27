@@ -1,5 +1,5 @@
-app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataFormat', '$window', 'staticData', 'pressMediaManager', function (
-    $scope, $http, $location, dataFormat, $window, staticData, pressMediaManager) {
+app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataFormat', '$window', 'staticData', 'pressMediaManager', 'ExportData', function (
+    $scope, $http, $location, dataFormat, $window, staticData, pressMediaManager, ExportData) {
 
     var absUrl = $location.absUrl().split("/");
     var elastic_id = absUrl[absUrl.length - 1];
@@ -115,22 +115,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             },
             "checkbox": $scope.checkbox
         }
-
-        $http({
-            method: 'POST',
-            url: '/exportData/',
-            data: $.param({ data: JSON.stringify(json_data) })
-        }).then(function successCallback(response, headers) {
-            if (response.headers()['content-type'] == 'text/json') {
-                var blob = new Blob([JSON.stringify(response.data)], { type: response.headers()['content-type'] });
-            }
-            else {
-                var blob = new Blob([String(response.data)], { type: response.headers()['content-type'] });
-            }
-            saveAs(blob, response.headers()['file-name']);
-        }, function errorCallback(response) {
-            console.log("Error Callback");
-        });
+        ExportData.save(json_data);
     }
 
     $scope.validateExport = function () {
@@ -148,7 +133,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         }
     }
 
-    $scope.backToTop = function(){
+    $scope.backToTop = function () {
         window.scrollTo(0, 0);
     }
 
@@ -282,8 +267,8 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.restoreHistogram = function () {
         var date1 = $("#datepicker1").datepicker('getDate');
         var date2 = $("#datepicker2").datepicker('getDate');
-        $scope.histogram_startdate = date1.toISOString().slice(0, 10)+ " 00:00:00";
-        $scope.histogram_enddate = date2.toISOString().slice(0, 10)+ " 23:59:59";
+        $scope.histogram_startdate = date1.toISOString().slice(0, 10) + " 00:00:00";
+        $scope.histogram_enddate = date2.toISOString().slice(0, 10) + " 23:59:59";
 
         $scope.startdate = $scope.histogram_startdate;
         $scope.enddate = $scope.histogram_enddate;
@@ -346,8 +331,8 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         var date1 = $("#datepicker1").datepicker('getDate');
         var date2 = $("#datepicker2").datepicker('getDate');
 
-        $scope.histogram_startdate = date1.toISOString().slice(0, 10)+ " 00:00:00";
-        $scope.histogram_enddate = date2.toISOString().slice(0, 10)+ " 23:59:59";
+        $scope.histogram_startdate = date1.toISOString().slice(0, 10) + " 00:00:00";
+        $scope.histogram_enddate = date2.toISOString().slice(0, 10) + " 23:59:59";
 
     }
     //Controler for advancesearch button.

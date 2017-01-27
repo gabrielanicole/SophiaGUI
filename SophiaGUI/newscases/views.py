@@ -26,8 +26,8 @@ def createNewsCase(request):
             elastic_data = {
                 "new_name": data['new_name'],
                 "new_date": data['new_date']+" 00:00:00",
-                "new_date_from": data['dates']['startdate'] +" 00:00:00",
-                "new_date_to": data['dates']['enddate'] +" 00:00:00",
+                "new_date_from": data['dates']['startdate'],
+                "new_date_to": data['dates']['enddate'],
                 "new_and": data['and'],
                 "new_or": data['or'],
                 "new_category": data['category'],
@@ -247,8 +247,8 @@ def updateNewsCase(request):
                 newCase.save()
                 elastic_data = {
                     "new_name": data['new_name'],
-                    "new_date_from": data['dates']['startdate'] +" 00:00:00",
-                    "new_date_to": data['dates']['enddate'] +" 00:00:00",
+                    "new_date_from": data['dates']['startdate'],
+                    "new_date_to": data['dates']['enddate'],
                     "new_and": data['and'],
                     "new_or": data['or'],
                     "new_category": data['category'],
@@ -260,8 +260,8 @@ def updateNewsCase(request):
                 newCase.follow_new_feed = follow_new_feed
                 newCase.save()
                 elastic_data = {
-                    "new_date_from": data['dates']['startdate'] +" 00:00:00",
-                    "new_date_to": data['dates']['enddate'] +" 00:00:00",
+                    "new_date_from": data['dates']['startdate'],
+                    "new_date_to": data['dates']['enddate'],
                     "new_and": data['and'],
                     "new_or": data['or'],
                     "new_category": data['category'],
