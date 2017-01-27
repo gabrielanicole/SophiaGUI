@@ -89,3 +89,26 @@ app.factory('Tweets', function ($http) {
         }
     }
 });
+
+app.factory('NewsCases', function ($http) {
+    return {
+        updateNewsCase: function (data) {
+            return $http({
+                method: 'POST',
+                url: '/updateNewsCase/',
+                data: $.param({ data: JSON.stringify(json_data) })
+            }).then(function successCallback(response) {
+                return response;
+            });
+        },
+        removeArticle: function (data) {
+            return $http({
+                method: 'POST',
+                url: '/removeArticle/',
+                data: $.param(data)
+            }).then(function successCallback(response) {
+                return response;
+            });
+        }
+    }
+})

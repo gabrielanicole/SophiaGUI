@@ -1,5 +1,5 @@
-app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataFormat', '$window', 'staticData', 'pressMediaManager', 'ExportData', function (
-    $scope, $http, $location, dataFormat, $window, staticData, pressMediaManager, ExportData) {
+app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataFormat', '$window', 'staticData', 'ExportData', 'PressMedia', 'Articles', 'NewsCases', function (
+    $scope, $http, $location, dataFormat, $window, staticData, ExportData, PressMedia, Articles, NewsCases) {
 
     var absUrl = $location.absUrl().split("/");
     var elastic_id = absUrl[absUrl.length - 1];
@@ -27,19 +27,13 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.twitter = "";
 
     $scope.loadPressMedia = function () {
-        $http({
-            method: 'GET',
-            url: '/pressmedia/getlist/',
-        }).then(function successCallback(response) {
+        PressMedia.getPressMediaList().then(function (response) {
             for (x in response.data) {
                 $scope.press_source = response.data;
             }
             var empty = { media_id: "", media_name: "", media_twitter: "" };
             $scope.press_source.unshift(empty);
             $scope.selectedMedium = empty;
-
-        }, function errorCallback(response) {
-            console.log(response.data);
         });
     }
 
@@ -162,23 +156,17 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
                 "art_category": $scope.selectedCategory
             }
 
-            $http({
-                method: 'POST',
-                url: '/get_data/articles/articles_advance_search/' + page + '/',
-                data: $.param({ data: JSON.stringify(json_data) })
-            }).then(function successCallback(response) {
-                for (var x = 0; x < response.data.results.length; x++) {
-                    $scope.articulos.push(response.data.results[x]);
+            Articles.getArticlesList(json_data, page).then(function (data) {
+                for (var x = 0; x < data.results.length; x++) {
+                    $scope.articulos.push(data.results[x]);
                 }
-                $scope.total_pages = parseInt(response.data.totalpages);
-                $scope.actual_page = parseInt(response.data.page);
+                $scope.total_pages = parseInt(data.totalpages);
+                $scope.actual_page = parseInt(data.page);
 
                 var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
                 $scope.page_init = range.page_init;
                 $scope.page_end = range.page_end;
                 $scope.busy = false;
-            }, function errorCallback(response) {
-                return (response);
             });
         }
     }
@@ -191,10 +179,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.loadPressMedia();
         $scope.restoreSession(response.data);
         $scope.restoreHistogram();
-        $scope.update_list(1, data);
-
-    }, function errorCallback(response) {
-        console.log(response);
+        $scope.update_list(1);
     });
 
     $scope.restoreSession = function (data) {
@@ -248,20 +233,12 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             search: JSON.stringify(json_data)
         };
 
-        $http({
-            method: 'POST',
-            url: '/get_data/articles/histogram',
-            data: $.param(data)
-
-        }).then(function successCallback(response) {
-            //Delete the histogram
+        Articles.getArticlesCountBy(data).then(function (data) {
             $("#histogram").empty();
             //Add the new histogram
-            var histograma = generate_histogram(width = ($scope.windowsWidth - 300), height = 300, data_json = response.data);
+            var histograma = generate_histogram(width = ($scope.windowsWidth - 300), height = 300, data_json = data);
+        })
 
-        }, function errorCallback(response) {
-            console.log(response);
-        });
     }
 
     $scope.restoreHistogram = function () {
@@ -279,7 +256,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.selectedItem($scope.granularity);
     }
 
-    $scope.update_list = function (page, data) {
+    $scope.update_list = function (page) {
 
         $http({
             method: 'POST',
@@ -307,24 +284,19 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "art_category": $scope.selectedCategory
         }
         $scope.busy = true;
-        $http({
-            method: 'POST',
-            url: '/get_data/articles/articles_advance_search/' + $scope.actual_page + '/',
-            data: $.param({ data: JSON.stringify(json_data) })
-        }).then(function successCallback(response) {
-            $scope.articulos = response.data.results;
-            $scope.total_pages = parseInt(response.data.totalpages);
-            $scope.actual_page = parseInt(response.data.page);
-            $scope.total_found = parseInt(response.data.total);
+
+        Articles.getArticlesList(json_data, $scope.actual_page).then(function (data) {
+            $scope.articulos = data.results;
+            $scope.total_pages = parseInt(data.totalpages);
+            $scope.actual_page = parseInt(data.page);
+            $scope.total_found = parseInt(data.total);
 
             var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
             $scope.page_init = range.page_init;
             $scope.page_end = range.page_end;
             $scope.busy = false;
 
-        }, function errorCallback(response) {
-            return (response);
-        });
+        })
     }
 
     $scope.update_histogram = function () {
@@ -364,17 +336,9 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "follow_new_feed": checked
         }
 
-        $http({
-            method: 'POST',
-            url: '/updateNewsCase/',
-            data: $.param({ data: JSON.stringify(json_data) })
-        }).then(function successCallback(response) {
-            console.log(response);
-        }, function errorCallback(response) {
-            console.log(response);
-        });
-
-        $scope.news_case_name = "";
+        NewsCases.updateNewsCase(json_data).then(function (response) {
+            $scope.news_case_name = "";
+        })
     }
 
     $scope.loadModal = function (article_id) {
@@ -405,16 +369,9 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             elastic_id: elastic_id,
             article_id: id[0][0]
         }
-        $http({
-            method: 'POST',
-            url: '/removeArticle/',
-            data: $.param(data)
-        }).then(function successCallback(response) {
+        NewsCases.removeArticle(data).then(function (response) {
             $scope.update_list($scope.actual_page, data);
-        }, function errorCallback(response) {
-            console.log(response);
-        });
-        console.log($scope.actual_page);
+        })
     }
 
 }]);
