@@ -148,9 +148,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
-TEMPLATE_DIRS = (
-    os.path.join(SETTINGS_PATH, 'templates'),
-)
+#TEMPLATE_DIRS = (
+#    os.path.join(SETTINGS_PATH, 'templates'),
+#)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
@@ -177,8 +177,8 @@ STATICFILES_DIRS = (
                     os.path.join(BASE_DIR, STATIC_URL),
                     )
 
-#PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-#STATIC_ROOT = os.path.join(PROJECT_ROOT, '/explora/static')
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(PROJECT_ROOT, '/explora/static')
 
 #STATIC_URL = '/static/'
 
