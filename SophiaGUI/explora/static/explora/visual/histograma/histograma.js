@@ -159,7 +159,7 @@ function generate_histogram(width, height, data_json) {
         dif = Math.abs(date2.getTime() - date1.getTime());
         days = Math.ceil(dif / (1000 * 3600 * 24));
 
-        if (days <= 7) {
+        if (days < 7) {
             date1 = new Date(new Date().getTime() - 1 * 24 * 60 * 60 * 1000);
             brush.extent([date1, date2]);
         }
