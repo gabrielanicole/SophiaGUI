@@ -18,7 +18,6 @@ from django.db.models import Q
 def createNewsCase(request):
     if request.method == 'POST':
         try:
-
             data = request.POST.get('data').encode('utf8')
             data = json.loads(data)
             follow_new_feed = data['follow_new_feed']
@@ -36,7 +35,8 @@ def createNewsCase(request):
                 "new_art_yes": [],
                 "new_art_not": [],
                 "new_index": data['index'],
-                "new_fields": data['fields']
+                "new_fields": data['fields'],
+                "new_pre_owner": data['pre_owner']
             }
 
             file = json.loads(open("explora/static/user.json").read())
@@ -254,6 +254,7 @@ def updateNewsCase(request):
                     "new_category": data['category'],
                     "new_press_source": data['press_source'],
                     "new_not": data['not_and'],
+                    "new_pre_owner": data['pre_owner']
                 }
 
             else:
@@ -267,6 +268,7 @@ def updateNewsCase(request):
                     "new_category": data['category'],
                     "new_press_source": data['press_source'],
                     "new_not": data['not_and'],
+                    "new_pre_owner": data['pre_owner']
                 }
             
             elastic_data = json.dumps(elastic_data)
