@@ -10,6 +10,8 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     $scope.startdate;
     $scope.enddate;
 
+    $("#mediaContainer").tooltip();
+    $("#mediumGroupContainer").tooltip();
     //Date Picker Setup
     $("#datepicker1").datepicker({
         format: "yyyy-mm-dd",
@@ -42,7 +44,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     }
 
     $scope.press_source = [];
-    //Default values
+    $scope.press_media_groups = [];
     $scope.selectedMedium = [];
 
     function loadPressMedia() {
@@ -51,13 +53,21 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             var empty = { media_id: "", media_name: "", media_twitter: "" };
             $scope.press_source.unshift(empty);
             $scope.selectedMedium = empty;
-
             $scope.update_list(1);
             //Draw Histogram for first time
             $scope.selectedItem($scope.granularity);
         });
     }
     loadPressMedia();
+
+    function loadPressMediaGroups() {
+        PressMedia.getPressMediaGroups().then(function (response) {
+            $scope.press_media_groups = response.data.names;
+            $scope.press_media_groups.unshift("");
+        });
+    }
+
+    loadPressMediaGroups();
 
     $scope.mediaChange = function (media) {
         $scope.selectedMedium = media;
@@ -135,7 +145,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
         $scope.granularity = selected;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
-            "index": "articles",
+            "index": "publications",
             "fields": ["pub_content"],
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,

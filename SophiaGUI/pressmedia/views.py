@@ -9,18 +9,20 @@ import tweepy
 from twitter import addFriend, removeFriend
 
 # Create your views here.
+
+
 @login_required(login_url='/login_required')
 def pressMedia(request):
     my_user = request.user.social_auth.filter(provider='facebook').first()
     if my_user:
         url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
         return render(request, 'pressmedia.html', {'user': request.user.get_full_name(), 'profile_pic': url
-                                               })
+                                                   })
     else:
         return render(request, 'pressmedia.html', {'user': request.user.get_full_name()
-                                               })
+                                                   })
 
-@login_required(login_url='/login_required')                              
+@login_required(login_url='/login_required')
 def insertPressMedia(request):
     if request.method == 'POST':
         try:
@@ -38,7 +40,7 @@ def insertPressMedia(request):
             auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
             auth.set_access_token(access_token, access_token_secret)
             t_api = tweepy.API(auth)
-            addFriend(t_api,data['pre_twitter'])
+            addFriend(t_api, data['pre_twitter'])
             if addFriend == '200':
                 data = json.dumps(data)
                 api = u'http://{0}/v2/pressmedia/'.format(api_url)
@@ -50,6 +52,8 @@ def insertPressMedia(request):
             print e
             return HttpResponse('Ha ocurrido un error durante el proceso')
 
+
+@login_required(login_url='/login_required')
 def getPressMedia(request):
     if request.method == 'GET':
         try:
@@ -57,13 +61,13 @@ def getPressMedia(request):
             api_user = file["user"]
             api_password = file["password"]
             api_url = file["api_url"]
-            api = u'http://{0}/v2/pressmedia/'.format(api_url) 
+            api = u'http://{0}/v2/pressmedia/'.format(api_url)
             response = requests.get(api)
             return HttpResponse('')
         except Exception as e:
             print e
             return HttpResponse('')
-            
+
     if request.method == 'POST':
         try:
             media_id = request.POST.get('media_id').encode('utf8')
@@ -71,15 +75,17 @@ def getPressMedia(request):
             api_user = file["user"]
             api_password = file["password"]
             api_url = file["api_url"]
-            api = u'http://{0}/v2/pressmedia/{1}'.format(api_url, media_id) 
+            api = u'http://{0}/v2/pressmedia/{1}'.format(api_url, media_id)
             response = requests.get(api)
             response = json.loads(response.content)
             response = response['_source']
             return JsonResponse(response, safe=False)
         except Exception as e:
             print e
-            return HttpResponse('')            
+            return HttpResponse('')
 
+
+@login_required(login_url='/login_required')
 def getListPressMedia(request):
     if request.method == 'GET':
         try:
@@ -87,19 +93,39 @@ def getListPressMedia(request):
             api_user = file["user"]
             api_password = file["password"]
             api_url = file["api_url"]
-            api = u'http://{0}/v2/pressmedia/ids/'.format(api_url) 
+            api = u'http://{0}/v2/pressmedia/ids/'.format(api_url)
             response = requests.get(api)
             data = json.loads(response.content)
             data = data['hits']['hits']
             results = []
             for x in data:
                 media = {
-                    'media_id':x['_id'],
-                    'media_name':x['fields']['pre_name'][0],
-                    'media_twitter':x['fields']['pre_twitter'] [0]   
+                    'media_id': x['_id'],
+                    'media_name': x['fields']['pre_name'][0],
+                    'media_twitter': x['fields']['pre_twitter'][0]
                 }
                 results.append(media)
-            return JsonResponse(results,safe=False)
+            return JsonResponse(results, safe=False)
         except Exception as e:
             print e
             return HttpResponse('')
+
+
+@login_required(login_url='/login_required')
+def getMediaGroups(request):
+    if request.method == 'GET':
+        try:
+            file = json.loads(open("explora/static/user.json").read())
+            api_user = file["user"]
+            api_password = file["password"]
+            api_url = file["api_url"]
+            api = u'http://{0}/v2/pressmedia/owners/'.format(api_url)
+            response = requests.get(api)
+            d = json.loads(response.content)
+            data = {
+                'names': d
+            }
+            return JsonResponse(data, safe=False)
+        except Exception as e:
+            print e
+            return HttpResponse('error')

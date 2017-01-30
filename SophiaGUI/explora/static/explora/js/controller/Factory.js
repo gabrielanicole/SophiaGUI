@@ -62,6 +62,14 @@ app.factory('PressMedia', function ($http) {
             }).then(function (response) {
                 return response;
             });
+        },
+        getPressMediaGroups: function () {
+            return $http({
+                method: 'GET',
+                url: '/pressmedia/getgroups/',
+            }).then(function (response) {
+                return response;
+            });
         }
     }
 });

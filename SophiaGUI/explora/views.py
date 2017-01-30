@@ -339,10 +339,10 @@ def tweetsCountBy(request):
        #      {'username': api_user, 'password': api_password})
 
        # cookies = dict(sessionid=client.cookies['sessionid'])
-
         api = u'http://{0}/v2/countby/'.format(api_url)
         try:
             response = requests.post(api, data=search)
+
             #response = requests.get(api)
 
         except Exception as e:
