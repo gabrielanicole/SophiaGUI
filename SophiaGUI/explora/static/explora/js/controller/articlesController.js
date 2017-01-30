@@ -17,6 +17,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $("#mediaContainer").tooltip();
     $("#categoryContainer").tooltip();
     $("#exportButton").tooltip();
+    $("#mediumGroupContainer").tooltip();
 
     $scope.options = [
         { key: "Minuto", value: "minute" },
@@ -128,9 +129,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
     function loadPressMedia() {
         PressMedia.getPressMediaList().then(function (response) {
-            for (x in response.data) {
-                $scope.press_source = response.data;
-            }
+            $scope.press_source = response.data;
             var empty = { media_id: "", media_name: "", media_twitter: "" };
             $scope.press_source.unshift(empty);
             $scope.selectedMedium = empty;
@@ -187,11 +186,11 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         loadHistogram($scope.granularity);
     }
 
-    $scope.validateTotalFound = function(){
-        if($scope.total_found <= 10000){
+    $scope.validateTotalFound = function () {
+        if ($scope.total_found <= 10000) {
             return true;
         }
-        else{
+        else {
             return false;
         }
     }

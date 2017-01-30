@@ -10,19 +10,13 @@
 
     <div class=row>
         <form class="navbar-form navbar-left" role="search">
-			  <div class="form-group">
-				        <div class="selectContainer">
-				            <select class="form-control" name="medio" ng-model="selectedMedium" ng-change="mediaChange(selectedMedium)"ng-options="x.media_name for x in press_source | orderBy:'media_name'">
-				            </select>
+			<div class="form-group">
+				        <div id="mediaContainer" class="selectContainer" data-toggle="tooltip" title="Filtrar por medio">
+				            <select class="form-control" name="medio" ng-model="selectedMedium" ng-change="mediaChange(selectedMedium)" ng-options="x.media_name for x in press_source | orderBy:'media_name'">
+                            </select>
 				        </div>
 		       </div>
 
-				<div class="form-group">
-				        <div class="selectContainer">
-				            <select class="form-control" name="categoria" ng-model="selectedCategory" ng-options="x for x in category">
-				            </select>
-				        </div>
-				</div>
             <input type="text" class="form-control" id="datepicker1">
             <input type="text" class="form-control" id="datepicker2">
             <button class="btn btn-default" ng-click="get_input_data()"> Buscar</button>

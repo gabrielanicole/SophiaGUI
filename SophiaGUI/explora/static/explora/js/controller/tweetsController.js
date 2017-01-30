@@ -1,5 +1,5 @@
-app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 'Tweets', function (
-    $scope, $http, dataFormat, $window, Tweets) {
+app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 'Tweets', 'PressMedia', function (
+    $scope, $http, dataFormat, $window, Tweets, PressMedia) {
 
     $scope.total_pages;
     $scope.actual_page;
@@ -42,24 +42,22 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     }
 
     $scope.press_source = [];
-    $scope.category = ["Categoría"];
     //Default values
     $scope.selectedMedium = [];
-    $scope.selectedCategory = $scope.category[0];
 
-    $http({
-        method: 'GET',
-        url: '/pressmedia/getlist/',
-    }).then(function successCallback(response) {
-        for (x in response.data) {
+    function loadPressMedia() {
+        PressMedia.getPressMediaList().then(function (response) {
             $scope.press_source = response.data;
-            $scope.selectedMedium = $scope.press_source[0];
-            //$scope.press_source.push(response.data[x].media_name);
-        }
-        $scope.selectedMedium = $scope.press_source[0];
-    }, function errorCallback(response) {
-        console.log(response.data);
-    });
+            var empty = { media_id: "", media_name: "", media_twitter: "" };
+            $scope.press_source.unshift(empty);
+            $scope.selectedMedium = empty;
+
+            $scope.update_list(1);
+            //Draw Histogram for first time
+            $scope.selectedItem($scope.granularity);
+        });
+    }
+    loadPressMedia();
 
     $scope.mediaChange = function (media) {
         $scope.selectedMedium = media;
@@ -133,14 +131,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
 
     $scope.selectedItem = function (selected) {
 
-        var twitter;
-        try {
-            twitter = $scope.selectedMedium.media_twitter[0];
-        }
-        catch (err) {
-            twitter = "";
-        }
-
+        var twitter = $scope.selectedMedium.media_twitter;
         $scope.granularity = selected;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
@@ -166,14 +157,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
 
     $scope.update_list = function (page) {
 
-        var twitter;
-        try {
-            twitter = $scope.selectedMedium.media_twitter;
-        }
-        catch (err) {
-            twitter = "";
-        }
-
+        var twitter = $scope.selectedMedium.media_twitter;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "publications",
@@ -194,17 +178,13 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             $scope.page_init = range.page_init;
             $scope.page_end = range.page_end;
         })
-
     }
 
     $scope.update_histogram = function () {
         var date1 = $("#datepicker1").datepicker('getDate');
         var date2 = $("#datepicker2").datepicker('getDate');
-
         $scope.histogram_startdate = date1.toISOString().slice(0, 10) + " 00:00:00";
         $scope.histogram_enddate = date2.toISOString().slice(0, 10) + " 23:59:59";
-        $scope.selectedItem($scope.granularity);
-
     }
 
     $scope.get_input_data = function () {
@@ -213,9 +193,5 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
         $scope.update_list(1);
         $scope.selectedItem($scope.granularity);
     }
-
-    $scope.update_list(1);
-    //Draw Histogram for first time
-    $scope.selectedItem($scope.granularity);
 
 }]);
