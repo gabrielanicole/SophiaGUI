@@ -158,7 +158,6 @@ function generate_histogram(width, height, data_json) {
         .selectAll('rect')
         .attr("height", h2);
 
-
     minichart.select("g.y.axis").call(yAxis2);
     minichart.select("g.x.axis").call(xAxis2);
 
