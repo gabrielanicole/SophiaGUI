@@ -101,6 +101,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.page_end;
     $scope.size = 3;
     $scope.busy = false;
+    $scope.total_found;
 
     $scope.press_source = [];
     $scope.category = staticData.getCategoryList();
@@ -184,6 +185,15 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.selectedItem = function (selected) {
         $scope.granularity = selected;
         loadHistogram($scope.granularity);
+    }
+
+    $scope.validateTotalFound = function(){
+        if($scope.total_found <= 10000){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     function loadHistogram(granularity) {

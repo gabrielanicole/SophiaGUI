@@ -27,6 +27,15 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.selectedCategory = $scope.category[0];
     $scope.twitter = "";
 
+    $scope.validateTotalFound = function(){
+        if($scope.total_found <= 10000){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
     $scope.loadPressMedia = function () {
         PressMedia.getPressMediaList().then(function (response) {
             for (x in response.data) {
