@@ -402,7 +402,7 @@ def exportData(request):
 
         except Exception as e:
             print e
-            return HttpResponse('Error')
+            return HttpResponse(e)
 
     if request.method == 'GET':
         try:
@@ -441,4 +441,4 @@ def exportData(request):
 
         except Exception as e:
             print e
-            return HttpResponse('')
+            return HttpResponse(e)

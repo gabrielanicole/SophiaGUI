@@ -11,14 +11,24 @@ function generate_histogram(width, height, data_json) {
 
     var chart = d3.select("#histogram")
         .append("svg")
+        .attr("id", "selectedHistogram")
         .attr("class", "chart")
         .attr("width", w + margin.left + margin.right)
         .attr("height", h + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    chart.append("rect")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("fill", "white")
+        .attr("style","stroke:white")
+        .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")");
+
+
     var minichart = d3.select("#histogram")
         .append("svg")
+        .attr("id", "miniHistogram")
         .attr("class", "chart")
         .attr("width", w + margin2.left + margin2.right)
         .attr("height", h2 + margin2.top + margin2.bottom)

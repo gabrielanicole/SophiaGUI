@@ -170,7 +170,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
                 "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
                 "art_name_press_source": twitter,
                 "art_category": $scope.selectedCategory,
-                "pre_owner":$scope.selecteMediumGroup
+                "pre_owner": $scope.selecteMediumGroup
             }
 
             Articles.getArticlesList(json_data, page).then(function (data) {
@@ -202,15 +202,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         loadHistogram($scope.granularity);
     }
 
-    $scope.validateTotalFound = function () {
-        if ($scope.total_found <= 10000) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
     function loadHistogram(granularity) {
         var twitter = $scope.selectedMedium.media_twitter;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
@@ -223,7 +214,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "not_and": tag_values.not_contain_group,
             "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
             "art_category": $scope.selectedCategory,
-            "pre_owner":$scope.selecteMediumGroup
+            "pre_owner": $scope.selecteMediumGroup
         }
 
         var data = {
@@ -250,7 +241,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
             "art_name_press_source": twitter,
             "art_category": $scope.selectedCategory,
-            "pre_owner":$scope.selecteMediumGroup
+            "pre_owner": $scope.selecteMediumGroup
         }
 
         Articles.getArticlesList(json_data, page).then(function (data) {
@@ -323,7 +314,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "press_source": twitter,
             "new_name": $scope.news_case_name,
             "new_date": today,
-            "pre_owner":$scope.selecteMediumGroup,
+            "pre_owner": $scope.selecteMediumGroup,
             "follow_new_feed": checked
         }
 
@@ -337,6 +328,12 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             toastr.error("No ingresó nombre al caso noticioso");
         }
         $scope.news_case_name = "";
+    }
+
+    $scope.exportSVG = function () {
+        var svgString = new XMLSerializer().serializeToString(document.querySelector("#selectedHistogram"));
+        var svgImage = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+        saveAs(svgImage, "image");
     }
 
     function run() {
