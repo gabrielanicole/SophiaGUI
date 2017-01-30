@@ -33,7 +33,10 @@ app.factory('Articles', function ($http) {
 
 app.factory('ExportData', function ($http) {
     return {
-        save: function (data) {
+        save: function (data, opts) {
+            var target = document.getElementById('spinner')
+            var spinner = new Spinner(opts);
+            spinner.spin(target);
             $http({
                 method: 'POST',
                 url: '/exportData/',
@@ -45,6 +48,7 @@ app.factory('ExportData', function ($http) {
                 else {
                     var blob = new Blob([String(response.data)], { type: response.headers()['content-type'] });
                 }
+                spinner.stop(target);
                 saveAs(blob, response.headers()['file-name']);
             }, function errorCallback(response) {
                 console.log("Error Callback");

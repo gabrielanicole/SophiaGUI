@@ -36,8 +36,8 @@
             <button class="btn btn-default" ng-click="get_input_data()"> Buscar</button>
             <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal"> Actualizar Caso</button>
             <button id="exportButton" class="btn btn-default" data-toggle="modal" data-target="#exportDataModal" data-toggle="tooltip" title="Exportar el resultado de la búsqueda">Exportar</button>
- 	
-               </form>
+ 	          </form>
+
 		  </div>
 
     <div class="row">
@@ -232,6 +232,9 @@
                     <label><input type="radio" name="format" ng-click="checkbox.format='XML'" disabled>XML</label>
                   </div>
               </div>
+          </div>
+          <div class="row">
+            <div id="spinner"></div>
           </div>
         </div>
         <div class="modal-footer">
