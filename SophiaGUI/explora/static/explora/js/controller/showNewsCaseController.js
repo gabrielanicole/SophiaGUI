@@ -24,6 +24,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.category = staticData.getCategoryList();
     //Default values
     $scope.selectedMedium = [];
+    $scope.selecteMediumGroup = [];
     $scope.selectedCategory = $scope.category[0];
     $scope.twitter = "";
 
@@ -34,6 +35,20 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         else {
             return false;
         }
+    }
+
+
+    $scope.selecteMediumGroup;
+    function loadPressMediaGroups() {
+        PressMedia.getPressMediaGroups().then(function (response) {
+            $scope.press_media_groups = response.data.names;
+            $scope.press_media_groups.unshift("");
+            $scope.selecteMediumGroup = $scope.press_media_groups[0];
+        });
+    }
+    loadPressMediaGroups();
+    $scope.groupChange = function (group) {
+        $scope.selecteMediumGroup = group;
     }
 
     $scope.loadPressMedia = function () {
@@ -228,6 +243,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "not_and": tag_values.not_contain_group,
             "art_name_press_source": $scope.twitter,
             "art_category": $scope.selectedCategory,
+            "pre_owner":$scope.selecteMediumGroup,
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
         }
 
@@ -281,6 +297,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "idNot": idNot,
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
             "art_name_press_source": $scope.twitter,
+            "pre_owner":$scope.selecteMediumGroup,
             "art_category": $scope.selectedCategory
         }
         $scope.busy = true;
@@ -333,6 +350,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "category": $scope.selectedCategory,
             "press_source": $scope.twitter,
             "new_name": $scope.news_case_name,
+            "pre_owner":$scope.selecteMediumGroup,
             "follow_new_feed": checked
         }
 

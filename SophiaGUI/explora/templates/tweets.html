@@ -19,7 +19,7 @@
 
 				<div class="form-group">
 				        <div id="mediumGroupContainer" class="selectContainer" data-toggle="tooltip" title="Filtrar por grupo de medios">
-				            <select class="form-control" name="categoria" ng-model="selectedMediumGroup" ng-change="" ng-options="x for x in press_media_groups">
+				            <select class="form-control" name="categoria" ng-model="selectedMediumGroup" ng-change="groupChange(selectedMediumGroup)" ng-options="x|limitTo:25 for x in press_media_groups">
 				            </select>
 				       </div>
 				</div>

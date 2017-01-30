@@ -60,14 +60,20 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     }
     loadPressMedia();
 
+    $scope.selecteMediumGroup;
     function loadPressMediaGroups() {
         PressMedia.getPressMediaGroups().then(function (response) {
             $scope.press_media_groups = response.data.names;
             $scope.press_media_groups.unshift("");
+            $scope.selecteMediumGroup = $scope.press_media_groups[0];
+
         });
     }
-
     loadPressMediaGroups();
+
+    $scope.groupChange = function (group) {
+        $scope.selecteMediumGroup = group;
+    }
 
     $scope.mediaChange = function (media) {
         $scope.selectedMedium = media;
@@ -97,6 +103,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
                 "and": tag_values.must_contain_group,
                 "or": tag_values.should_contain_group,
                 "not_and": tag_values.not_contain_group,
+                "pre_owner":$scope.selecteMediumGroup,
                 "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
             }
 
@@ -151,6 +158,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
             "pub_username": twitter,
+            "pre_owner":$scope.selecteMediumGroup,
             "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
         }
 
@@ -176,6 +184,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
+            "pre_owner":$scope.selecteMediumGroup,
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
         }
 
