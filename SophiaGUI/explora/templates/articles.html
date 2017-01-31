@@ -11,7 +11,7 @@
 
 <div id="angularController" ng-controller="searchController">
 
-	 <div class=row>
+	 <div class="row">
 				<form class="navbar-form navbar-left" role="search">
 
 				    <div class="form-group">
@@ -39,7 +39,7 @@
             <input type="text" class="form-control" id="datepicker2">
             <button class="btn btn-default" ng-click="get_input_data()"> Buscar</button>
             <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal">Crear Caso</button>
-            <button id="exportButton" class="btn btn-default" data-toggle="modal" data-target="#exportDataModal" data-toggle="tooltip" title="Exportar el resultado de la búsqueda">Exportar</button>
+            <button id="exportButton" class="btn btn-default" data-toggle="modal" data-target="#exportDataModal" data-toggle="tooltip" title="Exportar el resultado de la búsqueda"><span class="glyphicon glyphicon-download-alt"></span></button>
 					</form>
 
 		</div>
@@ -67,11 +67,17 @@
                 <li ng-repeat="option in options"><a ng-click="selectedItem(option.value)">[[option.key]]</a></li>
              </ul>
          </div>
-      <button type="button" class="btn btn-default" ng-click="exportSVG()">Exportar Imagen</button>
+      <button type="button" class="btn btn-default" ng-click="exportSVG()"><span class="glyphicon glyphicon-download-alt"></span>  Exportar Imagen</button>
       </div>
     </div>
 
-   <div class = "row hidden-xs">
+    <div class="row">
+      <div class="col-md-12">
+        <p class="text-center" style="font-size: 20px; cursor:pointer" data-toggle="collapse" data-target="#hideHistogram"><span class="glyphicon glyphicon-chevron-up"></span></p>
+      </div>
+    </div>
+
+   <div id="hideHistogram" class = "row hidden-xs collapse in">
      <div class="col-md-12">
         <div id="histogram_container" style="width:100%">
             <div id="histogram"></div>
@@ -90,16 +96,16 @@
     </div>
 
     <div class="row">
-        <div class="col-md-3"></div>
+        <div class="col-md-4"></div>
         <!-- Offset-->
-        <div class="col-md-6">
+        <div class="col-md-4">
             <ul class="pagination">
                 <li><a href="#">&laquo;</a></li>
                 <li ng-repeat="page in range(page_init,page_end)"><a ng-click="page_number([[page]])" href=""> [[page]]</a></li>
                 <li><a href="#">&raquo;</a></li>
             </ul>
         </div>
-        <div class="col-md-3"></div>
+        <div class="col-md-4"></div>
         <!-- Offset-->
     </div>
 
@@ -121,6 +127,7 @@
                             <img class="img-responsive" alt="image-not-found" src="[[d.art_image_link]]">
                           </div>
                       </div>
+
                       <div class="row">
                         <div class="col-md-12">
                             <h5>[[d.art_name_press_source]] </h5>

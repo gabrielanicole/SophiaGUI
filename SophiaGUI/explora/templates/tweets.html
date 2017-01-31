@@ -59,12 +59,18 @@
     </div>
 
     <div class="row">
-        <div id="histogram_container" style="width:100%">
-            <div id="histogram">
-
-            </div>
-        </div>
+      <div class="col-md-12">
+        <p class="text-center" style="font-size: 20px; cursor:pointer" data-toggle="collapse" data-target="#hideHistogram"><span class="glyphicon glyphicon-chevron-up"></span></p>
+      </div>
     </div>
+
+   <div id="hideHistogram" class = "row hidden-xs collapse in">
+     <div class="col-md-12">
+        <div id="histogram_container" style="width:100%">
+            <div id="histogram"></div>
+        </div>
+     </div>
+  </div>
 
     <div id="tweetsContainer">
 
@@ -76,19 +82,19 @@
       </div>
     </div>
 
-        <div class="row">
-            <div class="col-md-3"></div>
-            <!-- Offset-->
-            <div class="col-md-6">
-                <ul class="pagination">
-                    <li><a href="#">&laquo;</a></li>
-                    <li ng-repeat="page in range(page_init,page_end)"><a ng-click="page_number([[page]])" href=""> [[page]]</a></li>
-                    <li><a href="#">&raquo;</a></li>
-                </ul>
-            </div>
-            <div class="col-md-3"></div>
-            <!-- Offset-->
+    <div class="row">
+        <div class="col-md-4"></div>
+        <!-- Offset-->
+        <div class="col-md-4">
+            <ul class="pagination">
+                <li><a href="#">&laquo;</a></li>
+                <li ng-repeat="page in range(page_init,page_end)"><a ng-click="page_number([[page]])" href=""> [[page]]</a></li>
+                <li><a href="#">&raquo;</a></li>
+            </ul>
         </div>
+        <div class="col-md-4"></div>
+        <!-- Offset-->
+    </div>
 
         <div infinite-scroll='loadNextItems()' infinite-scroll-disabled='busy' infinite-scroll-distance='0'>
         

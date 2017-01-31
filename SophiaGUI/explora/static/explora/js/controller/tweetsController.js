@@ -169,7 +169,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
 
         Tweets.getTweetsCountBy(data).then(function (response) {
             $("#histogram").empty();
-            var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300, data_json = data);
+            var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300, data_json = response.data);
         });
     }
 
