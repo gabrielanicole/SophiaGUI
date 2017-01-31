@@ -11,15 +11,15 @@
 				<form class="navbar-form navbar-left" role="search">
 
 				    <div class="form-group">
-				        <div id="mediaContainer" class="selectContainer">
-				            <select class="form-control" name="medio" ng-model="selectedMedium"  ng-change="mediaChange(selectedMedium)" ng-options="x.media_name for x in press_source | orderBy:'media_name'">
-				            </select>
+				        <div id="mediaContainer" class="selectContainer" data-toggle="tooltip" title="Filtrar por medio">
+				            <select class="form-control" name="medio" ng-model="selectedMedium" ng-change="mediaChange(selectedMedium)" ng-options="x.media_name for x in press_source | orderBy:'media_name'">
+                    </select>
 				        </div>
 		       </div>
 
 				    <div class="form-group">
-				        <div class="selectContainer">
-				            <select class="form-control" name="categoria" ng-change="categoryChange(selectedCategory)" ng-model="selectedCategory" ng-options="x for x in category">
+				        <div id="categoryContainer" class="selectContainer" data-toggle="tooltip" title="Filtrar por categoría">
+				            <select class="form-control" name="categoria" ng-model="selectedCategory" ng-change="categoryChange(selectedCategory)" ng-options="x for x in category">
 				            </select>
 				        </div>
 				    </div>
@@ -63,9 +63,9 @@
                 <li ng-repeat="option in options"><a ng-click="loadHistogram(option.value)">[[option.key]]</a></li>
              </ul>
          </div>
+         <button type="button" class="btn btn-default" ng-click="exportSVG()">Exportar Imagen</button>
       </div>
     </div>
-
 
    <div class = "row">
        <div id="histogram_container" style="width:100%">
@@ -101,12 +101,11 @@
     <div infinite-scroll='loadNextItems()' infinite-scroll-disabled='busy' infinite-scroll-distance='0'>
           <div ng-repeat="d in articulos">
             <div ng-class="row|($index % 4 == 0)">
-
               <div class="col-md-3 news-deploy">
 
                       <div class="row-fluid">
                           <div class="col-md-12">
-                               <button id="del" type="button" class="close" data-toggle="tooltip"  data-placement="top" title="Ocultar" ng-click="removeArticle([[d.art_id]])">&times;</button>
+                               <button type="button" class="close" data-toggle="tooltip"  data-placement="top" title="Ocultar" ng-click="removeArticle([[d.art_id]])">&times;</button>
                           </div>
                         </div>
 

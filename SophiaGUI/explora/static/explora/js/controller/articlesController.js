@@ -63,7 +63,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
     $scope.exportData = function () {
 
-
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             search: {

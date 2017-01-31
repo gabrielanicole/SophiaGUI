@@ -1,6 +1,12 @@
 app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataFormat', '$window', 'staticData', 'ExportData', 'PressMedia', 'Articles', 'NewsCases', function (
     $scope, $http, $location, dataFormat, $window, staticData, ExportData, PressMedia, Articles, NewsCases) {
 
+
+    $("#mediaContainer").tooltip();
+    $("#categoryContainer").tooltip();
+    $("#exportButton").tooltip();
+    $("#mediumGroupContainer").tooltip();
+
     var opts = {
         lines: 15 // The number of lines to draw
         , length: 34 // The length of each line
@@ -154,6 +160,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
                 "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
                 "art_category": $scope.selectedCategory,
                 "idNot": $scope.idNot,
+                "pre_owner": $scope.selecteMediumGroup
             },
             "checkbox": $scope.checkbox
         }
@@ -271,7 +278,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "pre_owner": $scope.selecteMediumGroup,
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
         }
-        console.log(JSON.stringify(json_data));
+
         var data = {
             startdate: $scope.histogram_startdate,
             enddate: $scope.histogram_enddate,
@@ -325,7 +332,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "pre_owner": $scope.selecteMediumGroup,
             "art_category": $scope.selectedCategory
         }
-        console.log(JSON.stringify(json_data));
+
         $scope.busy = true;
 
         Articles.getArticlesList(json_data, $scope.actual_page).then(function (data) {
@@ -393,7 +400,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             url: '/articles/modal_new',
             data: $.param(data)
         }).then(function successCallback(response) {
-            console.log(response)
             if ($('#myModal').length) {
                 $('#myModal').remove();
             }
@@ -416,6 +422,29 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         NewsCases.removeArticle(data).then(function (response) {
             $scope.update_list($scope.actual_page, data);
         })
+    }
+
+        $scope.exportSVG = function () {
+        var svgString = new XMLSerializer().serializeToString(document.querySelector("#selectedHistogram"));
+        svgImage = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+        saveAs(svgImage, "exportImage.svg");
+        /*
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        ctx.canvas.width = 1066;
+        ctx.canvas.height = 300;
+        var DOMURL = window.URL || window.webkitURL || window;
+        var img = new Image();
+        var url = DOMURL.createObjectURL(svgImage);
+        img.onload = function () {
+            ctx.drawImage(img, 0, 0);
+            DOMURL.revokeObjectURL(url);
+            var imgURI = canvas
+                .toDataURL('image/png')
+                .replace('image/png', 'image/octet-stream');
+            //window.open(imgURI,"_self")
+        };
+        img.src = url; */
     }
 
 }]);
