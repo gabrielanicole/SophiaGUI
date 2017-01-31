@@ -1,7 +1,6 @@
 app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataFormat', '$window', 'staticData', 'ExportData', 'PressMedia', 'Articles', 'NewsCases', function (
     $scope, $http, $location, dataFormat, $window, staticData, ExportData, PressMedia, Articles, NewsCases) {
 
-
     $("#mediaContainer").tooltip();
     $("#categoryContainer").tooltip();
     $("#exportButton").tooltip();

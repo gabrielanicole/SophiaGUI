@@ -171,16 +171,16 @@ USE_TZ = True
 
 #STATIC_URL = '/static/'
 
-STATIC_URL = '/static/'
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STATICFILES_DIRS = (
-                    os.path.join(BASE_DIR, STATIC_URL),
-                )
+#STATIC_URL = '/static/'
+#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#STATICFILES_DIRS = (
+                #    os.path.join(BASE_DIR, STATIC_URL),
+             #   )
 
 #PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 #STATIC_ROOT = os.path.join(PROJECT_ROOT, '/explora/static/')
 
-#STATIC_URL = '/static/'
+STATIC_URL = '/static/'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR=os.path.dirname(__file__)
