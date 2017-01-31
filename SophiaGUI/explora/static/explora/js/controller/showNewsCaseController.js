@@ -140,7 +140,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
 
     $scope.checkbox = {
         art_title: false,
-        art_content: false,
         art_date: false,
         art_name_press_source: false,
         art_category: false,
@@ -171,7 +170,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
 
     $scope.validateExport = function () {
         if (($scope.checkbox.art_title == true ||
-            $scope.checkbox.art_content == true ||
             $scope.checkbox.art_date == true ||
             $scope.checkbox.art_name_press_source == true ||
             $scope.checkbox.art_category == true ||

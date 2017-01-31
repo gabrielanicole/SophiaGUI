@@ -23,6 +23,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         , hwaccel: false // Whether to use hardware acceleration
         , position: 'absolute' // Element positioning
     }
+    
     //Date Picker Setup
     $("#datepicker1").datepicker({
         format: "yyyy-mm-dd",
@@ -52,7 +53,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
 
     $scope.checkbox = {
-        art_title: false,
         art_content: false,
         art_date: false,
         art_name_press_source: false,
@@ -81,8 +81,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     }
 
     $scope.validateExport = function () {
-        if (($scope.checkbox.art_title == true ||
-            $scope.checkbox.art_content == true ||
+        if (($scope.checkbox.art_content == true ||
             $scope.checkbox.art_date == true ||
             $scope.checkbox.art_name_press_source == true ||
             $scope.checkbox.art_category == true ||
