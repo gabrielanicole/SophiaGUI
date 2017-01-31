@@ -1,5 +1,6 @@
 app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataFormat', '$window', 'staticData', 'ExportData', 'PressMedia', 'Articles', 'NewsCases', function (
     $scope, $http, $location, dataFormat, $window, staticData, ExportData, PressMedia, Articles, NewsCases) {
+
     var opts = {
         lines: 15 // The number of lines to draw
         , length: 34 // The length of each line
@@ -27,6 +28,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     var elastic_id = absUrl[absUrl.length - 1];
     var data = { 'elastic_id': elastic_id };
 
+
     $scope.histogram_startdate;
     $scope.histogram_enddate;
     $scope.idNot;
@@ -46,7 +48,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.category = staticData.getCategoryList();
     //Default values
     $scope.selectedMedium = [];
-    $scope.selecteMediumGroup = [];
+    $scope.selecteMediumGroup = "";
     $scope.selectedCategory = $scope.category[0];
     $scope.twitter = "";
 
@@ -59,26 +61,27 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         }
     }
 
-
     $scope.selecteMediumGroup;
-    function loadPressMediaGroups() {
+    function loadPressMediaGroups(data) {
         PressMedia.getPressMediaGroups().then(function (response) {
             $scope.press_media_groups = response.data.names;
             $scope.press_media_groups.unshift("");
             $scope.selecteMediumGroup = $scope.press_media_groups[0];
+            $scope.loadPressMedia(data);
         });
     }
-    loadPressMediaGroups();
+
     $scope.groupChange = function (group) {
         $scope.selecteMediumGroup = group;
     }
 
-    $scope.loadPressMedia = function () {
+    $scope.loadPressMedia = function (data) {
         PressMedia.getPressMediaList().then(function (response) {
             $scope.press_source = response.data;
             var empty = { media_id: "", media_name: "", media_twitter: "" };
             $scope.press_source.unshift(empty);
             $scope.selectedMedium = empty;
+            $scope.restoreSession(data);
         });
     }
 
@@ -154,7 +157,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             },
             "checkbox": $scope.checkbox
         }
-        ExportData.save(json_data,opts);
+        ExportData.save(json_data, opts);
     }
 
     $scope.validateExport = function () {
@@ -217,15 +220,11 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     }
 
     NewsCases.getNewsCaseInfo(data).then(function (response) {
-        $scope.loadPressMedia();
-        $scope.restoreSession(response.data);
-        $scope.restoreHistogram();
-        $scope.update_list(1);
+        loadPressMediaGroups(response.data);
     })
 
     $scope.restoreSession = function (data) {
         //Restore what the user searched
-        console.log(data);
         if (data.follow_new_feed == 'true') {
             histogram_startdate = String(data.news_case_data.new_date_from.slice(0, 10));
             histogram_enddate = new Date().toISOString().slice(0, 10);
@@ -253,6 +252,8 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.selectedMedium.media_twitter = data.news_case_data.new_press_source;
         $scope.selecteMediumGroup = data.news_case_data.new_pre_owner;
 
+        $scope.update_list(1);
+        $scope.restoreHistogram();
     }
 
     $scope.loadHistogram = function (selected) {
@@ -267,10 +268,10 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "not_and": tag_values.not_contain_group,
             "art_name_press_source": $scope.twitter,
             "art_category": $scope.selectedCategory,
-            "pre_owner":$scope.selecteMediumGroup,
+            "pre_owner": $scope.selecteMediumGroup,
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
         }
-
+        console.log(JSON.stringify(json_data));
         var data = {
             startdate: $scope.histogram_startdate,
             enddate: $scope.histogram_enddate,
@@ -321,9 +322,10 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "idNot": idNot,
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
             "art_name_press_source": $scope.twitter,
-            "pre_owner":$scope.selecteMediumGroup,
+            "pre_owner": $scope.selecteMediumGroup,
             "art_category": $scope.selectedCategory
         }
+        console.log(JSON.stringify(json_data));
         $scope.busy = true;
 
         Articles.getArticlesList(json_data, $scope.actual_page).then(function (data) {
@@ -374,7 +376,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "category": $scope.selectedCategory,
             "press_source": $scope.twitter,
             "new_name": $scope.news_case_name,
-            "pre_owner":$scope.selecteMediumGroup,
+            "pre_owner": $scope.selecteMediumGroup,
             "follow_new_feed": checked
         }
 
