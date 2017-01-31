@@ -377,8 +377,6 @@ def exportData(request):
                 corpusFields.append('art_url')
             if(options['art_name_press_source'] == True):
                 corpusFields.append('art_name_press_source')
-            if(options['art_content'] == True):
-                corpusFields.append('art_content')
             if(options['art_category'] == True):
                 corpusFields.append('art_category')
             

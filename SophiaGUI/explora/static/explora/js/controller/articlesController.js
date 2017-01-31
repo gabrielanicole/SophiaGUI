@@ -81,7 +81,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     }
 
     $scope.validateExport = function () {
-        if (($scope.checkbox.art_content == true ||
+        if (($scope.checkbox.art_title == true ||
             $scope.checkbox.art_date == true ||
             $scope.checkbox.art_name_press_source == true ||
             $scope.checkbox.art_category == true ||
