@@ -23,7 +23,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         , hwaccel: false // Whether to use hardware acceleration
         , position: 'absolute' // Element positioning
     }
-    
+
     //Date Picker Setup
     $("#datepicker1").datepicker({
         format: "yyyy-mm-dd",
@@ -245,7 +245,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
         Articles.getArticlesCountBy(data).then(function (data) {
             $("#histogram").empty();
-            var histograma = generate_histogram(width = ($scope.windowsWidth - 300), height = 300, data_json = data);
+            var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300, data_json = data);
         })
     }
 
@@ -264,7 +264,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "art_category": $scope.selectedCategory,
             "pre_owner": $scope.selecteMediumGroup
         }
- 
+
         Articles.getArticlesList(json_data, page).then(function (data) {
             $scope.articulos = data.results;
             $scope.total_pages = parseInt(data.totalpages);

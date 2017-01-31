@@ -103,7 +103,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
                 "and": tag_values.must_contain_group,
                 "or": tag_values.should_contain_group,
                 "not_and": tag_values.not_contain_group,
-                "pre_owner":$scope.selecteMediumGroup,
+                "pre_owner": $scope.selecteMediumGroup,
                 "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
             }
 
@@ -158,7 +158,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
             "pub_username": twitter,
-            "pre_owner":$scope.selecteMediumGroup,
+            "pre_owner": $scope.selecteMediumGroup,
             "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
         }
 
@@ -169,7 +169,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
 
         Tweets.getTweetsCountBy(data).then(function (response) {
             $("#histogram").empty();
-            var histograma = generate_histogram(width = ($scope.windowsWidth - 300), height = 300, data_json = response.data);
+            var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300, data_json = data);
         });
     }
 
@@ -184,7 +184,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
-            "pre_owner":$scope.selecteMediumGroup,
+            "pre_owner": $scope.selecteMediumGroup,
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
         }
 

@@ -14,7 +14,6 @@
   <script src="/static/explora/externalJS/spin.min.js"></script>
   <script src="https://use.fontawesome.com/6411ef667f.js"></script>
 
-
 	<!-- Bootstrap toogle -->
 	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
   <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
@@ -48,6 +47,7 @@
 	<nav id="custom-bootstrap-menu" class="navbar navbar-default">
 	  <div class="container-fluid">
 	    <div class="navbar-header">
+				<a class="navbar-brand" href="#"><span onclick="openNav()" class="glyphicon glyphicon-menu-hamburger"></span></a>
 	      <a class="navbar-brand" href="/articles">Sophia Project</a>
 	    </div>
 			
@@ -62,12 +62,9 @@
 		    	</li>
 		    {% endif %}
 	      	<li>
-	      		<a>{{user}}</a>
+						<p class="navbar-text">{{user}}</p>
 	      	</li>
     	  <li>
-		    <p style="padding-right:10px" class = "navbar-btn">
-		       <a href="#" class="btn btn-default" role="button"><span class="glyphicon glyphicon-cog"></span> Configuración</a>
-		    </p>
 		  </li>
 		  <li>
 		    <p style ="padding-right:10px" class = "navbar-btn">
@@ -79,20 +76,40 @@
 	</nav>
 
 	<div class="container-fluid">
+
+
+		<script>
+		function openNav() {
+				document.getElementById("mySidenav").style.width = "250px";
+		}
+		function closeNav() {
+				document.getElementById("mySidenav").style.width = "0";
+		}
+		</script>
+	
+		<div id="mySidenav" class="sidenav">
+			<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+			<a href="/articles"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Noticias</a>
+			<a href="/tweets"><i class="fa fa-twitter" aria-hidden="true"></i> Tweets</a>
+			<a href="/newscases"><i class="fa fa-file" aria-hidden="true"></i> Casos Noticiosos</a>
+			<a href="/pressmedia"><i class="fa fa-address-card" aria-hidden="true"></i></i> Medios de Prensa</a>
+		</div>
+
+		<!--
 		<div class="col-md-2">
 			<ul class="nav nav-pills nav-stacked">
 			  <li role="presentation"><a href="/articles"><i class="fa fa-newspaper-o" aria-hidden="true"></i> Noticias</a></li>
 				<li role="presentation"><a href="/tweets"><i class="fa fa-twitter" aria-hidden="true"></i> Tweets</a></li>
 				<li role="presentation"><a href="/newscases"><i class="fa fa-file" aria-hidden="true"></i> Casos Noticiosos</a></li>
-			  <li role="presentation"><a href="/pressmedia"><i class="fa fa-address-card" aria-hidden="true"></i>
-</i> Medios de Prensa</a></li>
+			  <li role="presentation"><a href="/pressmedia"><i class="fa fa-address-card" aria-hidden="true"></i></i> Medios de Prensa</a></li>
 			</ul>
-			</div>
+		</div> -->
 
-		<div id="main-content" class="col-md-10" ng-app="explora">
+		<div id="main-content" class="col-md-12" ng-app="explora">
         {% block content %}
         {% endblock %}
-       </div>
+    </div>
+
 </div>
 </body>
 </html>

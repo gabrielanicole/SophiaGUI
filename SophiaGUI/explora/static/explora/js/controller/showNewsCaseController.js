@@ -294,7 +294,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         Articles.getArticlesCountBy(data).then(function (data) {
             $("#histogram").empty();
             //Add the new histogram
-            var histograma = generate_histogram(width = ($scope.windowsWidth - 300), height = 300, data_json = data);
+            var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300, data_json = data);
         })
 
     }
