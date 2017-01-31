@@ -51,10 +51,12 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.id_not;
 
     $scope.press_source = [];
+    $scope.press_media_groups = [""];
+    $scope.selectedMediumGroup = $scope.press_media_groups[0];
     $scope.category = staticData.getCategoryList();
     //Default values
     $scope.selectedMedium = [];
-    $scope.selecteMediumGroup = "";
+    $scope.selectedMediumGroup;
     $scope.selectedCategory = $scope.category[0];
     $scope.twitter = "";
 
@@ -67,18 +69,18 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         }
     }
 
-    $scope.selecteMediumGroup;
+
     function loadPressMediaGroups(data) {
         PressMedia.getPressMediaGroups().then(function (response) {
             $scope.press_media_groups = response.data.names;
             $scope.press_media_groups.unshift("");
-            $scope.selecteMediumGroup = $scope.press_media_groups[0];
+            $scope.selectedMediumGroup = $scope.press_media_groups[0];
             $scope.loadPressMedia(data);
         });
     }
 
     $scope.groupChange = function (group) {
-        $scope.selecteMediumGroup = group;
+        $scope.selectedMediumGroup = group;
     }
 
     $scope.loadPressMedia = function (data) {
@@ -160,7 +162,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
                 "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
                 "art_category": $scope.selectedCategory,
                 "idNot": $scope.idNot,
-                "pre_owner": $scope.selecteMediumGroup
+                "pre_owner": $scope.selectedMediumGroup
             },
             "checkbox": $scope.checkbox
         }
@@ -254,11 +256,16 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         must_contain.add(new_and);
         not_contain.add(new_not);
 
-        $scope.twitter = data.news_case_data.new_category;
-        $scope.selectedCategory = data.news_case_data.new_category;
-        $scope.selectedMedium.media_twitter = data.news_case_data.new_press_source;
-        $scope.selecteMediumGroup = data.news_case_data.new_pre_owner;
+        for (var a = 0; a < $scope.press_source.length; a++) {
+            if ($scope.press_source[a].media_twitter == data.news_case_data.new_press_source) {
+                $scope.selectedMedium = $scope.press_source[a];
+                break;
+            }
+        }
 
+        $scope.selectedCategory = data.news_case_data.new_category;
+        //$scope.selectedMedium.media_twitter = data.news_case_data.new_press_source;
+        $scope.selectedMediumGroup = data.news_case_data.new_pre_owner;
         $scope.update_list(1);
         $scope.restoreHistogram();
     }
@@ -275,7 +282,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "not_and": tag_values.not_contain_group,
             "art_name_press_source": $scope.twitter,
             "art_category": $scope.selectedCategory,
-            "pre_owner": $scope.selecteMediumGroup,
+            "pre_owner": $scope.selectedMediumGroup,
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
         }
 
@@ -329,7 +336,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "idNot": idNot,
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
             "art_name_press_source": $scope.twitter,
-            "pre_owner": $scope.selecteMediumGroup,
+            "pre_owner": $scope.selectedMediumGroup,
             "art_category": $scope.selectedCategory
         }
 
@@ -383,7 +390,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "category": $scope.selectedCategory,
             "press_source": $scope.twitter,
             "new_name": $scope.news_case_name,
-            "pre_owner": $scope.selecteMediumGroup,
+            "pre_owner": $scope.selectedMediumGroup,
             "follow_new_feed": checked
         }
 
@@ -424,7 +431,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         })
     }
 
-        $scope.exportSVG = function () {
+    $scope.exportSVG = function () {
         var svgString = new XMLSerializer().serializeToString(document.querySelector("#selectedHistogram"));
         svgImage = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
         saveAs(svgImage, "exportImage.svg");

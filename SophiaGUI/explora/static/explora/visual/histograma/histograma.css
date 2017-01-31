@@ -13,23 +13,17 @@
   x.axis path {
   fill: none;
   stroke: #000;
-  shape-rendering: crispEdges;
   }
   y.axis line,
   y.axis path {
     fill: none;
     stroke: #000;
-    shape-rendering: crispEdges;
   }
   .brush {
   fill: lightgray;
   fill-opacity: .75;
-  shape-rendering: crispEdges;
 }
-.area {
-  fill: #078770;
-  clip-path: url(#clip);
-}
+
 
 #tip {
     position: absolute;

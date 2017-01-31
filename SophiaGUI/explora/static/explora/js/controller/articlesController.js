@@ -265,7 +265,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "art_category": $scope.selectedCategory,
             "pre_owner": $scope.selecteMediumGroup
         }
-
+ 
         Articles.getArticlesList(json_data, page).then(function (data) {
             $scope.articulos = data.results;
             $scope.total_pages = parseInt(data.totalpages);

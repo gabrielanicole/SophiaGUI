@@ -12,7 +12,7 @@
 
 				    <div class="form-group">
 				        <div id="mediaContainer" class="selectContainer" data-toggle="tooltip" title="Filtrar por medio">
-				            <select class="form-control" name="medio" ng-model="selectedMedium" ng-change="mediaChange(selectedMedium)" ng-options="x.media_name for x in press_source | orderBy:'media_name'">
+				            <select class="form-control" name="medio" data-ng-model="selectedMedium" data-ng-change="mediaChange(selectedMedium)" ng-options="x.media_name for x in press_source | orderBy:'media_name'">
                     </select>
 				        </div>
 		       </div>
@@ -26,7 +26,7 @@
 
 				  <div class="form-group">
 				        <div id="mediumGroupContainer" class="selectContainer" data-toggle="tooltip" title="Filtrar por grupo de medios">
-				            <select class="form-control" name="categoria" ng-model="selectedMediumGroup" ng-change="groupChange(selectedMediumGroup)" ng-options="x|limitTo:25 for x in press_media_groups">
+				            <select class="form-control" name="medioGroup" data-ng-options="x|limitTo:25 for x in press_media_groups track by x" data-ng-model="selectedMediumGroup" data-ng-change="groupChange(selectedMediumGroup)">
 				            </select>
 				       </div>
 			  	</div>
