@@ -168,4 +168,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR=os.path.dirname(__file__)
-STATIC_ROOT = os.path.join(PROJECT_DIR, '../explora/static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'explora/static/')

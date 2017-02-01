@@ -61,7 +61,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         { key: "Año", value: "year" }
     ];
 
-
     $scope.checkbox = {
         art_content: false,
         art_date: false,
