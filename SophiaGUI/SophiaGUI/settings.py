@@ -160,6 +160,7 @@ SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -174,3 +175,7 @@ STATIC_URL = '/static/'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR=os.path.dirname(__file__)
 STATIC_ROOT = os.path.join(BASE_DIR, 'explora/static/')
+
+STATICFILES_DIRS = (
+                    os.path.join(BASE_DIR, 'explora/static/'),
+                )
