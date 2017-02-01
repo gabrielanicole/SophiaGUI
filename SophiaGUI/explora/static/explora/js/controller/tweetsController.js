@@ -1,5 +1,13 @@
 app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 'Tweets', 'PressMedia','ExportData', function (
     $scope, $http, dataFormat, $window, Tweets, PressMedia, ExportData) {
+        
+    $('#hideHistogram').on('shown.bs.collapse', function () {
+        $("#collapseIcon").removeClass("glyphicon glyphicon-chevron-up").addClass("glyphicon glyphicon-chevron-down");
+    });
+
+    $('#hideHistogram').on('hidden.bs.collapse', function () {
+        $("#collapseIcon").removeClass("glyphicon glyphicon-chevron-down").addClass("glyphicon glyphicon-chevron-up");
+    });
 
     $scope.total_pages;
     $scope.actual_page;

@@ -25,17 +25,17 @@
       </div>
     </div>
 
-    <div class="row pagination_container">
-        <div class="col-md-3 col-centered"></div>
+    <div class="row">
+        <div class="col-md-4"></div>
         <!-- Offset-->
-        <div class="col-md-6 col-centered">
+        <div class="col-md-4" style="text-align:center">
             <ul class="pagination">
                 <li><a href="#">&laquo;</a></li>
                 <li ng-repeat="page in range(page_init,page_end)"><a ng-click="page_number([[page]])" href=""> [[page]]</a></li>
                 <li><a href="#">&raquo;</a></li>
             </ul>
         </div>
-        <div class="col-md-3 col-centered"></div>
+        <div class="col-md-4"></div>
         <!-- Offset-->
     </div>
 

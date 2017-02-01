@@ -5,7 +5,14 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $("#categoryContainer").tooltip();
     $("#exportButton").tooltip();
     $("#mediumGroupContainer").tooltip();
+    
+    $('#hideHistogram').on('shown.bs.collapse', function () {
+        $("#collapseIcon").removeClass("glyphicon glyphicon-chevron-up").addClass("glyphicon glyphicon-chevron-down");
+    });
 
+    $('#hideHistogram').on('hidden.bs.collapse', function () {
+        $("#collapseIcon").removeClass("glyphicon glyphicon-chevron-down").addClass("glyphicon glyphicon-chevron-up");
+    });
     var opts = {
         lines: 15 // The number of lines to draw
         , length: 34 // The length of each line

@@ -37,7 +37,7 @@
 
             <input type="text" class="form-control" id="datepicker1">
             <input type="text" class="form-control" id="datepicker2">
-            <button class="btn btn-default" ng-click="get_input_data()"> Buscar</button>
+            <button class="btn btn-default" ng-click="get_input_data()"><span class="glyphicon glyphicon-search"></span> Buscar</button>
             <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal">Crear Caso</button>
             <button id="exportButton" class="btn btn-default" data-toggle="modal" data-target="#exportDataModal" data-toggle="tooltip" title="Exportar el resultado de la búsqueda"><span class="glyphicon glyphicon-download-alt"></span></button>
 					</form>
@@ -73,7 +73,7 @@
 
     <div class="row hidden-xs">
       <div class="col-md-12">
-        <p class="text-center" style="font-size: 20px; cursor:pointer" data-toggle="collapse" data-target="#hideHistogram"><span class="glyphicon glyphicon-chevron-up"></span></p>
+        <p class="text-center" style="font-size: 20px; cursor:pointer" data-toggle="collapse" data-target="#hideHistogram"><span id="collapseIcon" class="glyphicon glyphicon-chevron-down"></span></p>
       </div>
     </div>
 
@@ -98,7 +98,7 @@
     <div class="row">
         <div class="col-md-4"></div>
         <!-- Offset-->
-        <div class="col-md-4">
+        <div class="col-md-4" style="text-align:center">
             <ul class="pagination">
                 <li><a href="#">&laquo;</a></li>
                 <li ng-repeat="page in range(page_init,page_end)"><a ng-click="page_number([[page]])" href=""> [[page]]</a></li>
