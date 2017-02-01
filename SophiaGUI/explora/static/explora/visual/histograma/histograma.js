@@ -22,7 +22,7 @@ function generate_histogram(width, height, data_json) {
         .attr("width", "100%")
         .attr("height", "100%")
         .attr("fill", "white")
-        .attr("style","stroke:white")
+        .attr("style", "stroke:white")
         .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")");
 
 
@@ -182,6 +182,8 @@ function generate_histogram(width, height, data_json) {
 
     function brushed() {
 
+        var scope = angular.element($("#angularController")).scope();
+
         var brush_values = brush.extent();
         //Cambiar el dominio para que sean solo dentro de los valores del selected data
         //x.domain([brush_values[0],brush_values[1]]);
@@ -198,7 +200,7 @@ function generate_histogram(width, height, data_json) {
         chart.selectAll(".bar2").remove();
 
         var ymax = 0;
-        chart.selectAll(".bar2")
+        var a = chart.selectAll(".bar2")
             .data(data)
             .enter()
             .append("rect")
@@ -212,11 +214,11 @@ function generate_histogram(width, height, data_json) {
                 }
             })
             .attr("class", "bar2")
+            .attr("style", "cursor:pointer")
             .attr("x", function (d) {
                 return x(d.key_as_string);
             })
             .attr("width", function (d) {
-                e = Object.keys(d).length;
                 return w / (n_e - 1);
             })
             .attr("y", function (d) { return y(d.doc_count); })
@@ -238,10 +240,24 @@ function generate_histogram(width, height, data_json) {
                     .style("top", 2000 + "px")
                     .style("opacity", 0);
             })
-            .on("click", function (d) {
-                console.log(d);
+            .on("click", function (d, i) {
+                getDate(JSON.stringify(d.key_as_string),JSON.stringify(a.data()[i + 1].key_as_string));
             })
             .style("fill", "#078770");
+
+        function getDate(date, date2) {
+
+            var aux_format = d3.time.format("%Y-%m-%d %H:%M:%S");
+            date = JSON.parse(date);
+            date2 = JSON.parse(date2);
+            aux_startdate = new Date(date);
+            aux_enddate = new Date(date2);
+            scope.$apply(function () {
+                scope.startdate = aux_format(aux_startdate);
+                scope.enddate = aux_format(aux_enddate);
+                scope.update_list(1);
+            })
+        }
 
         chart.select("g.y.axis").call(yAxis);
         chart.select("g.x.axis").call(xAxis);
@@ -249,7 +265,6 @@ function generate_histogram(width, height, data_json) {
         var startdate = String(brush_values[0].toISOString().slice(0, 19)).replace("T", " ");
         var enddate = String(brush_values[1].toISOString().slice(0, 19)).replace("T", " ");
 
-        var scope = angular.element($("#angularController")).scope();
         scope.$apply(function () {
             scope.startdate = startdate;
             scope.enddate = enddate;

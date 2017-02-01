@@ -56,7 +56,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         { key: "Minuto", value: "minute" },
         { key: "Hora", value: "hour" },
         { key: "Día", value: "day" },
-        { key: "Semana", value: "week" },
         { key: "Mes", value: "month" },
         { key: "Año", value: "year" }
     ];

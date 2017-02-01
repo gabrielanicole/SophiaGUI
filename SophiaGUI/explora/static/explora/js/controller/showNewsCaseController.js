@@ -103,7 +103,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         { key: "Minuto", value: "minute" },
         { key: "Hora", value: "hour" },
         { key: "Día", value: "day" },
-        { key: "Semana", value: "week" },
         { key: "Mes", value: "month" },
         { key: "Año", value: "year" }
     ];
