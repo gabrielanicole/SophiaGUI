@@ -2,6 +2,7 @@
 {% block header %}
 <link rel="stylesheet" href="/static/explora/tweets.css" type="text/css">
 <script type="text/javascript" src="/static/explora/js/controller/tweetsController.js"></script>
+<script type="text/javascript" src="/static/explora/externalJS/filesaver.min.js"></script>
 {% endblock header %}
 
 {% block content %}
@@ -55,7 +56,8 @@
                     <li ng-repeat="option in options"><a ng-click="selectedItem(option.value)">[[option.key]]</a></li>
                 </ul>
             </div>
-        </div>
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#exportImage"><span class="glyphicon glyphicon-download-alt"></span>  Exportar Imagen</button>
+           </div>
     </div>
 
     <div class="row hidden-xs">
@@ -139,6 +141,38 @@
               <p style="color:white"><span id="date">0</span></p>
           </div>
     </div>
+
+    <!-- Canvas For the PNG output -->
+ <canvas id="canvas" class="hidden" ></canvas>
+      <!-- Modal -->
+  <div id="exportImage" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header" style="background-color:#078770">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" style="text-align:center; color:White">Exportar Imagen</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+              <div class="col-md-12">
+                  <p><strong>Formato de salida:</strong></p>
+                  <div class="radio">
+                    <label><input type="radio" name="format" ng-click="exportImageFormat='PNG'">PNG</label>
+                  </div>
+                  <div class="radio">
+                    <label><input type="radio" name="format" ng-click="exportImageFormat='SVG'">SVG</label>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-default" ng-click="exportImage(exportImageFormat)">Exportar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>
 {% endblock content %}

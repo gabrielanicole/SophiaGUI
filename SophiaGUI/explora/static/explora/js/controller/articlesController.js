@@ -351,27 +351,10 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         $scope.news_case_name = "";
     }
 
-    $scope.exportSVG = function () {
-        var svgString = new XMLSerializer().serializeToString(document.querySelector("#selectedHistogram"));
-        svgImage = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
-        saveAs(svgImage, "exportImage.svg");
-        /*
-        var canvas = document.getElementById('canvas');
-        var ctx = canvas.getContext('2d');
-        ctx.canvas.width = 1066;
-        ctx.canvas.height = 300;
-        var DOMURL = window.URL || window.webkitURL || window;
-        var img = new Image();
-        var url = DOMURL.createObjectURL(svgImage);
-        img.onload = function () {
-            ctx.drawImage(img, 0, 0);
-            DOMURL.revokeObjectURL(url);
-            var imgURI = canvas
-                .toDataURL('image/png')
-                .replace('image/png', 'image/octet-stream');
-            //window.open(imgURI,"_self")
-        };
-        img.src = url; */
+    /* Export Image Secction */
+    $scope.exportImageFormat ="PNG";
+    $scope.exportImage = function (format) {
+          ExportData.exportImage(format);
     }
 
     function run() {

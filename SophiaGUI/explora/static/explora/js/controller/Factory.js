@@ -53,6 +53,31 @@ app.factory('ExportData', function ($http) {
             }, function errorCallback(response) {
                 console.log("Error Callback");
             });
+        },
+        exportImage: function (format) {
+            var svgString = new XMLSerializer().serializeToString(document.querySelector("#selectedHistogram"));
+            svgImage = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+            if (format == 'PNG') {
+                var canvas = document.getElementById('canvas');
+                var ctx = canvas.getContext('2d');
+                ctx.canvas.width = $('#selectedHistogram').width();
+                ctx.canvas.height = $('#selectedHistogram').height();
+                var DOMURL = window.URL || window.webkitURL || window;
+                var img = new Image();
+                var url = DOMURL.createObjectURL(svgImage);
+                img.onload = function () {
+                    ctx.drawImage(img, 0, 0);
+                    DOMURL.revokeObjectURL(url);
+                    var imgURI = canvas
+                        .toDataURL('image/png')
+                        .replace('image/png', 'image/octet-stream');
+                    window.open(imgURI, "_self")
+                };
+                img.src = url;
+            }
+            if (format == 'SVG') {
+                saveAs(svgImage, "exportImage.svg");
+            }
         }
     }
 });

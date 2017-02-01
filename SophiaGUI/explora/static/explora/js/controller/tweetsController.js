@@ -1,5 +1,5 @@
-app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 'Tweets', 'PressMedia', function (
-    $scope, $http, dataFormat, $window, Tweets, PressMedia) {
+app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 'Tweets', 'PressMedia','ExportData', function (
+    $scope, $http, dataFormat, $window, Tweets, PressMedia, ExportData) {
 
     $scope.total_pages;
     $scope.actual_page;
@@ -211,6 +211,12 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
         $scope.update_histogram();
         $scope.update_list(1);
         $scope.selectedItem($scope.granularity);
+    }
+
+    /* Export Image Secction */
+    $scope.exportImageFormat ="PNG";
+    $scope.exportImage = function (format) {
+          ExportData.exportImage(format);
     }
 
 }]);
