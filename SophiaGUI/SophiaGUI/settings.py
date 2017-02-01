@@ -147,6 +147,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    #'django.contrib.staticfiles.finders.AppDirectoriesFinder',    #causes verbose duplicate notifications in django 1.9
+)
+
 SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 #TEMPLATE_DIRS = (
 #    os.path.join(SETTINGS_PATH, 'templates'),
