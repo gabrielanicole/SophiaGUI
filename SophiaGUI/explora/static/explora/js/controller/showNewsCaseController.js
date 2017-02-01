@@ -213,7 +213,8 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
                 "not_and": tag_values.not_contain_group,
                 "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
                 "art_name_press_source": twitter,
-                "art_category": $scope.selectedCategory
+                "art_category": $scope.selectedCategory,
+                "pre_owner": $scope.selectedMediumGroup,
             }
 
             Articles.getArticlesList(json_data, page).then(function (data) {

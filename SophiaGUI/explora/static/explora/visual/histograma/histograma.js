@@ -241,12 +241,11 @@ function generate_histogram(width, height, data_json) {
                     .style("opacity", 0);
             })
             .on("click", function (d, i) {
-                getDate(JSON.stringify(d.key_as_string),JSON.stringify(a.data()[i + 1].key_as_string));
+                getDate(JSON.stringify(d.key_as_string), JSON.stringify(a.data()[i + 1].key_as_string));
             })
             .style("fill", "#078770");
 
         function getDate(date, date2) {
-
             var aux_format = d3.time.format("%Y-%m-%d %H:%M:%S");
             date = JSON.parse(date);
             date2 = JSON.parse(date2);
