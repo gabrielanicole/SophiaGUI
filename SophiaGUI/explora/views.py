@@ -16,7 +16,6 @@ from django.db.models import Q
 import cStringIO
 import csv
 from filewriter import return_json_file, return_csv_file
-from django.conf import settings
 
 # @brief Function that login the user to Sophia GUI.
 # @param request Web request with login data (username, password)
@@ -103,7 +102,6 @@ def index(request):
 @login_required(login_url='/login_required')
 def articles(request, num=1):
 
-    print settings.STATIC_ROOT
     my_user = request.user.social_auth.filter(provider='facebook').first()
     if my_user:
         url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)

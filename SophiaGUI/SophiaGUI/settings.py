@@ -147,10 +147,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    #'django.contrib.staticfiles.finders.AppDirectoriesFinder',    #causes verbose duplicate notifications in django 1.9
-)
 
 SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 #TEMPLATE_DIRS = (
@@ -174,7 +170,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR=os.path.dirname(__file__)
-STATIC_ROOT = os.path.join(BASE_DIR, 'explora/static/')
+STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
 
 STATICFILES_DIRS = (
                     os.path.join(BASE_DIR, 'explora/static/'),
