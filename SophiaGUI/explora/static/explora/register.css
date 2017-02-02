@@ -1,0 +1,9 @@
+.btn-register{
+    color: white;
+    background-color: rgba(24, 188, 156, 1);
+}
+
+.btn-register:hover{
+    color: white;
+    background-color: rgba(24, 170, 156, 1);
+}

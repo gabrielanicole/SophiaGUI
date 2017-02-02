@@ -187,7 +187,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.loadNextItems = function () {
         page = $scope.actual_page + 1;
         $scope.busy = true;
-        if (page < $scope.total_pages) {
+        if (page <= $scope.total_pages) {
             var twitter = $scope.selectedMedium.media_twitter;
             var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
             var json_data = {

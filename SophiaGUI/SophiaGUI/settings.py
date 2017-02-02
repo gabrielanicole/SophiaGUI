@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'explora',
     'pressmedia',
     'newscases',
+    'createaccount',
      # Add the python social auth
     'social.apps.django_app.default',
 ]
@@ -53,8 +54,9 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     )
 
-SOCIAL_AUTH_FACEBOOK_KEY = '1746978768908293'
-SOCIAL_AUTH_FACEBOOK_SECRET = 'ecdd8d3f68f361ff2f4736c0c7da4eb2'
+SOCIAL_AUTH_FACEBOOK_KEY = '1925295284364133'
+SOCIAL_AUTH_FACEBOOK_SECRET = '0704c91495bc6025f3ec6bc3efa5ddc0'
+
 #We ask facebook to give us the email of the user
 FACEBOOK_EXTENDED_PERMISSIONS = ['email']
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/"

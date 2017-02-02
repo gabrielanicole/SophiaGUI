@@ -13,6 +13,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $('#hideHistogram').on('hidden.bs.collapse', function () {
         $("#collapseIcon").removeClass("glyphicon glyphicon-chevron-down").addClass("glyphicon glyphicon-chevron-up");
     });
+    
     var opts = {
         lines: 15 // The number of lines to draw
         , length: 34 // The length of each line
@@ -74,7 +75,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             return false;
         }
     }
-
 
     function loadPressMediaGroups(data) {
         PressMedia.getPressMediaGroups().then(function (response) {
