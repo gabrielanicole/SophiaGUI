@@ -44,6 +44,7 @@ app.controller('registrationController', ['$scope', '$http', function ($scope, $
             data: $.param({ data: JSON.stringify(data) })
         }).then(function (response) {
             if (response.data == 'user exists') {
+                $scope.newUserCreated = false;
                 $scope.checkUserExist = true;
             }
             else if (response.data == 'new user created') {

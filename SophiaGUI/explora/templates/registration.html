@@ -28,6 +28,12 @@
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">Sophia Project</a>
             </div>
+            <ul class="nav navbar-nav navbar-right">
+                     <li>
+                        <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" class="btn btn-default btn-block" role="button">
+                            <span style="padding-right:10px" class="fa fa-facebook"></span>Login con Facebook</a>
+                    </li>
+            </ul>
         </div>
     </nav>
 
