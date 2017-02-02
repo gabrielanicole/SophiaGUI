@@ -7,3 +7,8 @@
     color: white;
     background-color: rgba(24, 170, 156, 1);
 }
+
+.btn.disabled:hover{
+    color: white;
+    background-color: rgba(24, 170, 156, 1);
+}

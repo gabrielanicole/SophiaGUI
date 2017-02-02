@@ -8,7 +8,6 @@ import simplejson as json
 def createaccount(request):
     return render(request,'registration.html')
 
-
 def createUser(request):
     if request.method == 'POST':
         try:
@@ -23,11 +22,13 @@ def createUser(request):
             if User.objects.filter(username=username).exists():
                 return HttpResponse('user exists')
             else:
+                #then create the new user and profile
                 new_user = User.objects.create_user(username=username,
                                                     email=email,
                                                     password=password,
                                                     first_name=firstname,
-                                                    last_name=lastname)
+                                                    last_name=lastname,
+                                                    is_active=False)
                 new_user.save()
                 profile = Profile(user=new_user)
                 profile.save()

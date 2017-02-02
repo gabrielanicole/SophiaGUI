@@ -51,6 +51,12 @@
     height: auto;
 }
 
+.profile-pic-anon{
+	margin-top:8px;
+    max-width: 15%;
+    max-height: 15%;
+    height: auto;
+}
 
 body{
 	font-family: 'Roboto', sans-serif;

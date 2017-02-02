@@ -4,8 +4,8 @@ app.controller('registrationController', ['$scope', '$http', function ($scope, $
     $scope.firstname = "Matias";
     $scope.lastname = "Aravena";
     $scope.email = "maravenag@live.cl";
-    $scope.password = "password123";
-    $scope.confirmpassword = "password123";
+    $scope.password = "";
+    $scope.confirmpassword = "";
     $scope.checkPasswords = false;
     $scope.checkMatchPasswords = false;
     $scope.checkUserExist = false;
@@ -37,6 +37,7 @@ app.controller('registrationController', ['$scope', '$http', function ($scope, $
             'email': $scope.email,
             'password': $scope.password
         }
+        console.log(!$scope.checkPasswords && !$scope.checkMatchPasswords);
 
         $http({
             method: 'POST',

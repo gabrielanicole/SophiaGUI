@@ -5,6 +5,7 @@ from social.apps.django_app.default.models import UserSocialAuth
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    activation_url = models.CharField(max_length=50, default="NULL")
 
 class NewsCase(models.Model):
     name = models.CharField(max_length=150)
