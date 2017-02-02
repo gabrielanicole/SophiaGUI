@@ -39,6 +39,8 @@
                     <h1>A unos pasos de empezar!</h1>
                     <div class="alert alert-danger" ng-show="checkPasswords" class="ng-hide"> La password debe tener al menos 8 caracteres</div>
                     <div class="alert alert-danger" ng-show="checkMatchPasswords" class="ng-hide"> Las passwords no coinciden!</div>
+                    <div class="alert alert-danger" ng-show="checkUserExist" class="ng-hide"> Nombre de usuario ya existe!</div>
+                    <div class="alert alert-success" ng-show="newUserCreated" class="ng-hide"> Se ha creado un nuevo usuario!</div>
                 </div>
             </div>
 

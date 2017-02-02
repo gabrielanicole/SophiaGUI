@@ -17,9 +17,19 @@ def createUser(request):
             lastname = data['lastname']
             password = data['password']
             email = data['email']
-            
+
             #validate if user exists
-            return HttpResponse("0k")
+            if User.objects.filter(username=username).exists():
+                return HttpResponse('user exists')
+            else:
+                #new_user = User.objects.create_user(username=username,
+                #                                    email=email,
+                #                                    password=password,
+                #                                    first_name=firstname,
+                #                                    last_name=lastname)
+                #new_user.save()
+                return HttpResponse("new user created")
+
         except Exception as e:
             print e
-            return HttpResponse('')
+            return HttpResponse('Internal Error!')
