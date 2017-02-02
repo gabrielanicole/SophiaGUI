@@ -1,9 +1,9 @@
 app.controller('registrationController', ['$scope', '$http', function ($scope, $http) {
 
-    $scope.username = "MatiasAravena";
-    $scope.firstname = "Matias";
-    $scope.lastname = "Aravena";
-    $scope.email = "maravenag@live.cl";
+    $scope.username = "";
+    $scope.firstname = "";
+    $scope.lastname = "";
+    $scope.email = "";
     $scope.password = "";
     $scope.confirmpassword = "";
     $scope.checkPasswords = false;

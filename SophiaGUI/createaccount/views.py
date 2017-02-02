@@ -34,36 +34,34 @@ def createUser(request):
                                                     last_name=lastname,
                                                     is_active=False)
                 new_user.save()
-                profile = Profile(user=new_user)
+                #ver el uuid a partir de un usuario
+                link = uuid.uuid3(uuid.NAMESPACE_DNS, username)
+                profile = Profile(user=new_user, activation_url=link)
                 profile.save()
+                content = useTemplate('http://localhost:8000/activate/'+str(link))
+                subject = 'Confirme su direccion de correo electronico'
+                text_content = 'habilita el html de tu correo'
+                html_content = content
+                from_email = '"Sophia Project" <sophiaproject4@gmail.com>'
+                to = email
+                msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
                 return HttpResponse("new user created")
 
         except Exception as e:
             print e
             return HttpResponse('Internal Error!')
 
-
-
-def sendmail(request):
-    link = uuid.uuid3('javier')
-    print link
-    content = useTemplate('www.confirme.mail.com/'+str(link))
-    try:
-        subject = 'Confirme su direccion de correo electronico'
-        text_content = 'habilita el html de tu correo'
-        html_content = content
-        from_email = '"Sophia Project" <sophiaproject4@gmail.com>'
-        to = "javierperezferrada@gmail.com"
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
-    except Exception as e:
-        print "fallo sendmail"
-        print e
-    return JsonResponse({"response":"ok"})
-
 def useTemplate(link):
-    htmlFile = open("mailConfirmation.html")
+    htmlFile = open("explora/static/mailConformation.html")
     content = htmlFile.read()
     content = content.replace("$$link$$",str(link))
     return(content)
+
+def activateUser(request, userUrl):
+    user_profile = Profile.objects.get(activation_url=userUrl)
+    user = User.objects.get(pk=user_profile.user_id)
+    user.is_active = True
+    user.save()
+    return HttpResponse("Account Active")
