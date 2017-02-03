@@ -38,7 +38,7 @@ def createUser(request):
                 link = uuid.uuid3(uuid.NAMESPACE_DNS, username)
                 profile = Profile(user=new_user, activation_url=link)
                 profile.save()
-                content = useTemplate('http://localhost:8000/activate/'+str(link), username)
+                content = useTemplate('http://www.sophia-project.info/activate/'+str(link), username)
                 subject = 'Confirme su direccion de correo electronico'
                 text_content = 'habilita el html de tu correo'
                 html_content = content

@@ -17,7 +17,9 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
     <script type="text/javascript" src="/static/explora/js/app.js"></script>
     <script type="text/javascript" src="/static/explora/js/controller/registrationController.js"></script>
+    <script type="text/javascript" src="/static/explora/js/controller/Services.js"></script>
     <script type="text/javascript" src="/static/explora/externalJS/ng-infinite-scroll.min.js"></script>
+    <script src="/static/explora/externalJS/spin.min.js"></script>
 
 </head>
 
@@ -40,18 +42,22 @@
     <div ng-app="explora">
         <div ng-controller="registrationController">
 
+            <div class="row">
+                <div id="spinner"></div>
+            </div>
+            
             <div class="container">
                 <div class="page-header">
-                    <h1>A unos pasos de empezar!</h1>
-                    <div class="alert alert-danger" ng-show="checkPasswords" class="ng-hide"> La password debe tener al menos 8 caracteres</div>
-                    <div class="alert alert-danger" ng-show="checkMatchPasswords" class="ng-hide"> Las passwords no coinciden!</div>
+                    <h2 class="text-center">A unos pasos de comenzar!</h2>
+                    <div class="alert alert-danger" ng-show="!checkPasswords" class="ng-hide"> La password debe tener al menos 8 caracteres</div>
+                    <div class="alert alert-danger" ng-show="!checkMatchPasswords" class="ng-hide"> Las passwords no coinciden!</div>
                     <div class="alert alert-danger" ng-show="checkUserExist" class="ng-hide"> Nombre de usuario ya existe!</div>
                     <div class="alert alert-success" ng-show="newUserCreated" class="ng-hide"> Se ha enviado un mail a <strong>[[email]]</strong> las instrucciones necesarias para activar su cuenta</div>
                 </div>
             </div>
 
             <div class="container-fluid">
-                <div class="row">
+                <div class="row" ng-hide="hideForm"> 
                     <div class="col-md-4 col-md-offset-4">
                         <form name="registerForm" class="form-horizontal">
 
@@ -101,7 +107,7 @@
 
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
-                                    <button class="btn btn-default btn-block btn-register" ng-click="getUserInput()">Registrarse</button>
+                                    <button class="btn btn-default btn-block btn-register" ng-disabled="!validateForm" ng-click="getUserInput(registerForm.$valid)">Registrarse</button>
                                 </div>
                             </div>
                         </form>
