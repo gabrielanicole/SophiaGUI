@@ -62,6 +62,9 @@ def useTemplate(link):
 def activateUser(request, userUrl):
     user_profile = Profile.objects.get(activation_url=userUrl)
     user = User.objects.get(pk=user_profile.user_id)
-    user.is_active = True
+    if(user.is_active == False):
+        user.is_active = True
+    else:
+        user.is_active = True
     user.save()
-    return HttpResponse("Account Active")
+    return render(request,'accountactive.html',{'user':user.get_full_name()})

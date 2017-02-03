@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Sophia</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/explora/explora.css" type="text/css">
+    <link rel="stylesheet" href="/static/explora/navbar.css" type="text/css">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/explora/register.css" type="text/css">
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+    <script type="text/javascript" src="/static/explora/js/app.js"></script>
+    <script type="text/javascript" src="/static/explora/js/controller/registrationController.js"></script>
+    <script type="text/javascript" src="/static/explora/externalJS/ng-infinite-scroll.min.js"></script>
+
+</head>
+
+<body>
+    <nav id="custom-bootstrap-menu" class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Sophia Project</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                	<li>
+						<form action="/login" id="login_form" class="navbar-form navbar-left" role="login" method="post">{% csrf_token %}
+							<div class="form-group">
+								<input name="username" value="" type="text" class="form-control" placeholder="Usuario">
+								<input name="password" value="" type="password" class="form-control" placeholder="Contraseña">
+							</div>
+							<button type="submit" class="btn btn-default">Login</button>
+						</form>
+				    </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+         <div class="jumbotron">
+           <h1 class="jumbo-text">Su cuenta ahora está activa! </h1>
+           <h3 class="jumbo-text"><strong>{{user}}</strong> su cuenta se ha activado y ya puede empezar a utilizar la plataforma Sophia</h3>
+           <h3 class="jumbo-text">Para poder acceder solo basta con ingresar su usuario y contraseña</h3>
+        </div>
+    </div>
+</body>
+
+<footer class="footer">
+    <p class="text-center" style="color:white;"> Footer correspondiente</p>
+	<p class="text-center" style="color:white;"> Copyright (c) 2017 sophia-project.info All rights reserved</p>
+</footer>

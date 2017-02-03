@@ -12,3 +12,16 @@
     color: white;
     background-color: rgba(24, 170, 156, 1);
 }
+.jumbotron{
+    background-color: rgba(24, 188, 156, 1);
+}
+.jumbo-text{
+    color: white !important;
+}
+.footer{
+    background-color:rgba(24, 188, 156, 1);
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+}
