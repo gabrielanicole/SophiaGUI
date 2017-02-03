@@ -1,4 +1,4 @@
-app.controller('registrationController', ['$scope', '$http','dataFormat', function ($scope, $http, dataFormat) {
+app.controller('registrationController', ['$scope', '$http', 'dataFormat', function ($scope, $http, dataFormat) {
 
     var opts = dataFormat.loadSpinnerOPTS();
 

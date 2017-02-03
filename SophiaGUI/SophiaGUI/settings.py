@@ -178,6 +178,11 @@ STATICFILES_DIRS = (
                     os.path.join(BASE_DIR, 'explora/static/'),
                 )
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+)
+
+
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'sophiaproject4@gmail.com'
