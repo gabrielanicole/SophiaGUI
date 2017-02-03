@@ -22,17 +22,22 @@ from filewriter import return_json_file, return_csv_file
 # @return HttpResponse Redirect to the "Index" if Login fails or "Articles" if success
 def login(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                auth_login(request, user)
-                return redirect('articles')
-        # here should be an else for when user account is disbled
-        else:
-            return redirect('index')
-
+        try:
+            username = request.POST['username']
+            password = request.POST['password']
+            user = User.objects.get(username=username)
+            if user is not None:
+                if user.is_active:
+                    user = authenticate(username=username, password=password)
+                    auth_login(request, user)
+                    return redirect('articles')
+                else:
+                    return render(request, 'accountnotactive.html')
+                    # here should be an else for when user account is disbled
+            else:
+                return redirect('index')
+        except Exception as e:
+            return render(request,'badlogin.html')
 
 @login_required()
 def modal_new(request):
