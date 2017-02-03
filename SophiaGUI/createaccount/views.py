@@ -38,7 +38,7 @@ def createUser(request):
                 link = uuid.uuid3(uuid.NAMESPACE_DNS, username)
                 profile = Profile(user=new_user, activation_url=link)
                 profile.save()
-                content = useTemplate('http://localhost:8000/activate/'+str(link))
+                content = useTemplate('http://localhost:8000/activate/'+str(link), username)
                 subject = 'Confirme su direccion de correo electronico'
                 text_content = 'habilita el html de tu correo'
                 html_content = content
@@ -53,10 +53,11 @@ def createUser(request):
             print e
             return HttpResponse('Internal Error!')
 
-def useTemplate(link):
+def useTemplate(link, username):
     htmlFile = open("explora/static/mailConformation.html")
     content = htmlFile.read()
     content = content.replace("$$link$$",str(link))
+    content = content.replace("$$username$$",str(username))
     return(content)
 
 def activateUser(request, userUrl):
