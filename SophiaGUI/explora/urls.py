@@ -20,6 +20,5 @@ urlpatterns = [
         views.getTweetsList, name='getTweetsList'),
     url(r'^get_data/tweets/histogram/$',
         views.tweetsCountBy, name='tweetsCountBy'),
-    url(r'^accounts/login/?next=/', views.index, name='index'),
     url(r'^exportData/$', views.exportData, name='exportData'),
 ]

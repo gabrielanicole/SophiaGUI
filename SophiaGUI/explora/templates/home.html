@@ -1,28 +1,34 @@
 <!DOCTYPE html>
 <html lang="es">
 
-	<head>
+<head>
 
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="description" content="">
-		<meta name="author" content="">
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>Sophia Project</title>
+    <title>Sophia Project</title>
 
-		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-        <link href="static/home/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
-            rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic'
-            rel='stylesheet' type='text/css'>
-        <link href="static/home/magnific-popup/magnific-popup.css" rel="stylesheet">
-        <link href="static/home/css/creative.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="static/home/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+        rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic'
+        rel='stylesheet' type='text/css'>
+    <link href="static/home/magnific-popup/magnific-popup.css" rel="stylesheet">
+    <link href="static/home/css/creative.css" rel="stylesheet">
 
-	</head>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="/static/home/scrollreveal/scrollreveal.min.js"></script>
+    <script src="/static/home/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <script src="/static/home/js/creative.js"></script>
+
+</head>
 
 <body id="page-top">
 
@@ -49,147 +55,154 @@
                         <a class="page-scroll" href="#contact">Contacto</a>
                     </li>
 
-                   <li>
-						<form action="/login" id="login_form" class="navbar-form navbar-left" role="login" method="post">{% csrf_token %}
-							<div class="form-group">
-								<input name="username" value="" type="text" class="form-control" placeholder="Usuario">
-								<input name="password" value="" type="password" class="form-control" placeholder="Contraseña">
-							</div>
-							<button type="submit" class="btn">Login</button>
-						</form>
-			    	</li>
+                    <li>
+                        <form action="/login" id="login_form" class="navbar-form navbar-left" role="login" method="post">{% csrf_token %}
+                            <div class="form-group">
+                                <input name="username" value="" type="text" class="form-control" placeholder="Usuario">
+                                <input name="password" value="" type="password" class="form-control" placeholder="Contraseña">
+                            </div>
+                            <button type="submit" class="btn">Login</button>
+                        </form>
+                    </li>
                     <li>
                         <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" role="button">
 						<span style="padding-right:10px" class="fa fa-facebook"></span>Login con Facebook</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container-fluid -->
-    </nav>
+</li>
+</ul>
+</div>
+<!-- /.navbar-collapse -->
+</div>
+<!-- /.container-fluid -->
+</nav>
 
-    <header>
-        <div class="header-content">
-            <div class="header-content-inner">
-                <h1 id="homeHeading">Explora el contenido de la prensa chilena</h1>
-                <hr>
-                <p>Sophia te permite explorar el contenido publicado por los medios de prensa chilenos en las redes sociales
-                    como también hace análisis sobre los mismos!</p>
-                <a href="#about" class="btn btn-primary btn-xl page-scroll">Aprender más</a>
-            </div>
+<header>
+    <div class="header-content">
+        <div class="header-content-inner">
+            <h1 id="homeHeading">Explora el contenido de la prensa chilena</h1>
+            <hr>
+            <p>Sophia te permite explorar el contenido publicado por los medios de prensa chilenos en las redes sociales como
+                también hace análisis sobre los mismos!</p>
+            <a href="#about" class="btn btn-primary btn-xl page-scroll">Aprender más</a>
         </div>
-    </header>
+    </div>
+</header>
 
-    <section class="bg-primary" id="about">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 text-center">
-                    <h2 class="section-heading">¿Para qué?</h2>
-                    <hr class="light">
-                    <p class="text-faded">Sophia es un observatorio independiente de medios de información en Chile. Defiende una visión de la
-                        prensa basada sobre el pluralismo, la objetividad y la independencia de la prensa como pilares de
-                        la libertad de expresión y de la construcción de una sociedad humana democrática</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 text-center">
-                    <h2 class="section-heading">¿Para quién?</h2>
-                    <hr class="light">
-                    <p class="text-faded">La plataforma web de exploración Sophia Explora se dirige a los estudiantes en ciencias sociales y ciencias
-                        de datos, a los investigadores y analistas, a los profesionales de medios y a todos los ciudadanos
-                        que deseen desarrollar su mirada crítica sobre los desafíos vinculados con el pluralismo, la objetividad
-                        y la independencia de la prensa.</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 text-center">
-                    <h2 class="section-heading">¿Cómo funciona?</h2>
-                    <hr class="light">
-                    <p class="text-faded">La plataforma Sophia Explora recopila, preprocesa y organiza visualmente los datos publicados por los
-                        medios en los redes sociales. Analiza la audiencia y la influencia de varios artefactos, cruzando
-                        esta información con otros datos extraidos por el anaĺisis del contenido textual de los articulos.
-                        </p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 text-center">
-                    <h2 class="section-heading">¿Quiénes somos?</h2>
-                    <hr class="light">
-                    <p class="text-faded">El observatorio Sophia es llevado por una comunidad de estudiantes, docentes y investigadores en Ciencias Sociales, Ciencia de la Información y Informática de la Universidad Austral de Chile (UACh).</p>
-                    <a href="#tools" class="page-scroll btn btn-default btn-xl sr-button">Nuestros servicios!</a>
-                </div>
+<section class="bg-primary" id="about">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 text-center">
+                <h2 class="section-heading">¿Para qué?</h2>
+                <hr class="light">
+                <p class="text-faded">Sophia es un observatorio independiente de medios de información en Chile. Defiende una visión de la prensa
+                    basada sobre el pluralismo, la objetividad y la independencia de la prensa como pilares de la libertad
+                    de expresión y de la construcción de una sociedad humana democrática</p>
             </div>
         </div>
-    </section>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 text-center">
+                <h2 class="section-heading">¿Para quién?</h2>
+                <hr class="light">
+                <p class="text-faded">La plataforma web de exploración Sophia Explora se dirige a los estudiantes en ciencias sociales y ciencias
+                    de datos, a los investigadores y analistas, a los profesionales de medios y a todos los ciudadanos que
+                    deseen desarrollar su mirada crítica sobre los desafíos vinculados con el pluralismo, la objetividad
+                    y la independencia de la prensa.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 text-center">
+                <h2 class="section-heading">¿Cómo funciona?</h2>
+                <hr class="light">
+                <p class="text-faded">La plataforma Sophia Explora recopila, preprocesa y organiza visualmente los datos publicados por los medios
+                    en los redes sociales. Analiza la audiencia y la influencia de varios artefactos, cruzando esta información
+                    con otros datos extraidos por el anaĺisis del contenido textual de los articulos.
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 text-center">
+                <h2 class="section-heading">¿Quiénes somos?</h2>
+                <hr class="light">
+                <p class="text-faded">El observatorio Sophia es llevado por una comunidad de estudiantes, docentes y investigadores en Ciencias
+                    Sociales, Ciencia de la Información y Informática de la Universidad Austral de Chile (UACh).</p>
+                <a href="#tools" class="page-scroll btn btn-default btn-xl sr-button">Nuestros servicios!</a>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <section id="tools">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <h2 class="section-heading">Nuestras herramientas</h2>
-                    <hr class="primary">
+<section id="tools">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading">Nuestras herramientas</h2>
+                <hr class="primary">
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 text-center">
+                <div class="service-box">
+                    <i class="fa fa-4x fa-area-chart text-primary sr-icons"></i>
+                    <h3>Sophia Indicadores</h3>
+                    <p class="text-muted">Informe actualizado regularmente presentando un conjunto de indicadores visuales y estadísticos para
+                        evaluar el pluralismo, la objetividad y la independencia de la prensa.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 text-center">
+                <div class="service-box">
+                    <i class="fa fa-4x fa-newspaper-o text-primary sr-icons"></i>
+                    <h3>Sophia Explora</h3>
+                    <p class="text-muted">Una plataforma web de exploración de datos permitiendo de crear sus propias observaciones, indicadores
+                        y análisis sobre las practicas de medios de información</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 text-center">
+                <div class="service-box">
+                    <i class="fa fa-4x fa-cloud text-primary sr-icons"></i>
+                    <h3>Sophia API</h3>
+                    <p class="text-muted">Una completa API, para poder realizar sus propias aplicaciones. Poseemos una gran cantidad de datos para
+                        compartir!
+                    </p>
                 </div>
             </div>
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-6 text-center">
-                    <div class="service-box">
-                        <i class="fa fa-4x fa-area-chart text-primary sr-icons"></i>
-                        <h3>Sophia Indicadores</h3>
-                        <p class="text-muted">Informe actualizado regularmente presentando un conjunto de indicadores visuales y estadísticos para evaluar el pluralismo, la objetividad y la independencia de la prensa.</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 text-center">
-                    <div class="service-box">
-                        <i class="fa fa-4x fa-newspaper-o text-primary sr-icons"></i>
-                        <h3>Sophia Explora</h3>
-                        <p class="text-muted">Una plataforma web de exploración de datos permitiendo de crear sus propias observaciones, indicadores y análisis sobre las practicas de medios de información</p>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 text-center">
-                    <div class="service-box">
-                        <i class="fa fa-4x fa-cloud text-primary sr-icons"></i>
-                        <h3>Sophia API</h3>
-                        <p class="text-muted">Una completa API, para poder realizar sus propias aplicaciones. Poseemos una gran cantidad de datos para compartir!</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    </div>
+</section>
 
-    <aside class="bg-sophia">
-        <div class="container text-center">
-            <div class="call-to-action">
-                <h2>Empieza a explorar con Sophia!</h2>
-                <a href="/createaccount/" class="btn btn-default btn-xl sr-button">Registrarse!</a>
+<aside class="bg-sophia">
+    <div class="container text-center">
+        <div class="call-to-action">
+            <h2>Empieza a explorar con Sophia!</h2>
+            <a href="/createaccount/" class="btn btn-default btn-xl sr-button">Registrarse!</a>
+        </div>
+    </div>
+</aside>
+
+<section id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 text-center">
+                <h2 class="section-heading">Alguna duda?</h2>
+                <hr class="primary">
+                <p>Si tiene alguna duda o deseea ponerse en contacto con nosotros puede enviarnos un mensaje a la siguiente
+                    dirección de correo electrónico</p>
+            </div>
+            <div class="col-lg-4 col-lg-offset-4 text-center">
+                <i class="fa fa-envelope-o fa-3x sr-contact"></i>
+                <p><a href="mailto:sophiaproject4@gmail.com">sophiaproject4@gmail.com</a></p>
             </div>
         </div>
-    </aside>
+    </div>
+</section>
 
-    <section id="contact">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 text-center">
-                    <h2 class="section-heading">Alguna duda?</h2>
-                    <hr class="primary">
-                    <p>Si tiene alguna duda o deseea ponerse en contacto con nosotros puede enviarnos un mensaje a la siguiente dirección de correo electrónico</p>
-                </div>
-                <div class="col-lg-4 col-lg-offset-4 text-center">
-                    <i class="fa fa-envelope-o fa-3x sr-contact"></i>
-                    <p><a href="mailto:sophiaproject4@gmail.com">sophiaproject4@gmail.com</a></p>
-                </div>
-            </div>
-        </div>
-    </section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+<script src="/static/home/scrollreveal/scrollreveal.min.js"></script>
+<script src="/static/home/magnific-popup/jquery.magnific-popup.min.js"></script>
+<script src="/static/home/js/creative.js"></script>
 
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-        <script src="static/home/scrollreveal/scrollreveal.min.js"></script>	
-        <script src="static/home/magnific-popup/jquery.magnific-popup.min.js"></script>
-        <script src="static/home/js/creative.js"></script>
 </body>
 
 </html>

@@ -39,6 +39,32 @@ def login(request):
         except Exception as e:
             return render(request,'badlogin.html')
 
+# @brief Function that redirect if a user is not logged into Sophia GUI
+# @param request
+# return HttpResponse Redirect to "articles" if success, or
+# "login_required" if fails
+def user_not_logged(request):
+    if request.user.is_authenticated():
+        return redirect('articles')
+    else:
+        return render(request, 'login_required.html')
+
+
+def index(request):
+    if request.user.is_authenticated():
+        return redirect('articles')
+    else:
+        return render(request, 'home.html')
+
+# @brief Function that log out the user from Sophia
+# @param requestfrom django.http import JsonResponse
+# @return HttpResponse with the main page
+
+@login_required()
+def logout(request):
+    auth_logout(request)
+    return redirect(index)
+
 @login_required()
 def modal_new(request):
     if request.method == 'POST':
@@ -78,32 +104,12 @@ def modal_new(request):
     else:
         return HttpResponse("Internal Error")
 
-# @brief Function that redirect if a user is not logged into Sophia GUI
-# @param request
-# return HttpResponse Redirect to "articles" if success, or
-# "login_required" if fails
-
-
-def user_not_logged(request):
-    if request.user.is_authenticated():
-        return redirect('articles')
-    else:
-        return render(request, 'login_required.html')
-
-
-def index(request):
-    if request.user.is_authenticated():
-        return redirect('articles')
-    else:
-        return render(request, 'home.html')
 
 # @brief Function that  render the "articles" page.
 # @param request Web request
 # @param num Value for the pagination
 # @return HttpResponse with the articles page.
 # @warning Login is required.
-
-
 @login_required(login_url='/login_required')
 def articles(request, num=1):
 
@@ -115,16 +121,6 @@ def articles(request, num=1):
     else:
         return render(request, 'articles.html', {'user': request.user.get_full_name()
                                                  })
-
-# @brief Function that log out the user from Sophia
-# @param requestfrom django.http import JsonResponse
-# @return HttpResponse with the main page
-
-
-@login_required()
-def logout(request):
-    auth_logout(request)
-    return render(request, 'home.html')
 
 # @brief Function that conect to the API and get articles between two dates and group by date
 # @param request
