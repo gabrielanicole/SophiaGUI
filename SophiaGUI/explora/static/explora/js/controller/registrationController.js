@@ -2,10 +2,11 @@ app.controller('registrationController', ['$scope', '$http', 'dataFormat', funct
 
     var opts = dataFormat.loadSpinnerOPTS();
 
-    $scope.username = "";
-    $scope.firstname = "";
-    $scope.lastname = "";
-    $scope.email = "";
+    $scope.regex = new RegExp('^[a-zA-Z0-9\.]*$');
+    $scope.username = "maravenag";
+    $scope.firstname = "Matias";
+    $scope.lastname = "Aravena";
+    $scope.email = "aravenagamboa@gmail.com";
     $scope.password;
     $scope.confirmpassword;
     $scope.checkPasswords = true;
@@ -13,14 +14,28 @@ app.controller('registrationController', ['$scope', '$http', 'dataFormat', funct
     $scope.checkUserExist = false;
     $scope.newUserCreated = false;
     $scope.validateForm = false;
+    $scope.showInvalidPassword = false;
     $scope.hideForm = false;
+    $scope.validPasswords = false;
 
     $scope.validateFormInput = function () {
-        if ($scope.checkPasswords == true && $scope.checkMatchPasswords == true) {
+        if ($scope.checkPasswords == true && $scope.checkMatchPasswords == true && $scope.validPasswords == true) {
             $scope.validateForm = true;
         }
         else {
             $scope.validateForm = false;
+        }
+    }
+
+    $scope.validateCharacters = function (password) {
+        var res = $scope.regex.test(password)
+        if (res == false) {
+            $scope.validPasswords = false;
+            $scope.showInvalidPassword = true;
+        }
+        else {
+            $scope.validPasswords = true;
+            $scope.showInvalidPassword = false;
         }
     }
 
@@ -30,6 +45,7 @@ app.controller('registrationController', ['$scope', '$http', 'dataFormat', funct
         }
         else {
             $scope.checkMatchPasswords = true;
+            $scope.validateCharacters(password1);
         }
         $scope.validateFormInput();
     }
@@ -47,7 +63,7 @@ app.controller('registrationController', ['$scope', '$http', 'dataFormat', funct
 
     $scope.getUserInput = function (valid) {
         if (valid == true) {
-            console.log("Se enviará la data");
+            $scope.showInvalidPassword = false;
             data = {
                 'username': $scope.username,
                 'firstname': $scope.firstname,
@@ -55,7 +71,7 @@ app.controller('registrationController', ['$scope', '$http', 'dataFormat', funct
                 'email': $scope.email,
                 'password': $scope.password
             }
-
+            
             var target = document.getElementById('spinner')
             var spinner = new Spinner(opts);
             spinner.spin(target);
@@ -79,7 +95,7 @@ app.controller('registrationController', ['$scope', '$http', 'dataFormat', funct
                     console.log(response.data);
                     spinner.stop(target);
                 }
-            });
+            }); 
         }
     }
 

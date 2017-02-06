@@ -52,9 +52,6 @@
             <div class="container">
                 <div class="page-header">
                     <h2 class="text-center">A unos pasos de comenzar!</h2>
-                    <div class="alert alert-danger" ng-show="!checkPasswords" class="ng-hide"> La password debe tener al menos 8 caracteres</div>
-                    <div class="alert alert-danger" ng-show="!checkMatchPasswords" class="ng-hide"> Las passwords no coinciden!</div>
-                    <div class="alert alert-danger" ng-show="checkUserExist" class="ng-hide"> Nombre de usuario ya existe!</div>
                     <div class="alert alert-success" ng-show="newUserCreated" class="ng-hide"> Se ha enviado un mail a <strong>[[email]]</strong> las instrucciones necesarias para activar su cuenta</div>
                 </div>
             </div>
@@ -110,11 +107,17 @@
 
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
-                                    <button class="btn btn-default btn-block btn-register" ng-disabled="!validateForm" ng-click="getUserInput(registerForm.$valid)">Registrarse</button>
+                                    <button class="btn btn-default btn-block btn-register"  ng-disabled="!validateForm" ng-click="getUserInput(registerForm.$valid)">Registrarse</button>
                                 </div>
                             </div>
                         </form>
                     </div>
+                        <div class="col-md-4">
+                            <div class="alert alert-danger" ng-show="!checkPasswords" class="ng-hide"> La password debe tener al menos 8 caracteres</div>
+                            <div class="alert alert-danger" ng-show="!checkMatchPasswords" class="ng-hide"> Las passwords no coinciden!</div>
+                            <div class="alert alert-danger" ng-show="checkUserExist" class="ng-hide"> Nombre de usuario ya existe!</div>
+                            <div class="alert alert-danger" ng-show="showInvalidPassword" class="ng-hide"> La password solo debe tener caracteres alfanuméricos!</div>
+                       </div>
                 </div>
             </div>
 
