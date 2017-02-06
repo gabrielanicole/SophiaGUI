@@ -137,7 +137,8 @@
                       <div class="row">
                         <div class="col-md-12">
                           <span style="cursor:pointer">
-                            <h4 class="news-data" ng-click="loadModal([[ d.art_id ]])"> [[d.art_title|limitTo:150]] </h4>
+                            <!-- <h4 class="news-data" ng-click="loadModal([[ d.art_id ]])"> [[d.art_title|limitTo:150]] </h4> -->
+                            <h4 class="news-data"><a style="color:black" target="_blank" ng-href="[[d.art_url]]">[[d.art_title|limitTo:150]]</a></h4>
                           </span>
                         </div>
                       </div>   
