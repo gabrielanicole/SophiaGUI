@@ -124,7 +124,7 @@ def articles(request, num=1):
 @login_required()
 def logout(request):
     auth_logout(request)
-    return redirect('index')
+    return render(request, 'home.html')
 
 # @brief Function that conect to the API and get articles between two dates and group by date
 # @param request

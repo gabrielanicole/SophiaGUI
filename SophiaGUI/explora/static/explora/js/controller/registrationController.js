@@ -3,10 +3,10 @@ app.controller('registrationController', ['$scope', '$http', 'dataFormat', funct
     var opts = dataFormat.loadSpinnerOPTS();
 
     $scope.regex = new RegExp('^[a-zA-Z0-9\.]*$');
-    $scope.username = "maravenag";
-    $scope.firstname = "Matias";
-    $scope.lastname = "Aravena";
-    $scope.email = "aravenagamboa@gmail.com";
+    $scope.username = "";
+    $scope.firstname = "";
+    $scope.lastname = "";
+    $scope.email = "";
     $scope.password;
     $scope.confirmpassword;
     $scope.checkPasswords = true;
