@@ -15,3 +15,8 @@ class NewsCase(models.Model):
     follow_new_feed = models.BooleanField(default=True)
     creation_date = models.DateField()
     visible = models.BooleanField(default=True)
+
+class Analist(models.Model):
+    user = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    request_send = models.BooleanField(default=False)
+    request_accepted = models.BooleanField(default=False)

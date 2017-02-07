@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^', include('pressmedia.urls')),
     url(r'^', include('newscases.urls')),
     url(r'^', include('createaccount.urls')),
+    url(r'^', include('user_request.urls')),
     url(r'^admin/', admin.site.urls),
     url('', include('social.apps.django_app.urls', namespace='social')),
 ]

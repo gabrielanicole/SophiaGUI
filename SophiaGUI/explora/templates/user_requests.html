@@ -1,0 +1,18 @@
+{% extends 'base.html' %} {% block header %}
+<script type="text/javascript" src="/static/explora/js/controller/userRequestController.js"></script>
+<link rel="stylesheet" href="/static/explora/pressMedia.css" type="text/css">
+<link rel="stylesheet" href="/static/explora/externalCSS/toastr.min.css" type="text/css">
+<script type="text/javascript" src="/static/explora/externalJS/toastr.min.js"></script>
+{% endblock header %}{% block content %}
+<div id="angularController" ng-controller="userRequestController">
+
+    <div class=row>
+        <div class="col-md-12">
+            {% if request.user.is_staff %}
+            {% endif %}
+            <button id="analistButton" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="Solicitar ser analista para poder corregir clasificación de noticias"><span class="glyphicon glyphicon-plus-sign"></span> Solicitar ser Analista</button>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

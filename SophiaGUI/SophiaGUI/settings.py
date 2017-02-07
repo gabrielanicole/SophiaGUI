@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'pressmedia',
     'newscases',
     'createaccount',
+    'user_request',
      # Add the python social auth
     'social.apps.django_app.default',
 ]
