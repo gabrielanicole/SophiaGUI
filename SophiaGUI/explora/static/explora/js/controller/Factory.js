@@ -166,4 +166,25 @@ app.factory('NewsCases', function ($http) {
             });
         }
     }
+});
+
+app.factory('userRequest', function ($http) {
+    return {
+        sendAnalistRequest: function () {
+            return $http({
+                method: 'POST',
+                url: '/requests/changeToAnalyst/'
+            }).then(function (response) {
+                return response;
+            });
+        },
+        getRequestList: function () {
+            return $http({
+                method: 'GET',
+                url: '/requests/getRequestList/'
+            }).then(function (response) {
+                return response;
+            });
+        }
+    }
 })

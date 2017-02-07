@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
 from django.contrib.auth.models import User
-from explora.models import Profile
+from explora.models import Profile, Analist
 import simplejson as json
 from django.http import JsonResponse
 from django.core.mail import send_mail
@@ -40,7 +40,8 @@ def createUser(request):
                 profile.save()
                 analist = Analist(user=profile)
                 analist.save()
-                content = useTemplate('http://www.sophia-project.info/activate/'+str(link), username)
+                
+                content = useTemplate('http://localhost:8000/activate/'+str(link), username)
                 subject = 'Confirme su direccion de correo electronico'
                 text_content = 'habilita el html de tu correo'
                 html_content = content
