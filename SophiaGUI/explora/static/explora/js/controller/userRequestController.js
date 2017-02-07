@@ -3,16 +3,22 @@ app.controller('userRequestController', ['$scope', '$http', 'userRequest', funct
     $("#analistButton").tooltip();
     $scope.requestList;
 
-    userRequest.getRequestList().then(function (response) {
-        $scope.requestList = response.data;
-    });
+    function loadList() {
+        userRequest.getRequestList().then(function (response) {
+            $scope.requestList = response.data;
+        });
+    }
 
     $scope.acceptRequest = function (username) {
-        console.log(username[0][0]);
+        userRequest.acceptAnalistRequest(username[0][0]).then(function (response) {
+            loadList();
+        });
     };
 
     $scope.rejectRequest = function (username) {
-        console.log(username[0][0]);
+        userRequest.rejectAnalistRequest(username[0][0]).then(function () {
+            loadList();
+        });
     };
 
     $scope.sendAnalistRequest = function () {
@@ -22,6 +28,7 @@ app.controller('userRequestController', ['$scope', '$http', 'userRequest', funct
             }
         });
     }
+    loadList();
 
 }]);
 

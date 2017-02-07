@@ -36,7 +36,7 @@ def changeToAnalyst(request):
 @login_required(login_url='/login_required')
 def getRequestList(request):
     if request.method == 'GET':
-        analist_list = Analist.objects.filter(request_send=True).select_related()
+        analist_list = Analist.objects.filter(request_send=True).exclude(request_accepted=True)
         response_list = []
         for x in analist_list:
             d = {
@@ -47,3 +47,24 @@ def getRequestList(request):
             }
             response_list.append(d)
         return JsonResponse(response_list, safe=False)
+
+@login_required(login_url='/login_required')
+def acceptAnalistRequest(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        user = User.objects.get(username=username)
+        profile = Profile.objects.get(pk=user.pk)
+        analist = Analist.objects.get(user_id=profile.pk)
+        analist.request_accepted = True
+        return HttpResponse("ok")
+
+@login_required(login_url='/login_required')
+def rejectAnalistRequest(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        user = User.objects.get(username=username)
+        profile = Profile.objects.get(pk=user.pk)
+        analist = Analist.objects.get(user_id=profile.pk)
+        analist.request_send  = False
+        analist.request_accepted = False
+        return HttpResponse("ok")

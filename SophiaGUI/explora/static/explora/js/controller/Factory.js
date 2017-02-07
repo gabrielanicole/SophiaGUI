@@ -185,6 +185,24 @@ app.factory('userRequest', function ($http) {
             }).then(function (response) {
                 return response;
             });
+        },
+        acceptAnalistRequest: function (username) {
+            return $http({
+                method: 'POST',
+                url: '/requests/acceptAnalistRequest/',
+                data: $.param({ username: username })
+            }).then(function (response) {
+                return response;
+            });
+        },
+        rejectAnalistRequest: function (username) {
+            return $http({
+                method: 'POST',
+                url: '/requests/rejectAnalistRequest/',
+                data: $.param({ username: username })
+            }).then(function (response) {
+                return response;
+            })
         }
     }
 })
