@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.shortcuts import HttpResponse
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
-from models import Profile, NewsCase
+from models import Profile, NewsCase, Analist
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
@@ -104,7 +104,6 @@ def modal_new(request):
     else:
         return HttpResponse("Internal Error")
 
-
 # @brief Function that  render the "articles" page.
 # @param request Web request
 # @param num Value for the pagination
@@ -113,13 +112,17 @@ def modal_new(request):
 @login_required(login_url='/login_required')
 def articles(request, num=1):
 
+    analist_requests = Analist.objects.filter(request_send=True).exclude(request_accepted=True).count()
     my_user = request.user.social_auth.filter(provider='facebook').first()
     if my_user:
         url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
-        return render(request, 'articles.html', {'user': request.user.get_full_name(), 'profile_pic': url
+        return render(request, 'articles.html', {'user': request.user.get_full_name(),
+                                                 'profile_pic': url,
+                                                 'analist_requests':analist_requests
                                                  })
     else:
-        return render(request, 'articles.html', {'user': request.user.get_full_name()
+        return render(request, 'articles.html', {'user': request.user.get_full_name(),
+                                                 'analist_requests':analist_requests
                                                  })
 
 # @brief Function that conect to the API and get articles between two dates and group by date
@@ -262,13 +265,17 @@ def advancedSearch(request, page=1):
 @login_required(login_url='/login_required')
 def tweets(request):
 
+    analist_requests = Analist.objects.filter(request_send=True).exclude(request_accepted=True).count()
     my_user = request.user.social_auth.filter(provider='facebook').first()
     if my_user:
         url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
-        return render(request, 'tweets.html', {'user': request.user.get_full_name(), 'profile_pic': url
+        return render(request, 'tweets.html', {'user': request.user.get_full_name(),
+                                               'profile_pic': url,
+                                               'analist_requests':analist_requests
                                                })
     else:
-        return render(request, 'tweets.html', {'user': request.user.get_full_name()
+        return render(request, 'tweets.html', {'user': request.user.get_full_name(),
+                                                'analist_requests':analist_requests
                                                })
 
 

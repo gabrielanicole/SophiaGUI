@@ -92,7 +92,11 @@
 			<a href="/tweets"><i class="fa fa-twitter" aria-hidden="true"></i> Tweets</a>
 			<a href="/newscases"><i class="fa fa-file" aria-hidden="true"></i> Casos Noticiosos</a>
 			<a href="/pressmedia"><i class="fa fa-address-card" aria-hidden="true"></i></i> Medios de Prensa</a>
-			<a href="/requests"><i class="fa fa-cogs" aria-hidden="true"></i></i> Solicitudes</a>
+			{% if request.user.is_staff %}
+			<a href="/requests"><i class="fa fa-cogs" aria-hidden="true"></i></i> Solicitudes <span class="badge">{{analist_requests}}</span></a>
+			{% else %}
+			<a href="/requests"><i class="fa fa-cogs" aria-hidden="true"></i></i> Solicitudes </a>
+			{% endif %}
 		</div>
 
 		<!--

@@ -7,19 +7,24 @@ import simplejson as json
 import requests
 import tweepy
 from twitter import addFriend, removeFriend
+from explora.models import Profile, Analist
 
 # Create your views here.
 
 
 @login_required(login_url='/login_required')
 def pressMedia(request):
+    analist_requests = Analist.objects.filter(request_send=True).exclude(request_accepted=True).count()
     my_user = request.user.social_auth.filter(provider='facebook').first()
     if my_user:
         url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
-        return render(request, 'pressmedia.html', {'user': request.user.get_full_name(), 'profile_pic': url
+        return render(request, 'pressmedia.html', {'user': request.user.get_full_name(),
+                                                   'profile_pic': url,
+                                                   'analist_requests':analist_requests
                                                    })
     else:
-        return render(request, 'pressmedia.html', {'user': request.user.get_full_name()
+        return render(request, 'pressmedia.html', {'user': request.user.get_full_name(),
+                                                  'analist_requests':analist_requests
                                                    })
 
 @login_required(login_url='/login_required')

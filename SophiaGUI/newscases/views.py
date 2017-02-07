@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from explora.models import Profile, NewsCase
+from explora.models import Profile, NewsCase, Analist
 from django.shortcuts import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
@@ -95,13 +95,17 @@ def createNewsCase(request):
 @login_required(login_url='/login_required')
 def newsCases(request):
 
+    analist_requests = Analist.objects.filter(request_send=True).exclude(request_accepted=True).count()
     my_user = request.user.social_auth.filter(provider='facebook').first()
     if my_user:
         url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
-        return render(request, 'newscase.html', {'user': request.user.get_full_name(), 'profile_pic': url
+        return render(request, 'newscase.html', {'user': request.user.get_full_name(),
+                                                 'profile_pic': url,
+                                                 'analist_requests':analist_requests
                                                })
     else:
-        return render(request, 'newscase.html', {'user': request.user.get_full_name()
+        return render(request, 'newscase.html', {'user': request.user.get_full_name(),
+                                                 'analist_requests':analist_requests
                                                })
 
 @login_required(login_url='/login_required')
