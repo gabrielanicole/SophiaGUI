@@ -47,7 +47,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         format: ""
     };
 
-
     /** Variables and function to change clasification Category */
     $scope.selectedCategoryForChange;
     $scope.selectedId;
@@ -57,10 +56,12 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.changeCategory = function (category) {
         $scope.selectedCategoryForChange = category[0][0];
     }
-    $scope.sendCategoryChange = function(){
-        Articles.changeArticleCategory($scope.selectedId, $scope.selectedCategoryForChange);
+    $scope.sendCategoryChange = function () {
+        Articles.changeArticleCategory($scope.selectedId, $scope.selectedCategoryForChange).then(function (response) {
+            response.data == "success" ? toastr.success("Clasificación actualizada") : toastr.error("Ha ocurrido un error");
+            $('#'+$scope.selectedId).text($scope.selectedCategoryForChange.toUpperCase());
+        });
     }
-
 
     $scope.exportData = function () {
 
