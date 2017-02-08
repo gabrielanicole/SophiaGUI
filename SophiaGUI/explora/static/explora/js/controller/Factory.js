@@ -186,6 +186,14 @@ app.factory('userRequest', function ($http) {
                 return response;
             });
         },
+        getAllowedRequestList: function () {
+            return $http({
+                method: 'GET',
+                url: '/requests/getAllowedRequestList/'
+            }).then(function (response) {
+                return response;
+            })
+        },
         acceptAnalistRequest: function (username) {
             return $http({
                 method: 'POST',
@@ -199,6 +207,15 @@ app.factory('userRequest', function ($http) {
             return $http({
                 method: 'POST',
                 url: '/requests/rejectAnalistRequest/',
+                data: $.param({ username: username })
+            }).then(function (response) {
+                return response;
+            })
+        },
+        removePermission: function (username) {
+            return $http({
+                method: 'POST',
+                url: '/requests/removePermission/',
                 data: $.param({ username: username })
             }).then(function (response) {
                 return response;

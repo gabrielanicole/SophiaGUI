@@ -8,4 +8,6 @@ urlpatterns = [
     url(r'^requests/getRequestList/$', views.getRequestList, name='getRequestList'),
     url(r'^requests/acceptAnalistRequest/', views.acceptAnalistRequest, name='acceptAnalistRequest'),
     url(r'^requests/rejectAnalistRequest/$', views.rejectAnalistRequest, name='rejectAnalistRequest'),
+    url(r'^requests/getAllowedRequestList/$', views.getAllowedRequestList, name='getAllowedRequestList'),
+    url(r'^requests/removePermission/$', views.removePermission, name='removePermission'),
 ]

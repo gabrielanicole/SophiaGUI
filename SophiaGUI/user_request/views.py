@@ -74,3 +74,34 @@ def rejectAnalistRequest(request):
         analist.request_accepted = False
         analist.save()
         return HttpResponse("ok")
+
+@login_required(login_url='/login_required')
+def getAllowedRequestList(request):
+    if request.method == 'GET':
+        analist_list = Analist.objects.filter(request_accepted=True)
+        response_list = []
+        for x in analist_list:
+            d = {
+                'username':x.user.user.username,
+                'firstname':x.user.user.first_name,
+                'lastname':x.user.user.last_name,
+                'email':x.user.user.email
+            }
+            response_list.append(d)
+        return JsonResponse(response_list, safe=False)
+
+@login_required(login_url='/login_required')
+def removePermission(request):
+    if request.method == 'POST':
+        try:
+            username = request.POST.get('username')
+            user = User.objects.get(username=username)
+            profile = Profile.objects.get(pk=user.pk)
+            analist = Analist.objects.get(user_id=profile.pk)
+            analist.request_send  = False
+            analist.request_accepted = False
+            analist.save()
+            return HttpResponse("success")
+        except Exception as e:
+            print e
+            return HttpResponse("error")

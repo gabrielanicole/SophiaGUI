@@ -1,0 +1,4 @@
+.request-table.nav>li>a:hover, 
+.request-table.nav>li>a:focus {
+	background-color: white !important;
+}

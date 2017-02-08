@@ -1,6 +1,6 @@
 {% extends 'base.html' %} {% block header %}
 <script type="text/javascript" src="/static/explora/js/controller/userRequestController.js"></script>
-<link rel="stylesheet" href="/static/explora/pressMedia.css" type="text/css">
+<link rel="stylesheet" href="/static/explora/requests.css" type="text/css">
 <link rel="stylesheet" href="/static/explora/externalCSS/toastr.min.css" type="text/css">
 <script type="text/javascript" src="/static/explora/externalJS/toastr.min.js"></script>
 
@@ -21,37 +21,76 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="container">
-            <div class="col-md-12">
-                <h2>Solicitudes</h2>
-                <p>Los siguientes usuarios han solicitado ser analistas:</p>
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Usuario</th>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Email</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="x in requestList">
-                            <td>[[x.username]]</td>
-                            <td>[[x.firstname]]</td>
-                            <td>[[x.lastname]]</td>
-                            <td>[[x.email]]</td>
-                            <td>
-                            <i style="color:mediumspringgreen;cursor:pointer" class="fa fa-check fa-2x" aria-hidden="true" ng-click="acceptRequest([[x.username]])"> </i>
-                            <i style="color:red;cursor:pointer" class="fa fa-ban fa-2x" aria-hidden="true" ng-click="rejectRequest([[x.username]])"></i>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+    {% if request.user.is_staff %}
+    <div class="container">
+        <div class="row">
+            <ul class="nav nav-tabs request-table">
+                <li class="active"><a data-toggle="tab" href="#home">Solicitudes</a></li>
+                <li><a data-toggle="tab" href="#menu1">Permisos</a></li>
+            </ul>
+
+            <div class="tab-content">
+                    <div id="home" class="tab-pane fade in active">
+                        <div class="col-md-12">
+                            <h2>Solicitudes</h2>
+                            <p>Los siguientes usuarios han solicitado ser analistas:</p>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Usuario</th>
+                                        <th>Nombre</th>
+                                        <th>Apellido</th>
+                                        <th>Email</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="x in requestList">
+                                        <td>[[x.username]]</td>
+                                        <td>[[x.firstname]]</td>
+                                        <td>[[x.lastname]]</td>
+                                        <td>[[x.email]]</td>
+                                        <td>
+                                        <i style="color:mediumspringgreen;cursor:pointer" class="fa fa-check fa-2x" aria-hidden="true" ng-click="acceptRequest([[x.username]])"> </i>
+                                        <i style="color:red;cursor:pointer" class="fa fa-ban fa-2x" aria-hidden="true" ng-click="rejectRequest([[x.username]])"></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="menu1" class="tab-pane fade">
+                        <div class="col-md-12">
+                            <h2>Revocar Permisos</h2>
+                            <p>Acá puede revocar los permisos entregados a los diferentes usuarios:</p>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Usuario</th>
+                                        <th>Nombre</th>
+                                        <th>Apellido</th>
+                                        <th>Email</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="x in allowedRequestList">
+                                        <td>[[x.username]]</td>
+                                        <td>[[x.firstname]]</td>
+                                        <td>[[x.lastname]]</td>
+                                        <td>[[x.email]]</td>
+                                        <td>
+                                        <i style="color:red;cursor:pointer" class="fa fa-ban fa-2x" aria-hidden="true" ng-click="removePermission([[x.username]])"></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
             </div>
         </div>
     </div>
+    {% endif %}
 
 </div>
 
