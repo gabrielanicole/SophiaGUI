@@ -6,3 +6,14 @@
 .press-info{
 	margin: 10px;
 }
+
+.panel-default {
+    border-color:rgba(24, 188, 156, 1);
+	max-width: 600px;
+}
+
+.panel-default>.panel-heading{
+	background-color: rgba(24, 188, 156, 1);
+	border-color: rgba(24, 188, 156, 1);
+	color: white;
+}

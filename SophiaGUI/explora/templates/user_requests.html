@@ -7,86 +7,93 @@
 {% endblock header %}{% block content %}
 <div id="angularController" ng-controller="userRequestController">
 
-   <div class="container"> 
-        <div class="row">
-            <div class="col-md-12">
-                {% if analist.request_send == False %}
-                <button id="analistButton" class="btn btn-default" ng-click="sendAnalistRequest()" data-toggle="tooltip" data-placement="bottom"
-                    title="Solicitar ser analista para poder corregir clasificación de noticias" ><span class="glyphicon glyphicon-plus-sign" ></span> Solicitar ser Analista</button>
-                    {% else %}
-                <button id="analistButton" class="btn btn-default" ng-click="sendAnalistRequest()" data-toggle="tooltip" data-placement="bottom"
-                    title="Solicitar ser analista para poder corregir clasificación de noticias" disabled><span class="glyphicon glyphicon-plus-sign"></span> Solicitar ser Analista</button>
-                    {% endif %}
-            </div>
-        </div>
-    </div>
-
     {% if request.user.is_staff %}
     <div class="container">
-        <div class="row">
+        <div class="row top-buffer">
             <ul class="nav nav-tabs request-table">
                 <li class="active"><a data-toggle="tab" href="#home">Solicitudes</a></li>
-                <li><a data-toggle="tab" href="#menu1">Permisos</a></li>
+                <li><a data-toggle="tab" href="#permisos">Permisos</a></li>
             </ul>
 
             <div class="tab-content">
-                    <div id="home" class="tab-pane fade in active">
-                        <div class="col-md-12">
-                            <h2>Solicitudes</h2>
-                            <p>Los siguientes usuarios han solicitado ser analistas:</p>
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Usuario</th>
-                                        <th>Nombre</th>
-                                        <th>Apellido</th>
-                                        <th>Email</th>
-                                        <th>Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="x in requestList">
-                                        <td>[[x.username]]</td>
-                                        <td>[[x.firstname]]</td>
-                                        <td>[[x.lastname]]</td>
-                                        <td>[[x.email]]</td>
-                                        <td>
-                                        <i style="color:mediumspringgreen;cursor:pointer" class="fa fa-check fa-2x" aria-hidden="true" ng-click="acceptRequest([[x.username]])"> </i>
-                                        <i style="color:red;cursor:pointer" class="fa fa-ban fa-2x" aria-hidden="true" ng-click="rejectRequest([[x.username]])"></i>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                <div id="home" class="tab-pane fade in active">
+                    <div class="col-md-12">
+                        <h2>Solicitudes</h2>
+                        <p>Los siguientes usuarios han solicitado ser analistas:</p>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Email</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in requestList">
+                                    <td>[[x.username]]</td>
+                                    <td>[[x.firstname]]</td>
+                                    <td>[[x.lastname]]</td>
+                                    <td>[[x.email]]</td>
+                                    <td>
+                                        <i class="fa fa-check fa-2x allow" aria-hidden="true" ng-click="acceptRequest([[x.username]])"> </i>
+                                        <i class="fa fa-ban fa-2x reject" aria-hidden="true" ng-click="rejectRequest([[x.username]])"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div id="menu1" class="tab-pane fade">
-                        <div class="col-md-12">
-                            <h2>Revocar Permisos</h2>
-                            <p>Acá puede revocar los permisos entregados a los diferentes usuarios:</p>
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Usuario</th>
-                                        <th>Nombre</th>
-                                        <th>Apellido</th>
-                                        <th>Email</th>
-                                        <th>Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="x in allowedRequestList">
-                                        <td>[[x.username]]</td>
-                                        <td>[[x.firstname]]</td>
-                                        <td>[[x.lastname]]</td>
-                                        <td>[[x.email]]</td>
-                                        <td>
-                                        <i style="color:red;cursor:pointer" class="fa fa-ban fa-2x" aria-hidden="true" ng-click="removePermission([[x.username]])"></i>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                </div>
+                <div id="permisos" class="tab-pane fade">
+                    <div class="col-md-12">
+                        <h2>Revocar Permisos</h2>
+                        <p>Acá puede revocar los permisos entregados a los diferentes usuarios:</p>
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Email</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in allowedRequestList">
+                                    <td>[[x.username]]</td>
+                                    <td>[[x.firstname]]</td>
+                                    <td>[[x.lastname]]</td>
+                                    <td>[[x.email]]</td>
+                                    <td>
+                                        <i class="fa fa-ban fa-2x reject" aria-hidden="true" ng-click="removePermission([[x.username]])"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+        <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">Solicitud de analista</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <p> Como analista, tiene la opción de modificar la clasificación automatizada realizada por Sophia, con
+                            el objetivo de realizar correcciones</p>
+                        {% if analist.request_send == False %}
+                        <button id="analistButton" class="btn btn-default" ng-click="sendAnalistRequest()" data-toggle="tooltip" data-placement="bottom"
+                            title="Solicitar ser analista para poder corregir clasificación de noticias"><span class="glyphicon glyphicon-plus-sign" ></span> Solicitar ser Analista</button> 
+                            {% else %}
+                        <button id="analistButton" class="btn btn-default" ng-click="sendAnalistRequest()" data-toggle="tooltip" data-placement="bottom"
+                            title="Se ha enviado su solicitud, debe esperar que el administrador responda a ella" disabled><span class="glyphicon glyphicon-plus-sign"></span> Solicitar ser Analista</button>
+                            {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

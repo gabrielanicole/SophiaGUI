@@ -2,3 +2,29 @@
 .request-table.nav>li>a:focus {
 	background-color: white !important;
 }
+.request-table.nav>li>a{
+	color: black !important;
+}
+.allow{
+	color:green;
+	cursor: pointer;
+}
+.reject{
+	color:crimson;
+	cursor: pointer;
+}
+
+.top-buffer{
+	margin-top:20px;
+}
+
+.panel-default {
+    border-color:rgba(24, 188, 156, 1);
+	max-width: 600px;
+}
+
+.panel-default>.panel-heading{
+	background-color: rgba(24, 188, 156, 1);
+	border-color: rgba(24, 188, 156, 1);
+	color: white;
+}

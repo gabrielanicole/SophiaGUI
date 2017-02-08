@@ -65,6 +65,31 @@ def logout(request):
     auth_logout(request)
     return redirect(index)
 
+# @brief Function that  render the "articles" page.
+# @param request Web request
+# @param num Value for the pagination
+# @return HttpResponse with the articles page.
+# @warning Login is required.
+@login_required(login_url='/login_required')
+def articles(request, num=1):
+
+    analist_requests = Analist.objects.filter(request_send=True).exclude(request_accepted=True).count()
+    my_user = request.user.social_auth.filter(provider='facebook').first()
+    profile = Profile.objects.get(pk=request.user.pk)
+    analist = Analist.objects.get(user_id=profile.pk)
+    if my_user:
+        url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
+        return render(request, 'articles.html', {'user': request.user.get_full_name(),
+                                                 'profile_pic': url,
+                                                 'analist_requests':analist_requests,
+                                                 'analist':analist
+                                                 })
+    else:
+        return render(request, 'articles.html', {'user': request.user.get_full_name(),
+                                                 'analist_requests':analist_requests,
+                                                 'analist':analist
+                                                 })
+
 @login_required()
 def modal_new(request):
     if request.method == 'POST':
@@ -103,27 +128,6 @@ def modal_new(request):
                                                    'imageLink': imageLink})
     else:
         return HttpResponse("Internal Error")
-
-# @brief Function that  render the "articles" page.
-# @param request Web request
-# @param num Value for the pagination
-# @return HttpResponse with the articles page.
-# @warning Login is required.
-@login_required(login_url='/login_required')
-def articles(request, num=1):
-
-    analist_requests = Analist.objects.filter(request_send=True).exclude(request_accepted=True).count()
-    my_user = request.user.social_auth.filter(provider='facebook').first()
-    if my_user:
-        url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
-        return render(request, 'articles.html', {'user': request.user.get_full_name(),
-                                                 'profile_pic': url,
-                                                 'analist_requests':analist_requests
-                                                 })
-    else:
-        return render(request, 'articles.html', {'user': request.user.get_full_name(),
-                                                 'analist_requests':analist_requests
-                                                 })
 
 # @brief Function that conect to the API and get articles between two dates and group by date
 # @param request

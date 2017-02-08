@@ -5,9 +5,7 @@ app.controller('userRequestController', ['$scope', '$http', 'userRequest', funct
 
     $scope.sendAnalistRequest = function () {
         userRequest.sendAnalistRequest().then(function (response) {
-            if (response.data == 'ok') {
-                toastr.success("Se ha enviado su solicitud");
-            }
+            response.data == "ok" ? toastr.success("Se ha aceptado el permiso") : toastr.error("Ha ocurrido un error");
         });
     }
 
