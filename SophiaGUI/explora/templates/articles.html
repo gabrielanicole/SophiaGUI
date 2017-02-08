@@ -120,7 +120,7 @@
                         </div>
                           <div class="col-md-6">
                             {% if analist.request_accepted == True %}
-                                <h5 style="cursor:pointer" class="category text-right" data-toggle="modal" data-target="#changeCategory"> [[d.art_category|uppercase]]</h5>
+                                <h5 style="cursor:pointer" class="category text-right" data-toggle="modal" data-target="#changeCategory" ng-click="changeSelectedId([[d.art_id]])">[[d.art_category|uppercase]]</h5>
                             {% else %}
                                 <h5 class="category text-right"> [[d.art_category|uppercase]]</h5>
                             {% endif %}
@@ -297,9 +297,9 @@
         <div class="modal-body">
           <div class="row">
               <div class="col-md-12">
-                <div ng-repeat="x in category" ng-if="x != '' ">
+                <div ng-repeat="cat in category" ng-if="cat != '' ">
                   <div class="radio">
-                    <label><input type="radio" name="format" ng-click="">[[x]]</label>
+                    <label><input type="radio" name="format" ng-click="changeCategory([[cat]])">[[cat]]</label>
                   </div>
                 </div>
               </div>
@@ -307,6 +307,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="sendCategoryChange()">Aceptar</button>
         </div>
       </div>
       

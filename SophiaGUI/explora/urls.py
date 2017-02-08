@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^get_data/tweets/histogram/$',
         views.tweetsCountBy, name='tweetsCountBy'),
     url(r'^exportData/$', views.exportData, name='exportData'),
+    url(r'^articles/changeCategory/$', views.changeCategory, name='changeCategory')
 ]

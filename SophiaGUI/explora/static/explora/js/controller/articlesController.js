@@ -47,6 +47,21 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         format: ""
     };
 
+
+    /** Variables and function to change clasification Category */
+    $scope.selectedCategoryForChange;
+    $scope.selectedId;
+    $scope.changeSelectedId = function (id) {
+        $scope.selectedId = id[0][0];
+    }
+    $scope.changeCategory = function (category) {
+        $scope.selectedCategoryForChange = category[0][0];
+    }
+    $scope.sendCategoryChange = function(){
+        Articles.changeArticleCategory($scope.selectedId, $scope.selectedCategoryForChange);
+    }
+
+
     $scope.exportData = function () {
 
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);

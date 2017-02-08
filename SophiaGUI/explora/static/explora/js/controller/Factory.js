@@ -27,6 +27,15 @@ app.factory('Articles', function ($http) {
             }).then(function (response) {
                 return response;
             });
+        },
+        changeArticleCategory: function(id, category){
+            return $http({
+                method:'POST',
+                url:'articles/changeCategory/',
+                data: $.param({id:id, category:category})
+            }).then(function(response){
+                return response;
+            });
         }
     };
 });

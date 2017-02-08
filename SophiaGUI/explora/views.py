@@ -452,3 +452,20 @@ def exportData(request):
         except Exception as e:
             print e
             return HttpResponse(e)
+
+@login_required(login_url='/login_required')
+def changeCategory(request):
+    if request.method == 'POST':
+        try:
+            art_id = request.POST.get('id')
+            category = request.POST.get('category')
+            file = json.loads(open("explora/static/user.json").read())
+            api_user = file["user"]
+            api_password = file["password"]
+            api_url = file["api_url"]
+            api = u'http://{0}/v2/articles/{1}/'.format(api_url, art_id)
+            response = requests.put(api, data={'art_category':category})
+            return HttpResponse("success")
+        except Exception as e:
+            print e
+            return HttpResponse("Error")
