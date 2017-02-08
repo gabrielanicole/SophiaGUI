@@ -283,7 +283,7 @@
     </div>
   </div>
 
-  {% if analist.request_accepted == True %}
+  {% if analist.request_accepted == True or request.user.is_staff %}
   <!-- Modal -->
   <div class="modal fade" id="changeCategory" role="dialog">
     <div class="modal-dialog modal-sm">
