@@ -77,6 +77,7 @@ def articles(request, num=1):
     my_user = request.user.social_auth.filter(provider='facebook').first()
     profile = Profile.objects.get(pk=request.user.pk)
     analist = Analist.objects.get(user_id=profile.pk)
+    
     if my_user:
         url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
         return render(request, 'articles.html', {'user': request.user.get_full_name(),
