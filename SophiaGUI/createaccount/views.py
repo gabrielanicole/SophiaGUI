@@ -40,7 +40,7 @@ def createUser(request):
                 analist = Analist(user=profile)
                 analist.save()
                 
-                content = useTemplate('http://localhost:8000/activate/'+str(link), username)
+                content = useTemplate('http://www.sophia-project.info/activate/'+str(link), username)
                 subject = 'Confirme su direccion de correo electronico'
                 text_content = 'habilita el html de tu correo'
                 html_content = content
