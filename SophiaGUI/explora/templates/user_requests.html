@@ -90,6 +90,9 @@
                         {% if analist.request_send == False %}
                         <button id="analistButton" class="btn btn-default" ng-click="sendAnalistRequest()" data-toggle="tooltip" data-placement="bottom"
                             title="Solicitar ser analista para poder corregir clasificación de noticias"><span class="glyphicon glyphicon-plus-sign" ></span> Solicitar ser Analista</button> 
+                        {% elif analist.request_accepted == True %}
+                       <button id="analistButton" class="btn btn-default" ng-click="sendAnalistRequest()" data-toggle="tooltip" data-placement="bottom"
+                            title="Su solicitud ha sido respondida, cuenta con los permisos de analista" disabled><span class="glyphicon glyphicon-plus-sign"></span> Solicitar ser Analista</button>                        
                         {% else %}
                         <button id="analistButton" class="btn btn-default" ng-click="sendAnalistRequest()" data-toggle="tooltip" data-placement="bottom"
                             title="Se ha enviado su solicitud, debe esperar que el administrador responda a ella" disabled><span class="glyphicon glyphicon-plus-sign"></span> Solicitar ser Analista</button>
@@ -97,14 +100,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    {% endif %}
-
-    {% if perms.explora.isAnalist %}
-    <div class="row">
-        <div class="col-md-12">
-            <h3> Testing </h3>
         </div>
     </div>
     {% endif %}

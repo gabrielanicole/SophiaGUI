@@ -18,7 +18,9 @@ def user_request(request):
     try:
         profile = Profile.objects.get(pk=request.user.pk)
         analist = Analist.objects.get(user_id=profile.pk)
+
     except Exception as e:
+        print e
         u = request.user
         profile = Profile(user=u, activation_url="NULL")
         profile.save()
@@ -29,11 +31,13 @@ def user_request(request):
         url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
         return render(request, 'user_requests.html', {'user': request.user.get_full_name(),
                                                       'profile_pic': url,
-                                                      'analist_requests':analist_requests
+                                                      'analist_requests':analist_requests,
+                                                      'analist':analist
                                                    })
     else:
         return render(request, 'user_requests.html', {'user': request.user.get_full_name(),
-                                                      'analist_requests':analist_requests
+                                                      'analist_requests':analist_requests,
+                                                      'analist':analist
                                                    })
 
 @login_required(login_url='/login_required')
