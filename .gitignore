@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 #Django Database
- db.sqlite3
+db.sqlite3
  
 #PyDev Project
 .project
@@ -14,7 +14,7 @@ __pycache__/
 *.so
 
 #Migration folder
-migrations/
+*migrations/*
 
 # Distribution / packaging
 .Python

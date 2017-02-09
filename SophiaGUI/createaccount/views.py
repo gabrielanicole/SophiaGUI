@@ -8,7 +8,6 @@ from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 import uuid
 # Create your views here.
-
 def createaccount(request):
     return render(request,'registration.html')
 

@@ -39,11 +39,7 @@ def createNewsCase(request):
                 "new_pre_owner": data['pre_owner']
             }
 
-            file = json.loads(open("explora/static/user.json").read())
-            api_user = file["user"]
-            api_password = file["password"]
-            api_url = file["api_url"]
-
+            client,headers,api_url = getClient()
             get_first_document ={
                 "index": data['index'],
                 "fields": data['fields'],
@@ -58,7 +54,7 @@ def createNewsCase(request):
             get_first_document = json.dumps(get_first_document)
             try:
                 api = u'http://{0}/v2/search/page/1/'.format(api_url)
-                documents = requests.post(api, data=get_first_document)
+                documents = client.post(api, data=get_first_document, headers=headers)
                 doc_results = json.loads(documents.text.encode('utf8'))
                 doc_results = doc_results['hits']['hits']
                 img_preview = doc_results[0]['_source']['art_image_link']
@@ -69,7 +65,7 @@ def createNewsCase(request):
             try:
                 elastic_data = json.dumps(elastic_data)
                 api = u'http://{0}/v2/newscases/'.format(api_url)
-                response = requests.post(api,data=elastic_data)
+                response = client.post(api,data=elastic_data, headers=headers)
                 elastic_response = json.loads(response.text.encode('utf8'))
                 elastic_id = elastic_response['_id']
             except Exception as e:
@@ -215,12 +211,9 @@ def getNewCaseInfo(request):
             print e
             return HttpResponse("e")       
         try:
-            file = json.loads(open("explora/static/user.json").read())
-            api_user = file["user"]
-            api_password = file["password"]
-            api_url = file["api_url"]
+            client,headers,api_url = getClient()
             api = u'http://{0}/v2/newscases/{1}/'.format(api_url,elastic_id)
-            response = requests.get(api)
+            response = requests.get(api, headers=headers)
             response = json.loads(response.content)
             response = response['_source']
 
@@ -276,13 +269,10 @@ def updateNewsCase(request):
                 }
             
             elastic_data = json.dumps(elastic_data)
-
-            file = json.loads(open("explora/static/user.json").read())
-            api_user = file["user"]
-            api_password = file["password"]
-            api_url = file["api_url"]
+            
+            client,headers,api_url = getClient()
             api = u'http://{0}/v2/newscases/{1}/'.format(api_url,elastic_id)
-            response = requests.put(api, data=elastic_data)
+            response = client.put(api, data=elastic_data, headers=headers)
 
             return HttpResponse("ok")
 
@@ -302,10 +292,7 @@ def removeArticle(request):
             except Exception as e:
                 return HttpResponse("The newscase was from another person")
             
-            file = json.loads(open("explora/static/user.json").read())
-            api_user = file["user"]
-            api_password = file["password"]
-            api_url = file["api_url"]
+            client,headers,api_url = getClient()
             api = u'http://{0}/v2/newscases/{1}/'.format(api_url,elastic_id)
             response = requests.get(api)
             response = json.loads(response.content)
@@ -315,7 +302,7 @@ def removeArticle(request):
                 "new_art_not":new_art_not
             }
             response_data = json.dumps(response_data)
-            response = requests.put(api, data=response_data)
+            response = client.put(api, data=response_data, headers=headers)
             return HttpResponse("ok")
         except Exception as e:
             print e
@@ -333,3 +320,16 @@ def removeNewsCase(request):
             newCase.visible = False
             newCase.save()
             return HttpResponse('')
+
+def getClient():
+    file = json.loads(open("explora/static/user.json").read())
+    api_url = file["api_url"]
+    api_token = file["token"]
+    URL_BASE_API = "http://api.sophia-project.info/"
+    PARAM_LOGIN_URL = URL_BASE_API + "accounts/login"
+    client = requests.session()
+    client.get(PARAM_LOGIN_URL)
+    csrftoken = client.cookies['csrftoken']
+    headers = {"Authorization":"Bearer "+api_token}
+    headers["X-CSRFToken"] = csrftoken
+    return client, headers, api_url

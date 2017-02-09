@@ -32,10 +32,7 @@ def insertPressMedia(request):
     if request.method == 'POST':
         try:
             data = request.POST.get('data').encode('utf8')
-            file = json.loads(open("explora/static/user.json").read())
-            api_user = file["user"]
-            api_password = file["password"]
-            api_url = file["api_url"]
+            client,headers,api_url = getClient()
             data = json.loads(data)
 
             consumer_key = 'wHpPsl5nuZXEyJU6fgqPzvs3V'
@@ -49,7 +46,7 @@ def insertPressMedia(request):
             if addFriend == '200':
                 data = json.dumps(data)
                 api = u'http://{0}/v2/pressmedia/'.format(api_url)
-                response = requests.post(api, data=data)
+                response = client.post(api, data=data, headers=headers)
                 return HttpResponse('Se ha insertado un nuevo medio de prensa')
             else:
                 return HttpResponse('No se ha insertado un nuevo usuario')
@@ -62,12 +59,9 @@ def insertPressMedia(request):
 def getPressMedia(request):
     if request.method == 'GET':
         try:
-            file = json.loads(open("explora/static/user.json").read())
-            api_user = file["user"]
-            api_password = file["password"]
-            api_url = file["api_url"]
+            client,headers,api_url = getClient()
             api = u'http://{0}/v2/pressmedia/'.format(api_url)
-            response = requests.get(api)
+            response = client.get(api, headers=headers)
             return HttpResponse('')
         except Exception as e:
             print e
@@ -76,12 +70,9 @@ def getPressMedia(request):
     if request.method == 'POST':
         try:
             media_id = request.POST.get('media_id').encode('utf8')
-            file = json.loads(open("explora/static/user.json").read())
-            api_user = file["user"]
-            api_password = file["password"]
-            api_url = file["api_url"]
+            client,headers,api_url = getClient()
             api = u'http://{0}/v2/pressmedia/{1}'.format(api_url, media_id)
-            response = requests.get(api)
+            response = client.get(api, headers=headers)
             response = json.loads(response.content)
             response = response['_source']
             return JsonResponse(response, safe=False)
@@ -94,12 +85,9 @@ def getPressMedia(request):
 def getListPressMedia(request):
     if request.method == 'GET':
         try:
-            file = json.loads(open("explora/static/user.json").read())
-            api_user = file["user"]
-            api_password = file["password"]
-            api_url = file["api_url"]
+            client,headers,api_url = getClient()
             api = u'http://{0}/v2/pressmedia/ids/'.format(api_url)
-            response = requests.get(api)
+            response = client.get(api, headers=headers)
             data = json.loads(response.content)
             data = data['hits']['hits']
             results = []
@@ -120,12 +108,9 @@ def getListPressMedia(request):
 def getMediaGroups(request):
     if request.method == 'GET':
         try:
-            file = json.loads(open("explora/static/user.json").read())
-            api_user = file["user"]
-            api_password = file["password"]
-            api_url = file["api_url"]
+            client,headers,api_url = getClient()
             api = u'http://{0}/v2/pressmedia/owners/'.format(api_url)
-            response = requests.get(api)
+            response = client.get(api, headers=headers)
             d = json.loads(response.content)
             data = {
                 'names': d
@@ -134,3 +119,16 @@ def getMediaGroups(request):
         except Exception as e:
             print e
             return HttpResponse('error')
+
+def getClient():
+    file = json.loads(open("explora/static/user.json").read())
+    api_url = file["api_url"]
+    api_token = file["token"]
+    URL_BASE_API = "http://api.sophia-project.info/"
+    PARAM_LOGIN_URL = URL_BASE_API + "accounts/login"
+    client = requests.session()
+    client.get(PARAM_LOGIN_URL)
+    csrftoken = client.cookies['csrftoken']
+    headers = {"Authorization":"Bearer "+api_token}
+    headers["X-CSRFToken"] = csrftoken
+    return client, headers, api_url

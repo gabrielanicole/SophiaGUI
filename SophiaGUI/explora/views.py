@@ -59,7 +59,6 @@ def index(request):
 # @brief Function that log out the user from Sophia
 # @param requestfrom django.http import JsonResponse
 # @return HttpResponse with the main page
-
 @login_required()
 def logout(request):
     auth_logout(request)
@@ -95,11 +94,7 @@ def articles(request, num=1):
 def modal_new(request):
     if request.method == 'POST':
 
-        file = json.loads(open("explora/static/user.json").read())
-        api_user = file["user"]
-        api_password = file["password"]
-        api_url = file["api_url"]
-
+        client,headers,api_url = getClient()
         art_id = request.POST.get('art_id').encode('utf8')
         # client = requests.post('http://{0}/v2/login/'.format(api_url),
         #     {'username': api_user, 'password': api_password})
@@ -108,7 +103,7 @@ def modal_new(request):
         api_url = u'http://{0}/v2/articles/{1}/'.format(api_url, art_id)
 
         #response = requests.get(api_url ,cookies=cookies)
-        response = requests.get(api_url)
+        response = client.get(api_url, headers=headers)
 
         data = json.loads(response.text.encode('utf8'))
 
@@ -144,20 +139,10 @@ def articlesCountBy(request):
         search['countby']=countby
         search = json.dumps(search)
 
-
-        file = json.loads(open("explora/static/user.json").read())
-        api_user = file["user"]
-        api_password = file["password"]
-        api_url = file["api_url"]
-
-       # client = requests.post('http://{0}/v2/login/'.format(api_url),
-       #      {'username': api_user, 'password': api_password})
-
-       # cookies = dict(sessionid=client.cookies['sessionid'])
-
+        client,headers,api_url = getClient()
         api = u'http://{0}/v2/countby/'.format(api_url)
         try:
-            response = requests.post(api, data=search)
+            response = client.post(api, data=search, headers=headers)
             #response = requests.get(api)
 
         except Exception as e:
@@ -179,20 +164,11 @@ def articlesByDates(request):
         startdate = request.POST['startdate']
         enddate = request.POST['enddate']
 
-        file = json.loads(open("explora/static/user.json").read())
-        api_user = file["user"]
-        api_password = file["password"]
-        api_url = file["api_url"]
+        client,headers,api_url = getClient()
 
-        client = requests.post('http://{0}/v2/login/'.format(api_url),
-                               {'username': api_user, 'password': api_password})
+        api = u'http://{0}/v2/articles/from/{1}/to/{2}/'.format(api_url, startdate, enddate)
 
-        cookies = dict(sessionid=client.cookies['sessionid'])
-
-        api = u'http://{0}/v2/articles/from/{1}/to/{2}/'.format(
-            api_url, startdate, enddate)
-
-        response = requests.get(api, cookies=cookies)
+        response = client.get(api, cookies=cookies, headers=headers)
 
         data_array = json.loads(response.text.encode('utf8'))
 
@@ -223,19 +199,11 @@ def advancedSearch(request, page=1):
 
         data = request.POST.get('data').encode('utf8')
 
-        file = json.loads(open("explora/static/user.json").read())
-        api_user = file["user"]
-        api_password = file["password"]
-        api_url = file["api_url"]
-
-        # client = requests.post('http://{0}/v2/login/'.format(api_url),
-        #     {'username': api_user, 'password': api_password})
-
-        #cookies = dict(sessionid=client.cookies['sessionid'])
+        client,headers,api_url = getClient()
 
         api = u'http://{0}/v2/search/page/{1}/'.format(api_url, page)
-
-        response = requests.post(api, data=data)
+        response = client.post(api, data=data, headers=headers)
+        #response = requests.post(api, data=data)
 
         data_array = json.loads(response.content.encode('utf8'))
 
@@ -291,18 +259,11 @@ def tweets(request):
 def getTweetsList(request, page=1):
 
     if request.method == 'POST':
-        try:
-            file = json.loads(open("explora/static/user.json").read())
-            api_user = file["user"]
-            api_password = file["password"]
-            api_url = file["api_url"]
-
-        except Exception as e:
-            return HttpResponse("Failed to load user")
-
+        client,headers,api_url = getClient()
         api = u'http://{0}/v2/search/page/{1}/'.format(api_url, page)
         data = request.POST.get('data').encode('utf8')
-        response = requests.post(api, data=data)
+        
+        response = client.post(api, data=data, headers=headers)
         data_array = json.loads(response.text.encode('utf8'))
         total = data_array['hits']['total']
         totalPages = data_array['totalPages']
@@ -339,25 +300,14 @@ def tweetsCountBy(request):
         countby = request.POST.get('countby').encode('utf8')
         search = request.POST.get('search').encode('utf8')
 
-        file = json.loads(open("explora/static/user.json").read())
-        api_user = file["user"]
-        api_password = file["password"]
-        api_url = file["api_url"]
-
+        client,headers,api_url = getClient()
         search = json.loads(search)
         search['countby']=countby
         search = json.dumps(search)
 
-       # client = requests.post('http://{0}/v2/login/'.format(api_url),
-       #      {'username': api_user, 'password': api_password})
-
-       # cookies = dict(sessionid=client.cookies['sessionid'])
         api = u'http://{0}/v2/countby/'.format(api_url)
         try:
-            response = requests.post(api, data=search)
-
-            #response = requests.get(api)
-
+            response = client.post(api, data=search, headers=headers)
         except Exception as e:
             return HttpResponse(e)
 
@@ -376,11 +326,7 @@ def exportData(request):
             search = data['search']
             options = data['checkbox']
 
-            file = json.loads(open("explora/static/user.json").read())
-            api_user = file["user"]
-            api_password = file["password"]
-            api_url = file["api_url"]
-
+            client,headers,api_url = getClient()
             corpusFields = []
             if(options['art_title'] == True):
                 corpusFields.append('art_title')
@@ -396,7 +342,7 @@ def exportData(request):
             search['corpusFields']=corpusFields
             search = json.dumps(search)
             api = u'http://{0}/v2/corpus/'.format(api_url)
-            response = requests.post(api,data=search)
+            response = client.post(api,data=search,headers=headers)
             response = json.loads(response.content)
             response = response['hits']['hits']
 
@@ -417,10 +363,7 @@ def exportData(request):
 
     if request.method == 'GET':
         try:
-            file = json.loads(open("explora/static/user.json").read())
-            api_user = file["user"]
-            api_password = file["password"]
-            api_url = file["api_url"]
+            client,headers,api_url = getClient()
             corpusFields = []
             corpusFields.append('art_title')
             corpusFields.append('art_date')
@@ -470,3 +413,16 @@ def changeCategory(request):
         except Exception as e:
             print e
             return HttpResponse("Error")
+
+def getClient():
+    file = json.loads(open("explora/static/user.json").read())
+    api_url = file["api_url"]
+    api_token = file["token"]
+    URL_BASE_API = "http://api.sophia-project.info/"
+    PARAM_LOGIN_URL = URL_BASE_API + "accounts/login"
+    client = requests.session()
+    client.get(PARAM_LOGIN_URL)
+    csrftoken = client.cookies['csrftoken']
+    headers = {"Authorization":"Bearer "+api_token}
+    headers["X-CSRFToken"] = csrftoken
+    return client, headers, api_url
