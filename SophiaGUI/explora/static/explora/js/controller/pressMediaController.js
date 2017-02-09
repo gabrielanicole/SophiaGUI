@@ -4,6 +4,10 @@ app.controller('pressMediaController', ['$scope', '$http', function ($scope, $ht
     $scope.pressMedia = {};
     $scope.selectedMedium;
 
+    $scope.insertClicked = false;
+    $scope.editClicked = false;
+    $scope.selectedMediaId = "";
+
     $http({
         method: 'GET',
         url: '/pressmedia/getlist/',
@@ -15,6 +19,7 @@ app.controller('pressMediaController', ['$scope', '$http', function ($scope, $ht
     });
 
     $scope.getMediaData = function (media) {
+        $scope.selectedMediaId = media.media_id
         $scope.selectedMedium = media;
         $http({
             method: 'POST',
@@ -27,24 +32,45 @@ app.controller('pressMediaController', ['$scope', '$http', function ($scope, $ht
         });
     }
 
-    $scope.clearPress = function(){
+    $scope.clearPress = function () {
         $scope.pressMedia = {};
     }
 
     $scope.insertMedia = function () {
-        $http({
-            method: 'POST',
-            url: '/pressmedia/insert/',
-            data: $.param({ data: JSON.stringify($scope.pressMedia) })
-        }).then(function successCallback(response) {
-            console.log(response);
-            toastr.success(response.data);
-        }, function errorCallback(response) {
-            toastr.error(response.data);
-        });
+        if ($scope.insertClicked == true && $scope.editClicked == false) {
+
+            $http({
+                method: 'POST',
+                url: '/pressmedia/insert/',
+                data: $.param({ data: JSON.stringify($scope.pressMedia) })
+            }).then(function successCallback(response) {
+                console.log(response);
+                toastr.success(response.data);
+            }, function errorCallback(response) {
+                toastr.error(response.data);
+            });
+        }
+        else {
+            $http({
+                method: 'POST',
+                url: '/pressmedia/edit/',
+                data: $.param({ data: JSON.stringify($scope.pressMedia), mediaEditid: $scope.selectedMediaId })
+            }).then(function successCallback(response) {
+                console.log(response);
+                toastr.success(response.data);
+            }, function errorCallback(response) {
+                toastr.error(response.data);
+            });
+        }
     }
-    $scope.editMedia = function(){
-        console.log($scope.selectedMedium);
+
+    $scope.editMedia = function () {
+        try {
+            $scope.selectedMediaId = $scope.selectedMedium.media_id;
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 
 }]);

@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^pressmedia/get/$', views.getPressMedia, name="getPressMedia"),
     url(r'^pressmedia/getlist/$', views.getListPressMedia,name="getListPressMedia"),
     url(r'^pressmedia/getgroups/$', views.getMediaGroups, name='getMediaGroups'),
+    url(r'^pressmedia/edit/$', views.editPressMedia, name='editPressMedia'),
 ]

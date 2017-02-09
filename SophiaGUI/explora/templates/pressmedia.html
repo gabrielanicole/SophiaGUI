@@ -16,8 +16,8 @@
                 </div>
             </div>
             {% if request.user.is_staff %}
-            <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal" ng-click="clearPress()"><span class=" 	glyphicon glyphicon-plus-sign"></span> Agregar Medio</button>
-            <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal" ng-click="editMedia()"><span class="glyphicon glyphicon-edit"></span>  Editar Medio</button>
+            <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal" ng-click="clearPress();insertClicked=true;editClicked=false;"><span class=" 	glyphicon glyphicon-plus-sign"></span> Agregar Medio</button>
+            <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal" ng-click="editMedia();insertClicked=false;editClicked=true;"><span class="glyphicon glyphicon-edit"></span>  Editar Medio</button>
             {% endif %}
         </form>
     </div>

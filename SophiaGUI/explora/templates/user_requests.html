@@ -37,7 +37,7 @@
                                     <td>[[x.lastname]]</td>
                                     <td>[[x.email]]</td>
                                     <td>
-                                        <i class="fa fa-check fa-2x allow" aria-hidden="true" ng-click="acceptRequest([[x.username]])"> </i>
+                                        <i ng-attr-id="[[x.username]]" class="fa fa-check fa-2x allow" aria-hidden="true" ng-click="acceptRequest([[x.username]])"> </i>
                                         <i class="fa fa-ban fa-2x reject" aria-hidden="true" ng-click="rejectRequest([[x.username]])"></i>
                                     </td>
                                 </tr>

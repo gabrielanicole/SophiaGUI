@@ -120,6 +120,31 @@ def getMediaGroups(request):
             print e
             return HttpResponse('error')
 
+@login_required(login_url='/login_required')
+def editPressMedia(request):
+    if request.method == 'POST':
+        try:
+            data = request.POST.get('data').encode('utf8')
+            media_id = request.POST.get('mediaEditid').encode('utf8')
+            client,headers,api_url = getClient()
+            data = json.loads(data)
+            consumer_key = 'wHpPsl5nuZXEyJU6fgqPzvs3V'
+            consumer_secret = 'zqDiIsAMGaCvuQpwYFZCawLGjRWHH9UNW6iPq9lXdY3PEvmYTk'
+            access_token = '822060303907176448-YYFVabdPAF8Fw8JbB7bM2out2RUFTvn'
+            access_token_secret = 'ctFi2JCDuI80e6lYCZDzKu3OYTBhvzAXeS1bCfO7aKMtn'
+            auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+            auth.set_access_token(access_token, access_token_secret)
+            t_api = tweepy.API(auth)
+            addFriend(t_api, data['pre_twitter'])
+            data = json.dumps(data)
+            api = u'http://{0}/v2/pressmedia/{1}/'.format(api_url, media_id)
+            response = client.put(api, data=data, headers=headers)
+            return HttpResponse('Se ha editado nuevo medio de prensa')
+        except Exception as e:
+            print e
+            return HttpResponse('Ha ocurrido un error durante el proceso')
+
+
 def getClient():
     file = json.loads(open("explora/static/user.json").read())
     api_url = file["api_url"]
