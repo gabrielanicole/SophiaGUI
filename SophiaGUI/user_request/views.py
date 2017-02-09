@@ -7,6 +7,8 @@ from django.core import serializers
 from django.http import JsonResponse
 from explora.models import Profile, Analist
 from django.contrib.contenttypes.models import ContentType
+from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 
 # Create your views here.
 @login_required(login_url='/login_required')
@@ -74,6 +76,16 @@ def acceptAnalistRequest(request):
         analist.save()
         group = Group.objects.get(name='Analistas')
         user.groups.add(group)
+
+        content = useTemplate(username)
+        subject = 'Se ha aceptado su solicitud de Analista'
+        text_content = 'habilita el html de tu correo'
+        html_content = content
+        from_email = '"Sophia Project" <sophiaproject4@gmail.com>'
+        to = user.email
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
         return HttpResponse("ok")
 
 @login_required(login_url='/login_required')
@@ -120,3 +132,9 @@ def removePermission(request):
         except Exception as e:
             print e
             return HttpResponse("error")
+
+def useTemplate(username):
+    htmlFile = open("explora/static/analistConfirmation.html")
+    content = htmlFile.read()
+    content = content.replace("$$username$$",str(username))
+    return(content)

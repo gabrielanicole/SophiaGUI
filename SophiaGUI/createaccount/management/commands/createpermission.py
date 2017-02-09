@@ -9,6 +9,7 @@ class Command(BaseCommand):
         pass
 
     def handle(self, *args, **options):
+            group, created = Group.objects.get_or_create(name='Analistas')
             content_type = ContentType.objects.get(app_label='explora', model='analist')
             permission = Permission.objects.create(codename='isAnalist',
                                                    name='Is Analist',
