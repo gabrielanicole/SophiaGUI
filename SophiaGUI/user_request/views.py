@@ -1,31 +1,38 @@
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth.decorators import login_required
 from explora.models import Profile, Analist
 from django.core import serializers
 from django.http import JsonResponse
 from explora.models import Profile, Analist
+from django.contrib.contenttypes.models import ContentType
 
 # Create your views here.
 @login_required(login_url='/login_required')
 def user_request(request):
 
     my_user = request.user.social_auth.filter(provider='facebook').first()
-    profile = Profile.objects.get(pk=request.user.pk)
-    analist = Analist.objects.get(user_id=profile.pk)
     analist_requests = Analist.objects.filter(request_send=True).exclude(request_accepted=True).count()
+
+    try:
+        profile = Profile.objects.get(pk=request.user.pk)
+        analist = Analist.objects.get(user_id=profile.pk)
+    except Exception as e:
+        u = request.user
+        profile = Profile(user=u, activation_url="NULL")
+        profile.save()
+        analist = Analist(user=profile)
+        analist.save()
 
     if my_user:
         url = u'https://graph.facebook.com/{0}/picture'.format(my_user.uid)
         return render(request, 'user_requests.html', {'user': request.user.get_full_name(),
                                                       'profile_pic': url,
-                                                      'analist':analist,
                                                       'analist_requests':analist_requests
                                                    })
     else:
         return render(request, 'user_requests.html', {'user': request.user.get_full_name(),
-                                                      'analist':analist,
                                                       'analist_requests':analist_requests
                                                    })
 
@@ -61,6 +68,8 @@ def acceptAnalistRequest(request):
         analist = Analist.objects.get(user_id=profile.pk)
         analist.request_accepted = True
         analist.save()
+        group = Group.objects.get(name='Analistas')
+        user.groups.add(group)
         return HttpResponse("ok")
 
 @login_required(login_url='/login_required')
@@ -101,6 +110,8 @@ def removePermission(request):
             analist.request_send  = False
             analist.request_accepted = False
             analist.save()
+            group = Group.objects.get(name='Analistas')
+            group.user_set.remove(user)
             return HttpResponse("success")
         except Exception as e:
             print e

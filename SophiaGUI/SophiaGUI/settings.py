@@ -16,7 +16,6 @@ from django.conf.global_settings import STATICFILES_DIRS
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -55,8 +54,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     )
 
-SOCIAL_AUTH_FACEBOOK_KEY = '1746978768908293'
-SOCIAL_AUTH_FACEBOOK_SECRET = 'ecdd8d3f68f361ff2f4736c0c7da4eb2'
+SOCIAL_AUTH_FACEBOOK_KEY = '1925295284364133'
+SOCIAL_AUTH_FACEBOOK_SECRET = '0704c91495bc6025f3ec6bc3efa5ddc0'
 
 #We ask facebook to give us the email of the user
 FACEBOOK_EXTENDED_PERMISSIONS = ['email']

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from explora.models import Profile, Analist
 import simplejson as json
 from django.http import JsonResponse
@@ -70,4 +70,5 @@ def activateUser(request, userUrl):
     else:
         user.is_active = True
     user.save()
+
     return render(request,'accountactive.html',{'user':user.get_full_name()})
