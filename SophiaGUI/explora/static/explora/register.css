@@ -14,6 +14,7 @@
 }
 .jumbotron{
     background-color: rgba(24, 188, 156, 1);
+    opacity: 0.9;
 }
 .jumbo-text{
     color: white !important;
@@ -24,4 +25,28 @@
     bottom:0;
     left:0;
     width:100%;
+}
+
+body{
+    background-image: url('/static/home/img/header.jpg');
+}
+
+.register-form{
+    background-color: whitesmoke;
+    padding: 10px;
+    border-radius: 3px;
+    opacity: 0.9;
+    
+}
+.register-form label{
+    color:black;
+}
+
+.title-heading{
+    text-transform: uppercase;
+    color:white;
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
 }
