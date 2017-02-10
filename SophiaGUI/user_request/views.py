@@ -9,6 +9,7 @@ from explora.models import Profile, Analist
 from django.contrib.contenttypes.models import ContentType
 from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
+import sys
 
 # Create your views here.
 @login_required(login_url='/login_required')
@@ -67,6 +68,8 @@ def getRequestList(request):
 
 @login_required(login_url='/login_required')
 def acceptAnalistRequest(request):
+    reload(sys)
+    sys.setdefaultencoding('utf8')
     if request.method == 'POST':
         username = request.POST.get('username')
         user = User.objects.get(username=username)
