@@ -15,7 +15,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 import cStringIO
 import csv
-from filewriter import return_json_file, return_csv_file
+from filewriter import return_json_file, return_csv_file, return_csv_text_file
 
 # @brief Function that login the user to Sophia GUI.
 # @param request Web request with login data (username, password)
@@ -349,45 +349,12 @@ def exportData(request):
             if(options['format'] == 'CSV'):
                 csv_file = return_csv_file(results)
                 return csv_file
+            elif(options['format'] == 'TXT'):
+                txt_file = return_csv_text_file(results)
+                return txt_file
             else:
                 json_file = return_json_file(results)
                 return json_file
-
-        except Exception as e:
-            print e
-            return HttpResponse(e)
-
-    if request.method == 'GET':
-        try:
-            client,headers,api_url = getClient()
-            corpusFields = []
-            corpusFields.append('art_title')
-            corpusFields.append('art_date')
-            corpusFields.append('art_name_press_source')
-            
-            search = {'and': [],
-                      'index': 'articles',
-                      'dates': {'startdate': '2016-11-01', 'enddate': '2017-01-25'},
-                      'fields': ['art_content'],
-                      'not_and': [],
-                      'art_name_press_source':"",
-                      'or': [{'match': 'cholito '}],
-                      'art_category': ""}
-            
-            search['corpusFields']=corpusFields
-            search = json.dumps(search)
-            api = u'http://{0}/v2/corpus/'.format(api_url)
-            response = requests.post(api,data=search)
-            response = json.loads(response.content)
-            response = response['hits']['hits']
-
-            results = []
-            for x in response:
-                results.append(x['_source'])
-        
-            json_file = return_json_file(results)
-            csv_file = return_csv_file(results)
-            return csv_file
 
         except Exception as e:
             print e
