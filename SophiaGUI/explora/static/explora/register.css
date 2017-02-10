@@ -54,3 +54,9 @@ body{
     text-transform: uppercase;
     text-align: center;
 }
+
+hr {
+  border-color:rgba(24, 188, 156, 1);
+  border-width: 3px;
+  max-width: 50px;
+}

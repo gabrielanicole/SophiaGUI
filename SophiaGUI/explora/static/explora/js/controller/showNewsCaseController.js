@@ -179,6 +179,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     }
 
     $scope.loadNextItems = function () {
+        $('#loadIcon').removeClass("hidden");
         page = $scope.actual_page + 1;
         $scope.busy = true;
         if (page <= $scope.total_pages) {
@@ -207,6 +208,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
                 $scope.page_init = range.page_init;
                 $scope.page_end = range.page_end;
                 $scope.busy = false;
+                $('#loadIcon').addClass("hidden");
             });
         }
     }

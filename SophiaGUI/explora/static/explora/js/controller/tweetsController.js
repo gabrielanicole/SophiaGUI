@@ -93,6 +93,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
 
     $scope.loadNextItems = function () {
 
+        $('#loadIcon').removeClass("hidden");
         page = $scope.actual_page + 1;
         if (page <= $scope.total_pages) {
             var twitter;
@@ -125,7 +126,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
                 var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
                 $scope.page_init = range.page_init;
                 $scope.page_end = range.page_end;
-
+                 $('#loadIcon').addClass("hidden");
             });
         }
     }

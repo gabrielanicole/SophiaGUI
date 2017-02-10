@@ -31,7 +31,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="x in requestList">
+                                <tr ng-repeat="x in requestList | orderBy:'username'">
                                     <td>[[x.username]]</td>
                                     <td>[[x.firstname]]</td>
                                     <td>[[x.lastname]]</td>
@@ -60,7 +60,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="x in allowedRequestList">
+                                <tr ng-repeat="x in allowedRequestList | orderBy:'username'">
                                     <td>[[x.username]]</td>
                                     <td>[[x.firstname]]</td>
                                     <td>[[x.lastname]]</td>
