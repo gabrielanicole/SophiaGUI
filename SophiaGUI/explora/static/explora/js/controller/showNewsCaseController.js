@@ -211,6 +211,9 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
                 $('#loadIcon').addClass("hidden");
             });
         }
+        else {
+            $('#loadIcon').addClass("hidden");
+        }
     }
 
     NewsCases.getNewsCaseInfo(data).then(function (response) {

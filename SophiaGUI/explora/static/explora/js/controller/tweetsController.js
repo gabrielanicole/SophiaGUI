@@ -1,6 +1,6 @@
-app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 'Tweets', 'PressMedia','ExportData', function (
+app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 'Tweets', 'PressMedia', 'ExportData', function (
     $scope, $http, dataFormat, $window, Tweets, PressMedia, ExportData) {
-        
+
     $('#hideHistogram').on('shown.bs.collapse', function () {
         $("#collapseIcon").removeClass("glyphicon glyphicon-chevron-up").addClass("glyphicon glyphicon-chevron-down");
     });
@@ -126,8 +126,11 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
                 var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
                 $scope.page_init = range.page_init;
                 $scope.page_end = range.page_end;
-                 $('#loadIcon').addClass("hidden");
+                $('#loadIcon').addClass("hidden");
             });
+        }
+        else {
+            $('#loadIcon').addClass("hidden");
         }
     }
     $scope.options = [
@@ -222,9 +225,9 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     }
 
     /* Export Image Secction */
-    $scope.exportImageFormat ="PNG";
+    $scope.exportImageFormat = "PNG";
     $scope.exportImage = function (format) {
-          ExportData.exportImage(format);
+        ExportData.exportImage(format);
     }
 
 }]);

@@ -211,6 +211,9 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
                 $('#loadIcon').addClass("hidden");
             });
         }
+        else{
+             $('#loadIcon').addClass("hidden");
+        }
     }
 
     $scope.mediaChange = function (media) {

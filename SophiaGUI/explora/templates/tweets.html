@@ -76,7 +76,6 @@
 
     <div id="tweetsContainer">
 
-    <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="alert alert-success">
@@ -84,7 +83,6 @@
                 </div>
             </div>
         </div>
-    </div>
     
     <div class="row">
         <div class="col-md-4"></div>
@@ -100,10 +98,8 @@
         <!-- Offset-->
     </div>
 
-    <div class="container">
-        <div class="row">
-            <div infinite-scroll='loadNextItems()' infinite-scroll-disabled='busy' infinite-scroll-distance='0'>
-            
+            <div infinite-scroll='loadNextItems()' infinite-scroll-disabled='busy' infinite-scroll-distance='0' infinite-scroll-use-document-bottom='true'>
+         
                     <div ng-repeat="d in tweets">
                         <div class="row tweet-box">
                             <div>
@@ -130,8 +126,6 @@
                     </div>
                 </div>
             <div style='clear: both;'></div>
-        </div>
-    </div>
 
         <div class="row top-buffer">
              <div class="col-md-6 col-md-offset-6">
