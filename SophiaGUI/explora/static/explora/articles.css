@@ -160,3 +160,11 @@ body{
 	margin-top:20px;
     margin-bottom: 5px;
 }
+
+.visz-table.nav>li>a:hover, 
+.visz-table.nav>li>a:focus {
+	background-color: white !important;
+}
+.visz-table.nav>li>a{
+	color: black !important;
+}

@@ -1,11 +1,11 @@
 app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', "staticData", "Articles", "ExportData", "PressMedia", function (
     $scope, $http, $window, dataFormat, staticData, Articles, ExportData, PressMedia) {
 
-    $('#hideHistogram').on('shown.bs.collapse', function () {
+    $('#hideVisz').on('shown.bs.collapse', function () {
         $("#collapseIcon").removeClass("glyphicon glyphicon-chevron-up").addClass("glyphicon glyphicon-chevron-down");
     });
 
-    $('#hideHistogram').on('hidden.bs.collapse', function () {
+    $('#hideVisz').on('hidden.bs.collapse', function () {
         $("#collapseIcon").removeClass("glyphicon glyphicon-chevron-down").addClass("glyphicon glyphicon-chevron-up");
     });
 
