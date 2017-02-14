@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'newscases',
     'createaccount',
     'user_request',
+    'tweets',
      # Add the python social auth
     'social.apps.django_app.default',
 ]

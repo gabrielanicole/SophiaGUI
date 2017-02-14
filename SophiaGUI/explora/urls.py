@@ -15,11 +15,6 @@ urlpatterns = [
         views.articlesByDates, name='articlesByDates'),
     url(r'^get_data/articles/articles_advance_search/([0-9]*)/$',
         views.advancedSearch, name='advancedSearch'),
-    url(r'^tweets$', views.tweets, name='tweets'),
-    url(r'^get_data/tweets/([0-9]*)/$',
-        views.getTweetsList, name='getTweetsList'),
-    url(r'^get_data/tweets/histogram/$',
-        views.tweetsCountBy, name='tweetsCountBy'),
     url(r'^exportData/$', views.exportData, name='exportData'),
     url(r'^articles/changeCategory/$', views.changeCategory, name='changeCategory')
 ]

@@ -68,18 +68,44 @@
     </div>
 
     <div class="row hidden-xs">
-      <div class="col-md-12">
-        <p class="text-center" style="font-size: 20px; cursor:pointer" data-toggle="collapse" data-target="#hideHistogram"><span id="collapseIcon" class="glyphicon glyphicon-chevron-down"></span></p>
-      </div>
+         <div class="col-md-12">
+              <p class="text-center" style="font-size: 20px; cursor:pointer" data-toggle="collapse" data-target="#hideVisz"><span id="collapseIcon" class="glyphicon glyphicon-chevron-down"></span></p>
+         </div>
     </div>
 
-   <div id="hideHistogram" class = "row hidden-xs collapse in">
-     <div class="col-md-12">
-        <div id="histogram_container" style="width:100%">
-            <div id="histogram"></div>
-        </div>
-     </div>
-  </div>
+
+    <div class="container-fluid">
+      <div id="hideVisz" class="row collapse in">
+
+          <div class="container-fluid">
+            <div class="row">
+              <ul class="nav nav-tabs visz-table">
+                <li class="active"><a data-toggle="tab" href="#histogram">Histograma</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="tab-content hidden-xs">
+
+            
+            <div id="histogram" class="tab-pane fade in active">
+              <div class="row">
+                      <div class = "row">
+                        <div class="col-md-12">
+                            <div id="histogram_container" style="width:100%">
+                                <div id="histogram"></div>
+                            </div>
+                        </div>
+                      </div>
+              </div>
+            </div>
+
+            <!--
+            <div id="mapa" class="tab-pane fade">
+            </div> -->
+
+          </div>
+      </div>
+    </div>
 
   <div id="articles-container">
 
