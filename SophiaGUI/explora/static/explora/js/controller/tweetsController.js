@@ -134,7 +134,6 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
         }
     }
     $scope.options = [
-        { key: "Minuto", value: "minute" },
         { key: "Hora", value: "hour" },
         { key: "Día", value: "day" },
         { key: "Mes", value: "month" },

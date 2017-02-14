@@ -7,7 +7,6 @@ import simplejson as json
 from explora.models import Profile, NewsCase, Analist
 # Create your views here.
 
-
 # @brief Function that renders Tweets Page
 # @param request
 # @return HttpResponse with Tweets Page
@@ -26,7 +25,6 @@ def tweets(request):
         return render(request, 'tweets.html', {'user': request.user.get_full_name(),
                                                 'analist_requests':analist_requests
                                                })
-
 
 # @brief Function that get Tweet List
 # @param request

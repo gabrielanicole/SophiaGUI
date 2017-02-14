@@ -79,7 +79,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     }
 
     $scope.options = [
-        { key: "Minuto", value: "minute" },
         { key: "Hora", value: "hour" },
         { key: "Día", value: "day" },
         { key: "Mes", value: "month" },

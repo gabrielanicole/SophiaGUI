@@ -31,7 +31,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $("#mediumGroupContainer").tooltip();
 
     $scope.options = [
-        { key: "Minuto", value: "minute" },
         { key: "Hora", value: "hour" },
         { key: "Día", value: "day" },
         { key: "Mes", value: "month" },
@@ -154,7 +153,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.selecteMediumGroup;
     function loadPressMediaGroups() {
         PressMedia.getPressMediaGroups().then(function (response) {
-            console.log(response.data);
             $scope.press_media_groups = response.data.names;
             $scope.press_media_groups.unshift("");
             $scope.selecteMediumGroup = $scope.press_media_groups[0];
