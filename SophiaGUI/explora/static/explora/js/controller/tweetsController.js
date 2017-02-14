@@ -51,6 +51,19 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
         return output;
     }
 
+    $scope.sortGroup = [
+        { key: "Tiempo", value: "pub_date" },
+        { key: "Relevancia", value: "_score" }
+    ]
+
+    $scope.selectedSort = $scope.sortGroup[0];
+
+    $scope.sortChange = function (sortType) {
+        $scope.selectedSort = sortType;
+    }
+
+
+
     $scope.press_source = [];
     $scope.press_media_groups = [];
     $scope.selectedMedium = [];
@@ -113,6 +126,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
                 "or": tag_values.should_contain_group,
                 "not_and": tag_values.not_contain_group,
                 "pre_owner": $scope.selecteMediumGroup,
+                "sort": $scope.selectedSort.value,
                 "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
             }
 
@@ -195,6 +209,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
             "pre_owner": $scope.selecteMediumGroup,
+            "sort": $scope.selectedSort.value,
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
         }
 

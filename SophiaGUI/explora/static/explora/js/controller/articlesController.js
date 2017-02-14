@@ -37,6 +37,17 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         { key: "Año", value: "year" }
     ];
 
+    $scope.sortGroup = [
+        { key: "Tiempo", value: "art_date" },
+        { key: "Relevancia", value: "_score" }
+    ]
+
+    $scope.selectedSort = $scope.sortGroup[0];
+
+    $scope.sortChange = function (sortType) {
+        $scope.selectedSort = sortType;
+    }
+
     $scope.checkbox = {
         art_content: false,
         art_date: false,
@@ -58,7 +69,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.sendCategoryChange = function () {
         Articles.changeArticleCategory($scope.selectedId, $scope.selectedCategoryForChange).then(function (response) {
             response.data == "success" ? toastr.success("Clasificación actualizada") : toastr.error("Ha ocurrido un error");
-            $('#'+$scope.selectedId).text($scope.selectedCategoryForChange.toUpperCase());
+            $('#' + $scope.selectedId).text($scope.selectedCategoryForChange.toUpperCase());
         });
     }
 
@@ -193,7 +204,8 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
                 "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
                 "art_name_press_source": twitter,
                 "art_category": $scope.selectedCategory,
-                "pre_owner": $scope.selecteMediumGroup
+                "pre_owner": $scope.selecteMediumGroup,
+                "sort": $scope.selectedSort.value
             }
 
             Articles.getArticlesList(json_data, page).then(function (data) {
@@ -210,8 +222,8 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
                 $('#loadIcon').addClass("hidden");
             });
         }
-        else{
-             $('#loadIcon').addClass("hidden");
+        else {
+            $('#loadIcon').addClass("hidden");
         }
     }
 
@@ -267,7 +279,8 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
             "art_name_press_source": twitter,
             "art_category": $scope.selectedCategory,
-            "pre_owner": $scope.selecteMediumGroup
+            "pre_owner": $scope.selecteMediumGroup,
+            "sort": $scope.selectedSort.value
         }
 
         Articles.getArticlesList(json_data, page).then(function (data) {

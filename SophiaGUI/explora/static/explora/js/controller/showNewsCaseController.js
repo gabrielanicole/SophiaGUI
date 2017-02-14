@@ -78,6 +78,17 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         });
     }
 
+    $scope.sortGroup = [
+        { key: "Tiempo", value: "art_date" },
+        { key: "Relevancia", value: "_score" }
+    ]
+
+    $scope.selectedSort = $scope.sortGroup[0];
+
+    $scope.sortChange = function (sortType) {
+        $scope.selectedSort = sortType;
+    }
+
     $scope.options = [
         { key: "Hora", value: "hour" },
         { key: "Día", value: "day" },
@@ -194,6 +205,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
                 "art_name_press_source": twitter,
                 "art_category": $scope.selectedCategory,
                 "pre_owner": $scope.selectedMediumGroup,
+                "sort": $scope.selectedSort.value
             }
 
             Articles.getArticlesList(json_data, page).then(function (data) {
@@ -324,7 +336,8 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
             "art_name_press_source": $scope.twitter,
             "pre_owner": $scope.selectedMediumGroup,
-            "art_category": $scope.selectedCategory
+            "art_category": $scope.selectedCategory,
+            "sort": $scope.selectedSort.value
         }
 
         $scope.busy = true;

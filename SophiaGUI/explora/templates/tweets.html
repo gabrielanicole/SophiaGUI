@@ -25,6 +25,13 @@
 				       </div>
 				</div>
 
+              <div class="form-group">
+				        <div id="sort" class="selectContainer" data-toggle="tooltip" title="Ordenar por relevancia o tiempor">
+				            <select class="form-control" name="categoria" ng-model="selectedSort" ng-change="sortChange(selectedSort)" ng-options="x.key for x in sortGroup">
+				            </select>
+				       </div>
+			  	</div>
+
             <input type="text" class="form-control" id="datepicker1">
             <input type="text" class="form-control" id="datepicker2">
             <button class="btn btn-default" ng-click="get_input_data()"><span class="glyphicon glyphicon-search"></span> Buscar</button>
