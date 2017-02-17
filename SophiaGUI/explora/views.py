@@ -217,7 +217,8 @@ def advancedSearch(request, page=1):
                 'art_image_link': key['_source']['art_image_link'],
                 'art_name_press_source': key['_source']['art_name_press_source'],
                 'art_category': key['_source']['art_category'],
-                'art_date': key['_source']['art_date']
+                'art_date': key['_source']['art_date'],
+                'art_score':key['_score']
             }
             results.append(array_element)
 
