@@ -270,11 +270,12 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     }
 
     $scope.loadHistogram = function (selected) {
+
         var date1 = $("#datepicker1").datepicker('getDate');
         var date2 = $("#datepicker2").datepicker('getDate');
         $scope.histogram_startdate = date1.toISOString().slice(0, 10) + " 00:00:00";
         $scope.histogram_enddate = date2.toISOString().slice(0, 10) + " 23:59:59";
-       
+
         $scope.granularity = selected;
         $scope.twitter = $scope.selectedMedium.media_twitter;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
@@ -328,6 +329,13 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     }
 
     $scope.loadElements = function (idNot, page) {
+
+        var date1 = $("#datepicker1").datepicker('getDate');
+        var date2 = $("#datepicker2").datepicker('getDate');
+
+        $scope.histogram_startdate = date1.toISOString().slice(0, 10) + " 00:00:00";
+        $scope.histogram_enddate = date2.toISOString().slice(0, 10) + " 23:59:59";
+
         $scope.actual_page = page;
         $scope.idNot = idNot;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);

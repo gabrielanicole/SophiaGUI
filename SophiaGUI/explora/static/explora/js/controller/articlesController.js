@@ -262,7 +262,8 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
         Articles.getArticlesCountBy(data).then(function (data) {
             $("#histogram").empty();
-            var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300, data_json = data);
+            var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300,
+                data_json = data, granularity = granularity);
         })
     }
 
