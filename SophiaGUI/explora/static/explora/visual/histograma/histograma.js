@@ -139,7 +139,6 @@ function generate_histogram(width, height, data, granularity) {
             return x2(d.key_as_string);
         })
         .attr("width", function (d) {
-            console.log(w / (m_e-padding));
             return w / (m_e-padding);
         })
         .attr("y", function (d) { return y2(d.doc_count); })

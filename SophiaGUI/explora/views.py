@@ -200,7 +200,6 @@ def advancedSearch(request, page=1):
         api = u'http://{0}/v2/search/page/{1}/'.format(api_url, page)
         response = client.post(api, data=data, headers=headers)
         #response = requests.post(api, data=data)
-        print response.content
 
         data_array = json.loads(response.content.encode('utf8'))
 
