@@ -1,4 +1,4 @@
-function generate_histogram(width, height, data_json, granularity) {
+function generate_histogram(width, height, data, granularity) {
 
     var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse
 
@@ -6,7 +6,6 @@ function generate_histogram(width, height, data_json, granularity) {
     var margin2 = { top: 20, right: 40, bottom: 50, left: 100 };
 
     var w = width - margin.left - margin.right;
-    console.log(w);
     var h = height - margin.top - margin.bottom;
     var h2 = height / 2 - margin2.top - margin2.bottom;
     var padding = (granularity == 'day' || granularity == 'hour') ? 1 : 1;
@@ -108,21 +107,13 @@ function generate_histogram(width, height, data_json, granularity) {
         .x(x2)
         .on("brushend", brushed);
 
-
-    //The input data is stored in data variable, this should change later...
-    data = data_json;
-    
     data.forEach(function (d) {
-        //console.log(d.key_as_string);
-        //d.key_as_string = d.key_as_string.substring(0, 19);
-        //d.key_as_string = parseDate(d.key_as_string);
         d.key_as_string = new Date(d.key_as_string);
         d.doc_count = +d.doc_count;
     });
 
     data = addBucket(granularity, data);
     var m_e = data.length;
-    console.log(m_e);
 
     x.domain([d3.min(data, function (d) { return d.key_as_string; }),
     d3.max(data, function (d) { return d.key_as_string; })]);
