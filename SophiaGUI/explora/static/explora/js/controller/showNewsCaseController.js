@@ -270,6 +270,11 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     }
 
     $scope.loadHistogram = function (selected) {
+        var date1 = $("#datepicker1").datepicker('getDate');
+        var date2 = $("#datepicker2").datepicker('getDate');
+        $scope.histogram_startdate = date1.toISOString().slice(0, 10) + " 00:00:00";
+        $scope.histogram_enddate = date2.toISOString().slice(0, 10) + " 23:59:59";
+       
         $scope.granularity = selected;
         $scope.twitter = $scope.selectedMedium.media_twitter;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
@@ -282,7 +287,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "art_name_press_source": $scope.twitter,
             "art_category": $scope.selectedCategory,
             "pre_owner": $scope.selectedMediumGroup,
-            "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
+            "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
         }
 
         var data = {
@@ -374,6 +379,13 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     }
 
     $scope.update_news_case = function (newsCaseName) {
+
+        var date1 = $("#datepicker1").datepicker('getDate');
+        var date2 = $("#datepicker2").datepicker('getDate');
+
+        $scope.histogram_startdate = date1.toISOString().slice(0, 10) + " 00:00:00";
+        $scope.histogram_enddate = date2.toISOString().slice(0, 10) + " 23:59:59";
+
         $scope.news_case_name = newsCaseName[0][0];
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         $scope.twitter = $scope.selectedMedium.media_twitter;
