@@ -42,6 +42,13 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         { key: "Relevancia", value: "_score" }
     ]
 
+    $scope.searchOptionList = [
+        { key: "Titular y Contenido", value: ["art_title", "art_content"] },
+        { key: "Titular", value: ["art_title"] },
+        { key: "Contenido", value: ["art_content"] }
+    ]
+    $scope.searchOption = $scope.searchOptionList[0];
+
     $scope.selectedSort = $scope.sortGroup[0];
 
     $scope.sortChange = function (sortType) {
@@ -79,7 +86,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         var json_data = {
             search: {
                 "index": "articles",
-                "fields": ["art_content"],
+                "fields": $scope.searchOption.value,
                 "art_name_press_source": $scope.selectedMedium.media_twitter,
                 "and": tag_values.must_contain_group,
                 "or": tag_values.should_contain_group,
@@ -197,7 +204,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
             var json_data = {
                 "index": "articles",
-                "fields": ["art_content"],
+                "fields": $scope.searchOption.value,
                 "and": tag_values.must_contain_group,
                 "or": tag_values.should_contain_group,
                 "not_and": tag_values.not_contain_group,
@@ -245,7 +252,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "articles",
-            "fields": ["art_content"],
+            "fields": $scope.searchOption.value,
             "art_name_press_source": twitter,
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
@@ -273,7 +280,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "articles",
-            "fields": ["art_content"],
+            "fields": $scope.searchOption.value,
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
@@ -284,6 +291,8 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "sort": $scope.selectedSort.value
         }
 
+        console.log(JSON.stringify(json_data));
+        
         Articles.getArticlesList(json_data, page).then(function (data) {
             $scope.articulos = data.results;
             $scope.total_pages = parseInt(data.totalpages);

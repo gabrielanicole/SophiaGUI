@@ -1,23 +1,17 @@
 app.service('dataFormat', function () {
     this.generate_array = function (data_array) {
         var results = [];
+        var match_array = [];
         if (data_array.length > 0) {
-            var match = "";
             for (i = 0; i < data_array.length; i++) {
                 if (data_array[i].indexOf(" ") == -1) {
-                    if (match == "") { match = data_array[i]; }
-                    else { match = match + " " + data_array[i]; }
+                    results.push({"match":data_array[i]})
                 }
                 else {
                     results.push({ "match_phrase": data_array[i] });
                 }
             }
-            if (match != "") { results.push({ "match": match }); }
         }
-        else {
-            return results;
-        }
-
         return results;
     }
 
