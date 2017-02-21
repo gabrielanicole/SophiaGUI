@@ -293,6 +293,16 @@ def changeCategory(request):
             print e
             return HttpResponse("Error")
 
+
+def sendGeoJSON(request):
+    if request.method == 'GET':
+        try:
+            file = json.loads(open("explora/static/explora/visual/map/countries.geo.json").read())
+            return JsonResponse(file, safe=False)
+        except Exception as e:
+            print e
+            return HttpResponse("Internal server error")
+
 def getClient():
     file = json.loads(open("explora/static/user.json").read())
     api_url = file["api_url"]

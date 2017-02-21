@@ -38,6 +38,7 @@
     -mox-box-shadow: 4px 4px 4px 10px rgba(0, 0, 0, 0.4);
     box-shadow: 4px 4px 10px rbga(0, 0, 0, 0.4) pointer-events: none;
 }
+
 #tip.hid {
     opacity: 0;
 

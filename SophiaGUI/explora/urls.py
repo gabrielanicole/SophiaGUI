@@ -16,5 +16,6 @@ urlpatterns = [
     url(r'^get_data/articles/articles_advance_search/([0-9]*)/$',
         views.advancedSearch, name='advancedSearch'),
     url(r'^exportData/$', views.exportData, name='exportData'),
-    url(r'^articles/changeCategory/$', views.changeCategory, name='changeCategory')
+    url(r'^articles/changeCategory/$', views.changeCategory, name='changeCategory'),
+    url(r'^articles/getGeoJSON/$', views.sendGeoJSON, name='sendGeoJSON')
 ]

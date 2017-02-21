@@ -1,0 +1,10 @@
+svg {
+  position: relative;
+}
+
+.mapPath {
+  fill-opacity: .2;
+  stroke: #fff;
+  stroke-width: 1.5px;
+  pointer-events: all;
+}
