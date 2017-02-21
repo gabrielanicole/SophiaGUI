@@ -58,12 +58,6 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
 
     $scope.selectedSort = $scope.sortGroup[0];
 
-    $scope.sortChange = function (sortType) {
-        $scope.selectedSort = sortType;
-    }
-
-
-
     $scope.press_source = [];
     $scope.press_media_groups = [];
     $scope.selectedMedium = [];
@@ -91,14 +85,6 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
         });
     }
     loadPressMediaGroups();
-
-    $scope.groupChange = function (group) {
-        $scope.selecteMediumGroup = group;
-    }
-
-    $scope.mediaChange = function (media) {
-        $scope.selectedMedium = media;
-    }
 
     $scope.backToTop = function () {
         window.scrollTo(0, 0);

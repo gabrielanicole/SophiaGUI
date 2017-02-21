@@ -64,9 +64,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         });
     }
 
-    $scope.groupChange = function (group) {
-        $scope.selectedMediumGroup = group;
-    }
 
     $scope.loadPressMedia = function (data) {
         PressMedia.getPressMediaList().then(function (response) {
@@ -78,16 +75,18 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         });
     }
 
+    $scope.searchOptionList = [
+        { key: "Titular y Contenido", value: ["art_title", "art_content"] },
+        { key: "Titular", value: ["art_title"] },
+        { key: "Contenido", value: ["art_content"] }
+    ]
+
     $scope.sortGroup = [
         { key: "Tiempo", value: "art_date" },
         { key: "Relevancia", value: "_score" }
     ]
-
     $scope.selectedSort = $scope.sortGroup[0];
 
-    $scope.sortChange = function (sortType) {
-        $scope.selectedSort = sortType;
-    }
 
     $scope.options = [
         { key: "Hora", value: "hour" },
@@ -147,7 +146,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         var json_data = {
             search: {
                 "index": "articles",
-                "fields": ["art_content"],
+                "fields": $scope.searchOption.value,
                 "art_name_press_source": $scope.selectedMedium.media_twitter,
                 "and": tag_values.must_contain_group,
                 "or": tag_values.should_contain_group,
@@ -180,14 +179,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         window.scrollTo(0, 0);
     }
 
-    $scope.mediaChange = function (media) {
-        $scope.selectedMedium = media;
-    }
-
-    $scope.categoryChange = function (category) {
-        $scope.selectedCategory = category;
-    }
-
     $scope.loadNextItems = function () {
         $('#loadIcon').removeClass("hidden");
         page = $scope.actual_page + 1;
@@ -197,7 +188,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
             var json_data = {
                 "index": "articles",
-                "fields": ["art_content"],
+                "fields": $scope.searchOption.value,
                 "and": tag_values.must_contain_group,
                 "or": tag_values.should_contain_group,
                 "not_and": tag_values.not_contain_group,
@@ -233,6 +224,12 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
 
     $scope.restoreSession = function (data) {
         //Restore what the user searched
+        for (x in $scope.searchOptionList) {
+            if (JSON.stringify($scope.searchOptionList[x].value) == JSON.stringify(data.news_case_data.new_fields)) {
+                $scope.searchOption = $scope.searchOptionList[x];
+            }
+        }
+
         if (data.follow_new_feed == 'true') {
             histogram_startdate = String(data.news_case_data.new_date_from.slice(0, 10));
             histogram_enddate = new Date().toISOString().slice(0, 10);
@@ -281,7 +278,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "articles",
-            "fields": ["art_content"],
+            "fields": $scope.searchOption.value,
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
@@ -301,7 +298,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         Articles.getArticlesCountBy(data).then(function (data) {
             $("#histogram").empty();
             //Add the new histogram
-                        var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300,
+            var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300,
                 data_json = data, granularity = $scope.granularity);
         })
 
@@ -342,7 +339,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "articles",
-            "fields": ["art_content"],
+            "fields":$scope.searchOption.value,
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
@@ -402,6 +399,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         var checked = $('#toogleCase').prop('checked');
 
         var json_data = {
+            "fields":$scope.searchOption.value,
             "elastic_id": elastic_id,
             "art_name_press_source": $scope.selectedMedium[0],
             "and": tag_values.must_contain_group,
@@ -417,6 +415,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
 
         NewsCases.updateNewsCase(json_data).then(function (response) {
             $scope.news_case_name = "";
+            toastr.success("Caso noticioso actualizado con éxito");
         })
     }
 

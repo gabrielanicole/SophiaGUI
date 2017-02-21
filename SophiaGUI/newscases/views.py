@@ -251,7 +251,8 @@ def updateNewsCase(request):
                     "new_category": data['category'],
                     "new_press_source": data['press_source'],
                     "new_not": data['not_and'],
-                    "new_pre_owner": data['pre_owner']
+                    "new_pre_owner": data['pre_owner'],
+                    "new_fields": data['fields']
                 }
 
             else:
@@ -265,7 +266,8 @@ def updateNewsCase(request):
                     "new_category": data['category'],
                     "new_press_source": data['press_source'],
                     "new_not": data['not_and'],
-                    "new_pre_owner": data['pre_owner']
+                    "new_pre_owner": data['pre_owner'],
+                    "new_fields": data['fields']
                 }
             
             elastic_data = json.dumps(elastic_data)

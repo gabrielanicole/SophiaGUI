@@ -41,6 +41,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         { key: "Tiempo", value: "art_date" },
         { key: "Relevancia", value: "_score" }
     ]
+    $scope.selectedSort = $scope.sortGroup[0];
 
     $scope.searchOptionList = [
         { key: "Titular y Contenido", value: ["art_title", "art_content"] },
@@ -48,12 +49,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         { key: "Contenido", value: ["art_content"] }
     ]
     $scope.searchOption = $scope.searchOptionList[0];
-
-    $scope.selectedSort = $scope.sortGroup[0];
-
-    $scope.sortChange = function (sortType) {
-        $scope.selectedSort = sortType;
-    }
 
     $scope.checkbox = {
         art_content: false,
@@ -178,9 +173,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     }
 
     loadPressMediaGroups();
-    $scope.groupChange = function (group) {
-        $scope.selecteMediumGroup = group;
-    }
 
     function loadPressMedia() {
         PressMedia.getPressMediaList().then(function (response) {
@@ -234,14 +226,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         }
     }
 
-    $scope.mediaChange = function (media) {
-        $scope.selectedMedium = media;
-    }
-
-    $scope.categoryChange = function (category) {
-        $scope.selectedCategory = category;
-    }
-
     $scope.selectedItem = function (selected) {
         $scope.granularity = selected;
         loadHistogram($scope.granularity);
@@ -291,8 +275,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "sort": $scope.selectedSort.value
         }
 
-        console.log(JSON.stringify(json_data));
-        
         Articles.getArticlesList(json_data, page).then(function (data) {
             $scope.articulos = data.results;
             $scope.total_pages = parseInt(data.totalpages);
@@ -354,7 +336,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         var checked = $('#toogleCase').prop('checked');
         var json_data = {
             "index": "articles",
-            "fields": ["art_content"],
+            "fields": $scope.searchOption.value,
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,

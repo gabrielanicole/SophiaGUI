@@ -17,28 +17,28 @@
 
 				    <div class="form-group">
 				        <div id="mediaContainer" class="selectContainer" data-toggle="tooltip" title="Filtrar por medio">
-				            <select class="form-control" name="medio" ng-model="selectedMedium" ng-change="mediaChange(selectedMedium)" ng-options="x.media_name for x in press_source | orderBy:'media_name'">
+				            <select class="form-control" name="medio" ng-model="selectedMedium" ng-options="x.media_name for x in press_source | orderBy:'media_name'">
                     </select>
 				        </div>
 		       </div>
 
 				    <div class="form-group">
 				        <div id="categoryContainer" class="selectContainer" data-toggle="tooltip" title="Filtrar por categoría">
-				            <select class="form-control" name="categoria" ng-model="selectedCategory" ng-change="categoryChange(selectedCategory)" ng-options="x for x in category">
+				            <select class="form-control" name="categoria" ng-model="selectedCategory" ng-options="x for x in category">
 				            </select>
 				        </div>
 				    </div>
 
 				  <div class="form-group">
 				        <div id="mediumGroupContainer" class="selectContainer" data-toggle="tooltip" title="Filtrar por grupo de medios">
-				            <select class="form-control" name="categoria" ng-model="selectedMediumGroup" ng-change="groupChange(selectedMediumGroup)" ng-options="x|limitTo:25 for x in press_media_groups">
+				            <select class="form-control" name="categoria" ng-model="selectedMediumGroup" ng-options="x|limitTo:25 for x in press_media_groups">
 				            </select>
 				       </div>
 			  	</div>
 
 				  <div class="form-group">
-				        <div id="searchOption" class="selectContainer" data-toggle="tooltip" title="Filtrar por grupo de medios">
-				            <select class="form-control" name="categoria" ng-model="searchOption" ng-change="searchOptionChange(searchOption)" ng-options="x.key for x in searchOptionList">
+				        <div id="searchOption" class="selectContainer" data-toggle="tooltip" title="Filtrar por campos">
+				            <select class="form-control" name="categoria" ng-model="searchOption" ng-options="x.key for x in searchOptionList">
 				            </select>
 				       </div>
 			  	</div>
@@ -136,7 +136,7 @@
         <form class="form-inline">
               <div class="form-group">
                   <label for="sort">Ordenar resultados por:</label>
-                  <select class="form-control" name="categoria" ng-model="selectedSort" ng-change="sortChange(selectedSort);update_list(1)" ng-options="x.key for x in sortGroup"></select>
+                  <select class="form-control" name="categoria" ng-model="selectedSort" ng-change="update_list(1)" ng-options="x.key for x in sortGroup"></select>
               </div>
         </form>
       </div>
