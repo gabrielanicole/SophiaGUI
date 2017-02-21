@@ -263,6 +263,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             var min_chart_data = data;
             Articles.getArticlesCountBy(data2).then(function (data) {
                 var chart_data = data;
+                console.log(chart_data);
                 var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300,
                     min_chart_data = min_chart_data, chart_data = chart_data, min_granularity = g1, chart_granularity = g2);
             })
