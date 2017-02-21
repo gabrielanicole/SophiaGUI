@@ -172,15 +172,26 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
         }
 
-        var data = {
-            countby: $scope.granularity,
+        //Temporaly works like this
+        var g1 = 'day'
+        var g2 = 'hour'
+        var data1 = {
+            countby: g1,
+            search: JSON.stringify(json_data)
+        };
+        var data2 = {
+            countby: g2,
             search: JSON.stringify(json_data)
         };
 
-        Tweets.getTweetsCountBy(data).then(function (response) {
+        Tweets.getTweetsCountBy(data1).then(function (data) {
             $("#histogram").empty();
-             var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300,
-                data_json = response.data, granularity = $scope.granularity);
+            var min_chart_data = data.data;
+            Tweets.getTweetsCountBy(data2).then(function (data) {
+                var chart_data = data.data;
+                var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300,
+                    min_chart_data = min_chart_data, chart_data = chart_data, min_granularity = g1, chart_granularity = g2);
+            })
         });
     }
 

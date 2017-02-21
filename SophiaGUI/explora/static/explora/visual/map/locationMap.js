@@ -2,7 +2,7 @@
 var width = $(window).width();
 var height = $(window).height();;
 
-$("#mapid").height(510);
+$("#mapid").height(549);
 $("#mapid").width(width - 63);
 
 $(function () {

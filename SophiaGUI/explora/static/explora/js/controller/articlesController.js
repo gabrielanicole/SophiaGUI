@@ -246,15 +246,26 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "pre_owner": $scope.selecteMediumGroup
         }
 
-        var data = {
-            countby: granularity,
+        //Temporaly works like this
+        var g1 = 'day'
+        var g2 = 'hour'
+        var data1 = {
+            countby: g1,
+            search: JSON.stringify(json_data)
+        };
+        var data2 = {
+            countby: g2,
             search: JSON.stringify(json_data)
         };
 
-        Articles.getArticlesCountBy(data).then(function (data) {
+        Articles.getArticlesCountBy(data1).then(function (data) {
             $("#histogram").empty();
-            var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300,
-                data_json = data, granularity = granularity);
+            var min_chart_data = data;
+            Articles.getArticlesCountBy(data2).then(function (data) {
+                var chart_data = data;
+                var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300,
+                    min_chart_data = min_chart_data, chart_data = chart_data, min_granularity = g1, chart_granularity = g2);
+            })
         })
     }
 

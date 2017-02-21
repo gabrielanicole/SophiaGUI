@@ -288,18 +288,31 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
         }
 
-        var data = {
+        var g1 = 'day';
+        var g2 = 'hour';
+        
+        var data1 = {
             startdate: $scope.histogram_startdate,
             enddate: $scope.histogram_enddate,
-            countby: $scope.granularity,
+            countby: g1,
             search: JSON.stringify(json_data)
         };
 
-        Articles.getArticlesCountBy(data).then(function (data) {
+        var data2 = {
+            startdate: $scope.histogram_startdate,
+            enddate: $scope.histogram_enddate,
+            countby: g2,
+            search: JSON.stringify(json_data)
+        };
+
+        Articles.getArticlesCountBy(data1).then(function (data) {
             $("#histogram").empty();
-            //Add the new histogram
-            var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300,
-                data_json = data, granularity = $scope.granularity);
+            var min_chart_data = data;
+            Articles.getArticlesCountBy(data2).then(function (data) {
+                var chart_data = data;
+                var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300,
+                    min_chart_data = min_chart_data, chart_data = chart_data, min_granularity = g1, chart_granularity = g2);
+            })
         })
 
     }
@@ -339,7 +352,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "articles",
-            "fields":$scope.searchOption.value,
+            "fields": $scope.searchOption.value,
             "and": tag_values.must_contain_group,
             "or": tag_values.should_contain_group,
             "not_and": tag_values.not_contain_group,
@@ -399,7 +412,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         var checked = $('#toogleCase').prop('checked');
 
         var json_data = {
-            "fields":$scope.searchOption.value,
+            "fields": $scope.searchOption.value,
             "elastic_id": elastic_id,
             "art_name_press_source": $scope.selectedMedium[0],
             "and": tag_values.must_contain_group,

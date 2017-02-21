@@ -1,14 +1,13 @@
-function generate_histogram(width, height, data, granularity) {
+function generate_histogram(width, height, min_chart_data, chart_data, min_granularity, chart_granularity) {
 
     var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse
 
     var margin = { top: 20, right: 40, bottom: 50, left: 100 };
     var margin2 = { top: 20, right: 40, bottom: 50, left: 100 };
-
     var w = width - margin.left - margin.right;
     var h = height - margin.top - margin.bottom;
     var h2 = height / 2 - margin2.top - margin2.bottom;
-    var padding = (granularity == 'day' || granularity == 'hour') ? 1 : 1;
+    var padding = 1;
 
     var chart = d3.select("#histogram")
         .append("svg")
@@ -107,31 +106,40 @@ function generate_histogram(width, height, data, granularity) {
         .x(x2)
         .on("brushend", brushed);
 
-    data.forEach(function (d) {
-        d.key_as_string = new Date(d.key_as_string);
+    min_chart_data.forEach(function (d) {
+        d.key_as_string = d.key_as_string.substring(0, 19);
+        d.key_as_string = parseDate(d.key_as_string);
         d.doc_count = +d.doc_count;
     });
 
-    data = addBucket(granularity, data);
-    var m_e = data.length;
+    chart_data.forEach(function (d) {
+        d.key_as_string = d.key_as_string.substring(0, 19);
+        d.key_as_string = parseDate(d.key_as_string);
+        d.doc_count = +d.doc_count;
+    });
 
-    x.domain([d3.min(data, function (d) { return d.key_as_string; }),
-    d3.max(data, function (d) { return d.key_as_string; })]);
+    min_chart_data = addBucket(min_granularity, min_chart_data);
+    chart_data = addBucket(chart_granularity, chart_data);
 
-    y.domain([0, d3.max(data, function (d) { return d.doc_count; })]);
+    var m_e = min_chart_data.length;
 
-    x2_min = d3.min(data, function (d) { return d.key_as_string; });
-    x2_max = d3.max(data, function (d) { return d.key_as_string; });
+    x.domain([d3.min(chart_data, function (d) { return d.key_as_string; }),
+    d3.max(chart_data, function (d) { return d.key_as_string; })]);
+
+    y.domain([0, d3.max(chart_data, function (d) { return d.doc_count; })]);
+
+    x2_min = d3.min(min_chart_data, function (d) { return d.key_as_string; });
+    x2_max = d3.max(min_chart_data, function (d) { return d.key_as_string; });
 
     x2.domain([x2_min, x2_max]);
 
-    y2.domain([0, d3.max(data, function (d) { return d.doc_count; })]);
+    y2.domain([0, d3.max(min_chart_data, function (d) { return d.doc_count; })]);
 
     chart.select("g.y.axis").call(yAxis);
     chart.select("g.x.axis").call(xAxis);
 
     minichart.selectAll(".bar")
-        .data(data)
+        .data(min_chart_data)
         .enter()
         .append("rect")
         .attr("class", "bar")
@@ -156,20 +164,18 @@ function generate_histogram(width, height, data, granularity) {
 
     function default_brush() {
 
-        var mindate = d3.min(data, function (d) { return d.key_as_string; });
-        var maxdate = d3.max(data, function (d) { return d.key_as_string; });
+        var mindate = d3.min(chart_data, function (d) { return d.key_as_string; });
+        var maxdate = d3.max(chart_data, function (d) { return d.key_as_string; });
 
         mindate = new Date(mindate);
         maxdate = new Date(maxdate);
 
         diference = Math.abs(maxdate.getTime() - mindate.getTime());
         daysdif = Math.ceil(diference / (1000 * 3600 * 24));
+        date1 = new Date(maxdate.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-        date1 = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000);
-        date2 = new Date();
-
-        (daysdif > 7) ? brush.extent([date1, date2]) : brush.extent([mindate, maxdate]);
-
+        (daysdif > 7) ? brush.extent([date1, maxdate]) : brush.extent([mindate, maxdate]);
+        console.log(brush.extent());
         brush(d3.select(".brush"));
         brushed();
     }
@@ -180,11 +186,11 @@ function generate_histogram(width, height, data, granularity) {
         var scope = angular.element($("#angularController")).scope();
         var brush_values = brush.extent();
 
-        selected_data = data.filter(function (d) {
+        selected_data = chart_data.filter(function (d) {
             return d.key_as_string >= brush_values[0] && d.key_as_string <= brush_values[1];
         });
 
-        selected_data = addBucket(granularity, selected_data);
+        selected_data = addBucket(chart_granularity, selected_data);
         var n_e = selected_data.length;
 
         x.domain([d3.min(selected_data, function (d) { return d.key_as_string; }),
@@ -253,7 +259,6 @@ function generate_histogram(width, height, data, granularity) {
                 scope.update_list(1);
             })
         }
-
 
         var startdate = String(brush_values[0].toISOString().slice(0, 19)).replace("T", " ");
         var enddate = String(brush_values[1].toISOString().slice(0, 19)).replace("T", " ");
