@@ -69,11 +69,11 @@
 
     <div class="container-fluid">
       <div id="hideVisz" class="row collapse in">
-
           <div class="container-fluid">
             <div class="row">
               <ul class="nav nav-tabs visz-table">
                 <li class="active"><a data-toggle="tab" href="#histogram">Histograma</a></li>
+                <li><a data-toggle="tab" href="#mapvisz" id="maptab">Mapa</a></li>
               </ul>
             </div>
           </div>
@@ -92,10 +92,15 @@
               </div>
             </div>
 
-            <!--
-            <div id="mapa" class="tab-pane fade">
-            </div> -->
-
+            <div id="mapvisz" class="tab-pane fade">
+              <div class="row">
+                <div class="col-md-12">
+                  <div id="map_container" style="width:100%">
+                      <div id="mapid"></div>                 
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
       </div>
     </div>
@@ -217,6 +222,10 @@
       </div>
     </div>
   </div>
+
+ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.5/leaflet.js"></script>
+ <script type="text/javascript" src="/static/explora/visual/map/locationMap.js"></script>
+
 
 </div>
 {% endblock content %}

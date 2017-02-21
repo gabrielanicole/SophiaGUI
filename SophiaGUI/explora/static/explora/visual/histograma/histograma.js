@@ -139,7 +139,7 @@ function generate_histogram(width, height, data, granularity) {
             return x2(d.key_as_string);
         })
         .attr("width", function (d) {
-            return w / (m_e-padding);
+            return w / (m_e - padding);
         })
         .attr("y", function (d) { return y2(d.doc_count); })
         .attr("height", function (d) { return h2 - y2(d.doc_count); })
@@ -190,9 +190,6 @@ function generate_histogram(width, height, data, granularity) {
         x.domain([d3.min(selected_data, function (d) { return d.key_as_string; }),
         d3.max(selected_data, function (d) { return d.key_as_string; })]);
 
-        chart.select("g.y.axis").call(yAxis);
-        chart.select("g.x.axis").call(xAxis);
-
         chart.selectAll(".bar2").remove();
 
         var ymax = 0;
@@ -240,6 +237,9 @@ function generate_histogram(width, height, data, granularity) {
                 getDate(JSON.stringify(d.key_as_string), JSON.stringify(a.data()[i + 1].key_as_string));
             })
             .style("fill", "#078770");
+
+        chart.select("g.y.axis").call(yAxis);
+        chart.select("g.x.axis").call(xAxis);
 
         function getDate(date, date2) {
             var aux_format = d3.time.format("%Y-%m-%d %H:%M:%S");
