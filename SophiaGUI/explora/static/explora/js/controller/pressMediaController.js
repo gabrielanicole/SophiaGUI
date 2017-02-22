@@ -64,6 +64,19 @@ app.controller('pressMediaController', ['$scope', '$http', function ($scope, $ht
         }
     }
 
+    $scope.deleteMedia = function () {
+        $http({
+            method: 'POST',
+            url: '/pressmedia/delete/',
+            data: $.param({ media_id: $scope.selectedMediaId, twitter: $scope.pressMedia.pre_twitter })
+        }).then(function successCallback(response) {
+            console.log(response);
+            toastr.success("Se ha eliminado el medio");
+        }, function errorCallback(response) {
+            toastr.error("Ha ocurrido un error");
+        });
+    }
+
     $scope.editMedia = function () {
         try {
             $scope.selectedMediaId = $scope.selectedMedium.media_id;

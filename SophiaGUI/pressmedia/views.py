@@ -144,6 +144,31 @@ def editPressMedia(request):
             print e
             return HttpResponse('Ha ocurrido un error durante el proceso')
 
+@login_required(login_url='/login_required')
+def deletePressMedia(request):
+    if request.method == 'POST':
+        try:
+            media_id = request.POST.get('media_id').encode('utf8')
+            screen_name = request.POST.get('twitter').encode('utf8')
+            client,headers,api_url = getClient()
+
+            #delete from Twitter
+            consumer_key = 'wHpPsl5nuZXEyJU6fgqPzvs3V'
+            consumer_secret = 'zqDiIsAMGaCvuQpwYFZCawLGjRWHH9UNW6iPq9lXdY3PEvmYTk'
+            access_token = '822060303907176448-YYFVabdPAF8Fw8JbB7bM2out2RUFTvn'
+            access_token_secret = 'ctFi2JCDuI80e6lYCZDzKu3OYTBhvzAXeS1bCfO7aKMtn'
+            auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+            auth.set_access_token(access_token, access_token_secret)
+            t_api = tweepy.API(auth)
+            removeFriend(t_api, screen_name)
+
+            api = u'http://{0}/v2/pressmedia/{1}/'.format(api_url, media_id)
+            response = client.delete(api, headers=headers)
+
+            return HttpResponse("Ok")
+        except Exception as e:
+            print e 
+            return HttpResponse("Internal Server Error")
 
 def getClient():
     file = json.loads(open("explora/static/user.json").read())
