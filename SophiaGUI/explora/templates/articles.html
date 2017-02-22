@@ -116,39 +116,45 @@
 
             <div id="extrainfo" class="tab-pane fade">
 
-              <div class="row top-buffer">
-
                 <div class="col-xs-4">
-                  <div class="table-scroll">
-                        <h2>Medios</h2>
-                        <p>Porcentaje de publicación por medio</p>            
+                         <h2>Medios</h2>
+                        <p>Porcentaje de publicación por medio a partir de la búsqueda</p>            
                         <table class="table table-striped">
                           <thead>
                             <tr>
-                              <th>Filtrar</th>
+                             <!-- <th>Filtrar</th> -->
                               <th>Medio</th>
                               <th>Noticias publicadas</th>
-                              <th>Tendencia</th>
+                              <th>Porcentaje</th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr ng-repeat="media in articles_by_media">
+                              
+                              <!--
                               <td>
                                 <input type="checkbox">
-                              </td>
+                              </td> -->
+
                               <td>[[media.key]]</td>
                               <td>[[media.doc_count]]</td>
-                              <td>Tendencia</td>
+                              <td>%[[(media.doc_count/total_found)*100 | limitTo:6]]</td>
                             </tr>
                           </tbody>
                         </table>
-                  </div>
                 </div>
 
-                <div class="col-xs-8">
+                <div class="col-xs-4">
+                      <div class="row top-buffer">
+                        <h4 class="text-center">Medios con mayor publicación</h4>
+                      </div>
+                      <div id="piechart_container" style="width:100%">
+                           <div id="piechart"></div>
+                      </div>
                 </div>
+                <div class="col-xs-4">
 
-              </div>
+                </div>            
             </div>
 
 
@@ -159,7 +165,7 @@
 
   <div id="articles-container">
 
-    <div class="row">
+    <div class="row top-buffer2">
       <div class="col-md-12">
           <div class="alert alert-success">
             <strong>Noticias encontradas</strong> [[total_found]]

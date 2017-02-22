@@ -293,6 +293,10 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             $scope.total_found = parseInt(data.total);
             $scope.articles_by_media = data.articles_by_media; 
 
+            $("#piechart").empty();
+            var chart_w = (($scope.windowsWidth/3) - 40);
+            var pie_chart = generate_chart($scope.articles_by_media, chart_w, $scope.total_found);
+
             var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
             $scope.page_init = range.page_init;
             $scope.page_end = range.page_end;

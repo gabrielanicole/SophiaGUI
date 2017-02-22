@@ -2,6 +2,10 @@
 	margin-top:10px;
 	 }
 
+.top-buffer2 {
+	margin-top:60px;
+	 }
+
 .news-deploy{
 	border: 1px solid #cccccc;
 	border-radius: 0px;
@@ -169,7 +173,22 @@ body{
 	color: black !important;
 }
 
-.table-scroll{
-    height: 550px;
-    overflow: auto;
+
+tr {
+width: 95%;
+display: inline-table;
+height:60px;
+table-layout: fixed;
+}
+
+table{
+ height:500px; 
+ display: -moz-groupbox;
+}
+
+tbody{
+  overflow-y: scroll;
+  height: 500px;
+  width: 95%;
+  position: absolute;
 }

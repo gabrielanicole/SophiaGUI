@@ -203,7 +203,6 @@ def advancedSearch(request, page=1):
 
         data_array = json.loads(response.content.encode('utf8'))
 
-
         articles_by_media = data_array['aggregations']['articlesByPressMedia']['buckets']
         total_search = data_array['hits']['total'] 
         total_pages = data_array['totalPages']
