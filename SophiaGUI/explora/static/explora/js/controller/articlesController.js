@@ -172,6 +172,10 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         });
     }
 
+    $scope.groupChange = function(group){
+        $scope.selecteMediumGroup = group;
+    }
+
     loadPressMediaGroups();
 
     function loadPressMedia() {
@@ -286,6 +290,8 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "sort": $scope.selectedSort.value
         }
 
+        console.log($scope.selecteMediumGroup);
+
         Articles.getArticlesList(json_data, page).then(function (data) {
             $scope.articulos = data.results;
             $scope.total_pages = parseInt(data.totalpages);
@@ -365,7 +371,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "pre_owner": $scope.selecteMediumGroup,
             "follow_new_feed": checked
         }
-
         if ($scope.news_case_name.length > 0) {
             Articles.createNewsCases(json_data).then(function (response) {
                 console.log(response);

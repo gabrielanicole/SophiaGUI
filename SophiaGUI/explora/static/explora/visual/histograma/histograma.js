@@ -1,14 +1,12 @@
 function generate_histogram(width, height, min_chart_data, chart_data, min_granularity, chart_granularity) {
 
     var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse
-
     var margin = { top: 20, right: 40, bottom: 50, left: 100 };
     var margin2 = { top: 20, right: 40, bottom: 50, left: 100 };
     var w = width - margin.left - margin.right;
     var h = height - margin.top - margin.bottom;
     var h2 = height / 2 - margin2.top - margin2.bottom;
     var padding = 1;
-
 
     var zoom = d3.behavior.zoom()
         .scaleExtent([10, 20])
@@ -307,7 +305,7 @@ function generate_histogram(width, height, min_chart_data, chart_data, min_granu
         }
         return data;
     }
-    
+
     function zoomed() {
         var ticks = Math.round(zoom.scale());
         xAxis2.ticks(ticks);

@@ -32,7 +32,7 @@
 
 				  <div class="form-group">
 				        <div id="mediumGroupContainer" class="selectContainer" data-toggle="tooltip" title="Filtrar por grupo de medios">
-				            <select class="form-control" name="categoria" ng-model="selectedMediumGroup" ng-options="x|limitTo:25 for x in press_media_groups">
+				            <select class="form-control" name="categoria" ng-model="selectedMediumGroup" ng-click="groupChange(selectedMediumGroup)" ng-options="x|limitTo:25 for x in press_media_groups">
 				            </select>
 				       </div>
 			  	</div>
@@ -117,35 +117,32 @@
             <div id="extrainfo" class="tab-pane fade">
 
                 <div class="col-xs-4">
-                         <h2>Medios</h2>
-                        <p>Porcentaje de publicación por medio a partir de la búsqueda</p>            
-                        <table class="table table-striped">
-                          <thead>
-                            <tr>
-                             <!-- <th>Filtrar</th> -->
-                              <th>Medio</th>
-                              <th>Noticias publicadas</th>
-                              <th>Porcentaje</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr ng-repeat="media in articles_by_media">
-                              
-                              <!--
-                              <td>
-                                <input type="checkbox">
-                              </td> -->
-
-                              <td>[[media.key]]</td>
-                              <td>[[media.doc_count]]</td>
-                              <td>%[[(media.doc_count/total_found)*100 | limitTo:6]]</td>
-                            </tr>
-                          </tbody>
-                        </table>
+                    <div class="row table-container">
+                          <h2>Medios</h2>
+                          <p>Porcentaje de publicación por medio a partir de la búsqueda</p>            
+                          <table class="table table-striped media-table">
+                            <thead>
+                              <tr class="media-table">
+                              <!-- <th>Filtrar</th> -->
+                                <th>Medio</th>
+                                <th>Noticias publicadas</th>
+                                <th>Porcentaje</th>
+                              </tr>
+                            </thead>
+                            <tbody class="media-table">
+                              <tr class="media-table" ng-repeat="media in articles_by_media">
+                                
+                                <td>[[media.key]]</td>
+                                <td>[[media.doc_count]]</td>
+                                <td>%[[(media.doc_count/total_found)*100 | limitTo:6]]</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                  </div>
                 </div>
 
                 <div class="col-xs-4">
-                      <div class="row top-buffer">
+                      <div class="row top-buffer2">
                         <h4 class="text-center">Medios con mayor publicación</h4>
                       </div>
                       <div id="piechart_container" style="width:100%">

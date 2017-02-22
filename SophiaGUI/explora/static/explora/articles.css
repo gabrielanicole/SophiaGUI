@@ -3,7 +3,7 @@
 	 }
 
 .top-buffer2 {
-	margin-top:60px;
+	margin-top:10px;
 	 }
 
 .news-deploy{
@@ -173,22 +173,25 @@ body{
 	color: black !important;
 }
 
-
-tr {
+.media-table tr {
 width: 95%;
 display: inline-table;
 height:60px;
 table-layout: fixed;
 }
 
-table{
- height:500px; 
- display: -moz-groupbox;
+.media-table table{
+ height:400px !important; 
+ display: -moz-groupbox !important;
 }
 
-tbody{
-  overflow-y: scroll;
-  height: 500px;
-  width: 95%;
-  position: absolute;
+.media-table tbody{
+  overflow-y: scroll !important;
+  height: 400px !important;
+  width: 95% !important;
+  position: absolute !important;
+}
+
+.table-container{
+    height: 600px;
 }
