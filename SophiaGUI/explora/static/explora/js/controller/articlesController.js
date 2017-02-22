@@ -291,6 +291,8 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             $scope.total_pages = parseInt(data.totalpages);
             $scope.actual_page = parseInt(data.page);
             $scope.total_found = parseInt(data.total);
+            $scope.articles_by_media = data.articles_by_media; 
+
             var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
             $scope.page_init = range.page_init;
             $scope.page_end = range.page_end;

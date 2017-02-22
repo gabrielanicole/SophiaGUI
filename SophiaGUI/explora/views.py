@@ -203,6 +203,8 @@ def advancedSearch(request, page=1):
 
         data_array = json.loads(response.content.encode('utf8'))
 
+
+        articles_by_media = data_array['aggregations']['articlesByPressMedia']['buckets']
         total_search = data_array['hits']['total'] 
         total_pages = data_array['totalPages']
         actual_page = data_array['page']
@@ -225,6 +227,7 @@ def advancedSearch(request, page=1):
         json_response = {'totalpages': total_pages,
                          'page': actual_page,
                          'total':total_search,
+                         'articles_by_media':articles_by_media,
                          'results': results}
         return JsonResponse(json_response, safe=False)
 

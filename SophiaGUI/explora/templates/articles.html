@@ -81,12 +81,13 @@
               <ul class="nav nav-tabs visz-table">
                 <li class="active"><a data-toggle="tab" href="#histogramtab">Histograma</a></li>
                 <li><a data-toggle="tab" href="#mapvisz" id="maptab">Mapa</a></li>
+                <li><a data-toggle="tab" href="#extrainfo" id="maptab">Otra Información</a></li>
               </ul>
             </div>
           </div>
+
           <div class="tab-content hidden-xs">
 
-            
             <div  id="histogramtab" class="tab-pane fade in active">
                 <div class="row top-buffer">
                         <div class="col-md-12">
@@ -98,7 +99,6 @@
                         <div class="col-md-12">
                             <div id="histogram_container" style="width:100%">
                                 <div class="row" id="histogram"></div>
-                                <div class="row" id="histogram2"></div>
                             </div>
                         </div>
                   </div>
@@ -113,6 +113,45 @@
                 </div>
               </div>
             </div>
+
+            <div id="extrainfo" class="tab-pane fade">
+
+              <div class="row top-buffer">
+
+                <div class="col-xs-4">
+                  <div class="table-scroll">
+                        <h2>Medios</h2>
+                        <p>Porcentaje de publicación por medio</p>            
+                        <table class="table table-striped">
+                          <thead>
+                            <tr>
+                              <th>Filtrar</th>
+                              <th>Medio</th>
+                              <th>Noticias publicadas</th>
+                              <th>Tendencia</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr ng-repeat="media in articles_by_media">
+                              <td>
+                                <input type="checkbox">
+                              </td>
+                              <td>[[media.key]]</td>
+                              <td>[[media.doc_count]]</td>
+                              <td>Tendencia</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                  </div>
+                </div>
+
+                <div class="col-xs-8">
+                </div>
+
+              </div>
+            </div>
+
+
           </div>
       </div>
     </div>
