@@ -9,6 +9,11 @@ function generate_histogram(width, height, min_chart_data, chart_data, min_granu
     var h2 = height / 2 - margin2.top - margin2.bottom;
     var padding = 1;
 
+
+    var zoom = d3.behavior.zoom()
+        .scaleExtent([10, 20])
+        .on("zoom", zoomed);
+
     var chart = d3.select("#histogram")
         .append("svg")
         .attr("id", "selectedHistogram")
@@ -32,7 +37,15 @@ function generate_histogram(width, height, min_chart_data, chart_data, min_granu
         .attr("width", w + margin2.left + margin2.right)
         .attr("height", h2 + margin2.top + margin2.bottom)
         .append("g")
-        .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+        .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")")
+        .call(zoom);
+
+    var rect = minichart.append("rect")
+        .attr("width", w + margin2.left + margin2.right)
+        .attr("height", h2 + margin2.top + margin2.bottom)
+        .style("stroke-width", 0)
+        .style("fill", "none")
+        .style("pointer-events", "all");
 
     var x = d3.time.scale()
         .range([0, w]);
@@ -46,9 +59,9 @@ function generate_histogram(width, height, min_chart_data, chart_data, min_granu
     var y2 = d3.scale.linear()
         .range([h2, 0]);
 
-
     var xAxis = d3.svg.axis()
         .scale(x)
+        .ticks(15)
         .tickSize(8, 1)
         .tickPadding(8)
         .orient("bottom");
@@ -62,6 +75,7 @@ function generate_histogram(width, height, min_chart_data, chart_data, min_granu
 
     var xAxis2 = d3.svg.axis()
         .scale(x2)
+        .ticks(15)
         .tickSize(5, 1)
         .tickPadding(6)
         .orient("bottom");
@@ -175,7 +189,6 @@ function generate_histogram(width, height, min_chart_data, chart_data, min_granu
         date1 = new Date(maxdate.getTime() - 7 * 24 * 60 * 60 * 1000);
 
         (daysdif > 7) ? brush.extent([date1, maxdate]) : brush.extent([mindate, maxdate]);
-        console.log(brush.extent());
         brush(d3.select(".brush"));
         brushed();
     }
@@ -294,4 +307,12 @@ function generate_histogram(width, height, min_chart_data, chart_data, min_granu
         }
         return data;
     }
+    
+    function zoomed() {
+        var ticks = Math.round(zoom.scale());
+        xAxis2.ticks(ticks);
+        minichart.select("g.x.axis").call(xAxis2);
+    }
 }
+
+
