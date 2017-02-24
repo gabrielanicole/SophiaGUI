@@ -140,7 +140,6 @@ def articlesCountBy(request):
         try:
             response = client.post(api, data=search, headers=headers)
             #response = requests.get(api)
-
         except Exception as e:
             return HttpResponse(e)
              
@@ -203,7 +202,7 @@ def advancedSearch(request, page=1):
 
         data_array = json.loads(response.content.encode('utf8'))
 
-        articles_by_media = data_array['aggregations']['articlesByPressMedia']['buckets']
+        articles_by_media = data_array['aggregations']['countByPressMedia']['buckets']
         total_search = data_array['hits']['total'] 
         total_pages = data_array['totalPages']
         actual_page = data_array['page']
@@ -304,6 +303,27 @@ def sendGeoJSON(request):
         except Exception as e:
             print e
             return HttpResponse("Internal server error")
+
+def getStackBar(request):
+    countby = request.POST.get('countby').encode('utf8')
+    search = request.POST.get('search').encode('utf8')
+        
+    search = json.loads(search)
+    search['countby']=countby
+    search = json.dumps(search)
+
+    client,headers,api_url = getClient()
+    api = u'http://{0}/v2/stackbar/'.format(api_url)
+    try:
+        response = client.post(api, data=search, headers=headers)
+            #response = requests.get(api)
+    except Exception as e:
+        return HttpResponse(e)
+         
+    data = json.loads(response.text.encode('utf8'))
+    #print data
+    data = data['aggregations']['countByPressMedia']['buckets']
+    return JsonResponse(data, safe=False)
 
 def getClient():
     file = json.loads(open("explora/static/user.json").read())

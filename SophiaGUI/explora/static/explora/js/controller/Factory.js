@@ -28,14 +28,23 @@ app.factory('Articles', function ($http) {
                 return response;
             });
         },
-        changeArticleCategory: function(id, category){
+        changeArticleCategory: function (id, category) {
             return $http({
-                method:'POST',
-                url:'articles/changeCategory/',
-                data: $.param({id:id, category:category})
-            }).then(function(response){
+                method: 'POST',
+                url: 'articles/changeCategory/',
+                data: $.param({ id: id, category: category })
+            }).then(function (response) {
                 return response;
             });
+        },
+        getStackBarData: function (data) {
+            return $http({
+                method: 'POST',
+                url: 'articles/getStackBar/',
+                data: $.param(data)
+            }).then(function (response) {
+                return response.data;
+            })
         }
     };
 });

@@ -172,7 +172,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         });
     }
 
-    $scope.groupChange = function(group){
+    $scope.groupChange = function (group) {
         $scope.selecteMediumGroup = group;
     }
 
@@ -253,6 +253,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         //Temporaly works like this
         var g1 = 'day'
         var g2 = 'hour'
+
         var data1 = {
             countby: g1,
             search: JSON.stringify(json_data)
@@ -262,9 +263,15 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             search: JSON.stringify(json_data)
         };
 
+        Articles.getStackBarData(data1).then(function (data) {
+            $("#stackedbar").empty();
+            var stackedbar = generate_stackedbar(data);
+        })
+
         Articles.getArticlesCountBy(data1).then(function (data) {
             $("#histogram").empty();
             var min_chart_data = data;
+
             Articles.getArticlesCountBy(data2).then(function (data) {
                 var chart_data = data;
                 var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300,
@@ -290,17 +297,15 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "sort": $scope.selectedSort.value
         }
 
-        console.log($scope.selecteMediumGroup);
-
         Articles.getArticlesList(json_data, page).then(function (data) {
             $scope.articulos = data.results;
             $scope.total_pages = parseInt(data.totalpages);
             $scope.actual_page = parseInt(data.page);
             $scope.total_found = parseInt(data.total);
-            $scope.articles_by_media = data.articles_by_media; 
+            $scope.articles_by_media = data.articles_by_media;
 
             $("#piechart").empty();
-            var chart_w = (($scope.windowsWidth/3) - 40);
+            var chart_w = (($scope.windowsWidth / 3) - 40);
             var pie_chart = generate_chart($scope.articles_by_media, chart_w, $scope.total_found);
 
             var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);

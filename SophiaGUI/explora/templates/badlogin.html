@@ -21,33 +21,33 @@
 </head>
 
 <body>
-        <nav id="custom-bootstrap-menu" class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/">Sophia Project</a>
-                </div>
-                <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <form action="/login" id="login_form" class="navbar-form navbar-left" role="login" method="post">{% csrf_token %}
-                                <div class="form-group">
-                                    <input name="username" value="" type="text" class="form-control" placeholder="Usuario">
-                                    <input name="password" value="" type="password" class="form-control" placeholder="Contraseña">
-                                </div>
-                                <button type="submit" class="btn btn-default">Login</button>
-                            </form>
-                        </li>
-                </ul>
+    <nav id="custom-bootstrap-menu" class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Sophia Project</a>
             </div>
-        </nav>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <form action="/login" id="login_form" class="navbar-form navbar-left" role="login" method="post">{% csrf_token %}
+                        <div class="form-group">
+                            <input name="username" value="" type="text" class="form-control" placeholder="Usuario">
+                            <input name="password" value="" type="password" class="form-control" placeholder="Contraseña">
+                        </div>
+                        <button type="submit" class="btn btn-default">Login</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
     <div class="container">
-         <div class="jumbotron">
-           <h1 class="jumbo-text">Nombre de usuario o contraseña erronea </h1>
+        <div class="jumbotron">
+            <h1 class="jumbo-text">Nombre de usuario o contraseña erronea </h1>
             <h3 class="jumbo-text">Se ha ingresado un nombre de usuario inválido o la contraseña no coincide</h3>
         </div>
     </div>
 </body>
 
 <footer class="footer">
-	<p class="text-center" style="color:white;"> Copyright (c) 2017 sophia-project.info All rights reserved</p>
+    <p class="text-center" style="color:white;"> Copyright (c) 2017 sophia-project.info All rights reserved</p>
 </footer>

@@ -8,9 +8,9 @@ function generate_histogram(width, height, min_chart_data, chart_data, min_granu
     var h2 = height / 2 - margin2.top - margin2.bottom;
     var padding = 1;
 
-    var zoom = d3.behavior.zoom()
-        .scaleExtent([10, 20])
-        .on("zoom", zoomed);
+    //var zoom = d3.behavior.zoom()
+    //    .scaleExtent([10, 20])
+    //    .on("zoom", zoomed);
 
     var chart = d3.select("#histogram")
         .append("svg")
@@ -35,8 +35,8 @@ function generate_histogram(width, height, min_chart_data, chart_data, min_granu
         .attr("width", w + margin2.left + margin2.right)
         .attr("height", h2 + margin2.top + margin2.bottom)
         .append("g")
-        .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")")
-        .call(zoom);
+        .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+        //.call(zoom);
 
     var rect = minichart.append("rect")
         .attr("width", w + margin2.left + margin2.right)
@@ -305,12 +305,14 @@ function generate_histogram(width, height, min_chart_data, chart_data, min_granu
         }
         return data;
     }
-
+  /*
     function zoomed() {
+      
         var ticks = Math.round(zoom.scale());
         xAxis2.ticks(ticks);
-        minichart.select("g.x.axis").call(xAxis2);
+        minichart.select("g.x.axis").call(xAxis2); 
     }
+    */
 }
 
 
