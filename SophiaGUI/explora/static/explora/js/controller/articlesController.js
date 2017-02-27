@@ -133,6 +133,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.total_pages;
     $scope.actual_page;
     $scope.articulos = [];
+    $scope.medias = [];
     $scope.page_init;
     $scope.page_end;
     $scope.size = 3;
@@ -305,6 +306,23 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
             $("#piechart").empty();
             var chart_w = (($scope.windowsWidth / 3) - 40);
+            /* Charge initial $scope.medias */
+            $scope.medias = [];
+            console.log($scope.articles_by_media.length);
+            if ($scope.articles_by_media.length > 10){
+                console.log($scope.articles_by_media);
+                for(var i=0;i<10;i++){
+                    $scope.medias.push($scope.articles_by_media[i]['key']);
+                }
+            }else{
+                for(var i=0;i<$scope.articles_by_media.length;i++){
+                    $scope.medias.push($scope.articles_by_media[i]['key']);
+                }
+            }
+            console.log($scope.medias);
+            for(var j=0;j<$scope.medias.length;j++){
+                $scope[$scope.medias[j]] = true;
+            }
             var pie_chart = generate_chart($scope.articles_by_media, chart_w, $scope.total_found);
 
             var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
@@ -391,6 +409,16 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.exportImageFormat = "PNG";
     $scope.exportImage = function (format) {
         ExportData.exportImage(format);
+    }
+    /* Function to add or remove media in $scope.medias array */
+    $scope.add_media = function (media) {
+        var i = $scope.medias.indexOf(media[0][0]);
+        if ( i !== -1 ) {
+            $scope.medias.splice(i, 1);
+        }else{
+            $scope.medias.push(media[0][0]);
+        }
+        console.log($scope.medias);
     }
 
     function run() {
