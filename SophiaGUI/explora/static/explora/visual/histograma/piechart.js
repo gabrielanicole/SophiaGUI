@@ -41,10 +41,10 @@ function generate_chart(data, width, total_found) {
             return colorScale(d.data.doc_count); })
         .style("opacity",0.6)
         .on("mouseover", function(d){
-            d3.select(this).style("opacity",0.7);
+            d3.select(this).style("opacity",1);
         })
         .on("mouseout", function(d){
-            d3.select(this).style("opacity",0.5);
+            d3.select(this).style("opacity",0.8);
         });
 
     g.append("text")

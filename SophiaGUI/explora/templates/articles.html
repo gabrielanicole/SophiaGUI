@@ -148,6 +148,33 @@
                                   <div id="piechart"></div>
                             </div>
                       </div>
+
+                        <div class="row">
+                          <div class="col-md-12">
+                            <form>
+                              <label class="radio-inline ">
+                                <input class="stackcontrol" type="radio" name="optradio" value="percent" >Porcentajes
+                              </label>
+                              <label class="radio-inline stackcontrol">
+                                <input class="stackcontrol" type="radio" name="optradio" value="count" checked>Cantidad
+                              </label>
+                            </form>
+                          </div>
+                        </div>
+
+                      <div class="row">
+                        <div class="col-md-4">
+                          <h6><strong>Medio: </strong> [[stackmedia]]</h6>
+                        </div>
+                        <div class="col-md-4">
+                          <h6><strong>Fecha: </strong> [[stackdate]]</h6>
+                        </div>
+                        <div class="col-md-4">
+                          <h6><strong>Total de noticias del día:</strong> [[totalofday]]</h6>
+                          <h6><strong>Total de noticias del medio en el día:</strong> [[totalByMedia]]</h6>
+                          <h6><strong>Porcentaje respecto al día:</strong> % [[stacktotal | limitTo:6]]</h6>
+                        </div>
+                     </div>
                     <div class="row">
                        <div id="stackbar_container" style="width:100%">
                            <div id="stackedbar"></div>

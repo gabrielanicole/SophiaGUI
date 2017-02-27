@@ -1,46 +1,28 @@
-function generate_stackedbar(data) {
+function generate_stackedbar(data, total_by_day) {
 
-    /*
-        data = []
-        var mediaNameList = [];
-        input.forEach(function (d) {
-            d.articlesByPressMedia.buckets.forEach(function (d) {
-                mediaNameList.indexOf(d.key) != -1 ? {} : mediaNameList.push(d.key);
-            })
-            data.push({
-                'total': d.doc_count,
-                'date': new Date(d.key_as_string),
-                'buckets': d.articlesByPressMedia.buckets
-            });
-        }) */
 
+    data = data.slice(0, 10);
+
+    //Used tp calculate the % by day
+    var total_by_day = total_by_day.buckets;
+    total_by_day.forEach(function (d) {
+        d.key_as_string = new Date(d.key_as_string);
+    })
+
+    //Declare scope => Interact with angular
+    var scope = angular.element($("#angularController")).scope();
+    var formatDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
     var colorScale = d3.scale.category20c();
     var w = 800;
     var h = 300;
     var margin = { top: 20, right: 30, bottom: 50, left: 50 }
-
-    var stacked = d3.select("#stackedbar")
-        .append("svg")
-        .attr("id", "selectedHistogram")
-        .attr("class", "chart")
-        .attr("width", w + margin.left + margin.right)
-        .attr("height", h + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    stacked.append("rect")
-        .attr("width", "100%")
-        .attr("height", "100%")
-        .attr("fill", "white")
-        .attr("style", "stroke:white")
-        .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")");
 
 
     var x = d3.time.scale()
         .range([0, w]);
 
     var y = d3.scale.linear()
-        .range([h, 0]);
+        .range([h, 0])
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -51,38 +33,238 @@ function generate_stackedbar(data) {
 
     var yAxis = d3.svg.axis()
         .scale(y)
-        .ticks(10, "%")
+        .ticks(10)
         .tickPadding(8)
         .tickSize(8, 1)
         .orient("left")
 
-    stacked.append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
 
-    stacked.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + h + ")")
-        .call(xAxis);
-
-    //y.domain([0, d3.max(data, function (d) { return d.total; })]);
-    //
-
+    var max = 0; //vax value to create de y axis and scale
     var data = data.map(function (d) {
+        var key = d.key;
+        var total_doc = d.doc_count;
         var bucket = d.result_over_time.buckets.map(function (d) {
-            return { 'x': new Date(d.key_as_string), 'y': d.doc_count }
+            d.y >= max ? max = d.y : max = max;
+            //Data to bind into each rect
+            return {
+                'x': new Date(d.key_as_string),
+                'y': +d.doc_count, 'stackValue': d.doc_count,
+                'key': key,
+                'total_doc_by_media': total_doc
+            }
         })
+        //Add offset for size of the rects
+        offdate = new Date(bucket[bucket.length - 1].x);
+        offdate.setDate(offdate.getDate() + 1);
+        bucket.push({
+            'x': offdate,
+            'y': +0, 'stackValue': 0,
+            'key': key,
+            'total_doc_by_media': total_doc
+        });
         return { bucket }
     })
 
-    n_e = data[0].bucket.length - 1;
+    n_e = data[0].bucket.length;
     x.domain([d3.min(data, function (d) { return d.bucket[0].x; }), d3.max(data, function (d) { return d.bucket[d.bucket.length - 1].x; })]);
-    //y.domain([0, d3.max(data, function (d) { return d.total; })]);
-    stacked.select("g.x.axis").call(xAxis);
 
-    var stack = d3.layout.stack();
-    stack(data.map(function (d) {
-        return d.bucket
-    }));
+    function normalizedChart() {
+        $("#stackedbar").empty();
 
+        var stacked = d3.select("#stackedbar")
+            .append("svg")
+            .attr("class", "chart")
+            .attr("width", w + margin.left + margin.right)
+            .attr("height", h + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        stacked.append("rect")
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .attr("fill", "white")
+            .attr("style", "stroke:white")
+            .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")");
+
+        stacked.append("g")
+            .attr("class", "y axis")
+            .call(yAxis);
+
+        stacked.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + h + ")")
+            .call(xAxis);
+
+        stacked.select("g.x.axis").call(xAxis);
+
+        delete stack
+        stack = d3.layout.stack().offset("expand")(data.map(function (d) {
+            return d.bucket
+        }));
+        y.domain([0, 1]);
+        // We make sure y = 0 when real value = 0, in case we have an empty stack.
+        stack.forEach(function (datum, index) {
+            datum.forEach(function (datum, index) {
+                if (datum.stackValue === 0) {
+                    datum.y = 0;
+                }
+            });
+        });
+
+        yAxis.ticks(10, "%")
+        stacked.select("g.y.axis").call(yAxis);
+
+        // Add a group for each row of data
+        var groups = stacked.selectAll("gr")
+            .data(stack)
+            .enter()
+            .append("g")
+            .style("fill", function (d, i) {
+                return colorScale(i);
+            });
+
+        // Add a rect for each data value
+        rects = groups.selectAll("rect")
+            .data(function (d) {
+                return d;
+            })
+            .enter()
+            .append("rect")
+            .attr("class", "srect")
+            .attr("x", function (d, i) {
+                return x(d.x);
+            })
+            .attr("y", function (d) {
+                return y(d.y0 + d.y);
+            })
+            .attr("height", function (d) {
+                return y(d.y0) - y(d.y0 + d.y);
+            })
+            .attr("width", w / n_e)
+            .on("mouseover", function (d) {
+
+                var selected_key = d.key;
+                var stackdate = d.x;
+                var aux = total_by_day.filter(x => x.key_as_string.getTime() === stackdate.getTime());
+                var stacktotal = (parseInt(d.stackValue) / parseInt(aux[0].doc_count)) * 100;
+                var total_by_media = d.stackValue;
+
+                d3.selectAll(".srect")
+                    .filter(function (f) {
+                        return f.key == selected_key;
+                    })
+                    .attr("stroke-width", 2)
+                    .attr("stroke", "red");
+
+                scope.$apply(function () {
+                    scope.stackmedia = selected_key;
+                    scope.stackdate = stackdate.toISOString().slice(0, 10);
+                    scope.stacktotal = stacktotal;
+                    scope.totalofday = aux[0].doc_count;
+                    scope.totalByMedia = total_by_media;
+                })
+            })
+            .on("mouseout", function (d) {
+                d3.selectAll(".srect").attr("stroke", "black").attr("stroke-width", 0.5);
+            });
+    }
+
+    function countChart() {
+        $("#stackedbar").empty();
+
+        var stacked = d3.select("#stackedbar")
+            .append("svg")
+            .attr("class", "chart")
+            .attr("width", w + margin.left + margin.right)
+            .attr("height", h + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        stacked.append("rect")
+            .attr("width", "100%")
+            .attr("height", "100%")
+            .attr("fill", "white")
+            .attr("style", "stroke:white")
+            .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")");
+
+        stacked.append("g")
+            .attr("class", "y axis")
+            .call(yAxis);
+
+        stacked.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + h + ")")
+            .call(xAxis);
+
+        stacked.select("g.x.axis").call(xAxis);
+
+        delete stack
+        stack = d3.layout.stack().offset("zero")(data.map(function (d) {
+            return d.bucket
+        }));
+
+        y.domain([0, d3.max(stack, function (d) { return d3.max(d, function (d) { return d.y0 + d.y; }) })])
+        stacked.select("g.y.axis").call(yAxis);
+
+        // Add a group for each row of data
+        var groups = stacked.selectAll("gr")
+            .data(stack)
+            .enter()
+            .append("g")
+            .style("fill", function (d, i) {
+                return colorScale(i);
+            });
+
+        // Add a rect for each data value
+        rects = groups.selectAll("rect")
+            .data(function (d) {
+                return d;
+            })
+            .enter()
+            .append("rect")
+            .attr("class", "srect")
+            .attr("x", function (d, i) {
+                return x(d.x);
+            })
+            .attr("y", function (d) {
+                return y(d.y0 + d.y);
+            })
+            .attr("height", function (d) {
+                return y(d.y0) - y(d.y0 + d.y);
+            })
+            .attr("width", w / n_e)
+            .on("mouseover", function (d) {
+
+                var selected_key = d.key;
+                var stackdate = d.x;
+                var aux = total_by_day.filter(x => x.key_as_string.getTime() === stackdate.getTime());
+                var stacktotal = (parseInt(d.stackValue) / parseInt(aux[0].doc_count)) * 100;
+                var total_by_media = d.stackValue;
+
+                d3.selectAll(".srect")
+                    .filter(function (f) {
+                        return f.key == selected_key;
+                    })
+                    .attr("stroke-width", 2)
+                    .attr("stroke", "red");
+
+                scope.$apply(function () {
+                    scope.stackmedia = selected_key;
+                    scope.stackdate = stackdate.toISOString().slice(0, 10);
+                    scope.stacktotal = stacktotal;
+                    scope.totalofday = aux[0].doc_count;
+                    scope.totalByMedia = total_by_media;
+                })
+            })
+            .on("mouseout", function (d) {
+                d3.selectAll(".srect").attr("stroke", "black").attr("stroke-width", 0.5);
+            });
+    }
+
+    d3.selectAll("input.stackcontrol").on("change", handleClick);
+    function handleClick() {
+        this.value == "percent" ? normalizedChart() : countChart();
+    }
+
+    countChart();
 }

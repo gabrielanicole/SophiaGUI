@@ -322,7 +322,13 @@ def getStackBar(request):
          
     data = json.loads(response.text.encode('utf8'))
     #print data
-    data = data['aggregations']['countByPressMedia']['buckets']
+    total_by_day = data['aggregations']['result_over_time_all']
+    total_by_media = data['aggregations']['countByPressMedia']['buckets']
+
+    data = {
+        'total_by_day':total_by_day,
+        'total_by_media':total_by_media
+    }
     return JsonResponse(data, safe=False)
 
 def getClient():

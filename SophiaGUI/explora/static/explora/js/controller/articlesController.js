@@ -150,7 +150,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     var histogram_enddate = new Date().toISOString().slice(0, 10);
     //var histogram_startdate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
     //var histogram_startdate = new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString().slice(0, 10);
-    var histogram_startdate = new Date(new Date().setMonth(new Date().getMonth() - 6)).toISOString().slice(0, 10);
+    var histogram_startdate = new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString().slice(0, 10);
     $scope.windowsWidth = $window.innerWidth;
     $scope.granularity = 'hour';
 
@@ -265,13 +265,12 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
         Articles.getStackBarData(data1).then(function (data) {
             $("#stackedbar").empty();
-            var stackedbar = generate_stackedbar(data);
+            var stackedbar = generate_stackedbar(data.total_by_media, data.total_by_day);
         })
 
         Articles.getArticlesCountBy(data1).then(function (data) {
             $("#histogram").empty();
             var min_chart_data = data;
-
             Articles.getArticlesCountBy(data2).then(function (data) {
                 var chart_data = data;
                 var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300,
@@ -400,5 +399,4 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     }
     loadPressMedia();
     run();
-
 }]);
