@@ -146,12 +146,15 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.selectedMedium = [];
     $scope.selectedCategory = $scope.category[0];
     $scope.press_media_groups = [];
+    $scope.articles_by_media = [];
+    $scope.stackData = [];
+    $scope.stacktype = "count";
 
     //Set Intial Variables
     var histogram_enddate = new Date().toISOString().slice(0, 10);
     //var histogram_startdate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
     //var histogram_startdate = new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString().slice(0, 10);
-    var histogram_startdate = new Date(new Date().setMonth(new Date().getMonth() - 1)).toISOString().slice(0, 10);
+    var histogram_startdate = new Date(new Date().setMonth(new Date().getMonth() - 6)).toISOString().slice(0, 10);
     $scope.windowsWidth = $window.innerWidth;
     $scope.granularity = 'hour';
 
@@ -265,8 +268,9 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         };
 
         Articles.getStackBarData(data1).then(function (data) {
+            $scope.stackData = data;
             $("#stackedbar").empty();
-            var stackedbar = generate_stackedbar(data.total_by_media, data.total_by_day);
+            var stackedbar = generate_stackedbar($scope.stackData.total_by_media, $scope.stackData.total_by_day, $scope.medias, $scope.stacktype);
         })
 
         Articles.getArticlesCountBy(data1).then(function (data) {
@@ -304,26 +308,25 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             $scope.total_found = parseInt(data.total);
             $scope.articles_by_media = data.articles_by_media;
 
-            $("#piechart").empty();
-            var chart_w = (($scope.windowsWidth / 3) - 40);
+
             /* Charge initial $scope.medias */
             $scope.medias = [];
-            console.log($scope.articles_by_media.length);
-            if ($scope.articles_by_media.length > 10){
-                console.log($scope.articles_by_media);
-                for(var i=0;i<10;i++){
+            if ($scope.articles_by_media.length > 10) {
+                for (var i = 0; i < 10; i++) {
                     $scope.medias.push($scope.articles_by_media[i]['key']);
                 }
-            }else{
-                for(var i=0;i<$scope.articles_by_media.length;i++){
+            } else {
+                for (var i = 0; i < $scope.articles_by_media.length; i++) {
                     $scope.medias.push($scope.articles_by_media[i]['key']);
                 }
             }
-            console.log($scope.medias);
-            for(var j=0;j<$scope.medias.length;j++){
-                $scope[$scope.medias[j]] = true;
+            for (var j = 0; j < $scope.medias.length; j++) {
+                $scope["mark" + $scope.medias[j]] = true;
             }
-            var pie_chart = generate_chart($scope.articles_by_media, chart_w, $scope.total_found);
+
+            $("#piechart").empty();
+            var chart_w = (($scope.windowsWidth / 3) - 40);
+            var pie_chart = generate_chart($scope.articles_by_media, chart_w, $scope.total_found, $scope.medias);
 
             var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
             $scope.page_init = range.page_init;
@@ -413,12 +416,22 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     /* Function to add or remove media in $scope.medias array */
     $scope.add_media = function (media) {
         var i = $scope.medias.indexOf(media[0][0]);
-        if ( i !== -1 ) {
+        if (i !== -1) {
             $scope.medias.splice(i, 1);
-        }else{
+        } else {
             $scope.medias.push(media[0][0]);
         }
-        console.log($scope.medias);
+
+        $("#piechart").empty();
+        var chart_w = (($scope.windowsWidth / 3) - 40);
+        var pie_chart = generate_chart($scope.articles_by_media, chart_w, $scope.total_found, $scope.medias);
+        $("#stackedbar").empty();
+        var stackedbar = generate_stackedbar($scope.stackData.total_by_media, $scope.stackData.total_by_day, $scope.medias, $scope.stacktype);
+    }
+    $scope.stackChange = function (type) {
+        $scope.stacktype = type;
+        $("#stackedbar").empty();
+        var stackedbar = generate_stackedbar($scope.stackData.total_by_media, $scope.stackData.total_by_day, $scope.medias, $scope.stacktype);
     }
 
     function run() {

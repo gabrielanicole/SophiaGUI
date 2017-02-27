@@ -1,7 +1,12 @@
-function generate_stackedbar(data, total_by_day) {
+function generate_stackedbar(data, total_by_day, medias, type) {
 
-
-    data = data.slice(0, 10);
+    aux_data = [];
+    data.forEach(function (d) {
+        if (medias.indexOf(d.key) != -1) {
+            aux_data.push({ key: d.key, doc_count: d.doc_count, result_over_time: d.result_over_time });
+        }
+    })
+    data = aux_data;
 
     //Used tp calculate the % by day
     var total_by_day = total_by_day.buckets;
@@ -156,6 +161,8 @@ function generate_stackedbar(data, total_by_day) {
                     .attr("stroke-width", 2)
                     .attr("stroke", "red");
 
+                //d3.select(this).atrr("stroke","black");
+
                 scope.$apply(function () {
                     scope.stackmedia = selected_key;
                     scope.stackdate = stackdate.toISOString().slice(0, 10);
@@ -248,6 +255,8 @@ function generate_stackedbar(data, total_by_day) {
                     .attr("stroke-width", 2)
                     .attr("stroke", "red");
 
+                //d3.select(this).atrr("stroke","black");
+
                 scope.$apply(function () {
                     scope.stackmedia = selected_key;
                     scope.stackdate = stackdate.toISOString().slice(0, 10);
@@ -261,10 +270,5 @@ function generate_stackedbar(data, total_by_day) {
             });
     }
 
-    d3.selectAll("input.stackcontrol").on("change", handleClick);
-    function handleClick() {
-        this.value == "percent" ? normalizedChart() : countChart();
-    }
-
-    countChart();
+    type == "percent" ? normalizedChart() : countChart();
 }

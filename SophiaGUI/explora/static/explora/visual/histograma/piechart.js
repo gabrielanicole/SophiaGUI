@@ -1,15 +1,24 @@
-function generate_chart(data, width, total_found) {
+function generate_chart(data, width, total_found, medias) {
     var width = width,
         height = 300,
         radius = Math.min(width, height) / 2;
 
-    data = data.slice(0, 10);
+    chartData = [];
+    data.forEach(function (d) {
+        if (medias.indexOf(d.key) != -1) {
+            chartData.push({ key: d.key, doc_count: d.doc_count });
+        }
+    })
+
     var sum = 0;
-    data.forEach(function(d){
+    chartData.forEach(function (d) {
         sum = sum + d.doc_count;
     })
     var dif = total_found - sum;
-    data.push({key:"otros medios", doc_count:dif});
+
+    chartData.push({ key: "otros medios", doc_count: dif });
+    console.log(chartData);
+
     var colorScale = d3.scale.category20c();
 
     var arc = d3.svg.arc()
@@ -31,20 +40,21 @@ function generate_chart(data, width, total_found) {
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
     var g = svg.selectAll(".arc")
-        .data(pie(data))
+        .data(pie(chartData))
         .enter().append("g")
         .attr("class", "arc");
 
     g.append("path")
         .attr("d", arc)
         .style("fill", function (d) {
-            return colorScale(d.data.doc_count); })
-        .style("opacity",0.6)
-        .on("mouseover", function(d){
-            d3.select(this).style("opacity",1);
+            return colorScale(d.data.doc_count);
         })
-        .on("mouseout", function(d){
-            d3.select(this).style("opacity",0.8);
+        .style("opacity", 0.6)
+        .on("mouseover", function (d) {
+            d3.select(this).style("opacity", 1);
+        })
+        .on("mouseout", function (d) {
+            d3.select(this).style("opacity", 0.8);
         });
 
     g.append("text")

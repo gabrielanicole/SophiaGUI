@@ -132,7 +132,7 @@
                             </thead>
                             <tbody class="media-table">
                               <tr class="media-table" ng-repeat="media in articles_by_media">
-                                <td><input type="checkbox" ng-click="add_media([[media.key]])" ng-checked=[[media.key]]></td>
+                                <td><input type="checkbox" ng-click="add_media([[media.key]])" ng-checked="mark[[media.key]]"></td>
                                 <td>[[media.key]]</td>
                                 <td>[[media.doc_count]]</td>
                                 <td>%[[(media.doc_count/total_found)*100 | limitTo:6]]</td>
@@ -154,10 +154,10 @@
                           <div class="col-md-12">
                             <form>
                               <label class="radio-inline ">
-                                <input class="stackcontrol" type="radio" name="optradio" value="percent" >Porcentajes
+                                <input class="stackcontrol" type="radio" name="optradio" ng-click="stackChange('percent')" >Porcentajes
                               </label>
                               <label class="radio-inline stackcontrol">
-                                <input class="stackcontrol" type="radio" name="optradio" value="count" checked>Cantidad
+                                <input class="stackcontrol" type="radio" name="optradio" ng-click="stackChange('count')" checked>Cantidad
                               </label>
                             </form>
                           </div>
