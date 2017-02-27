@@ -124,6 +124,7 @@
                             <thead>
                               <tr class="media-table">
                               <!-- <th>Filtrar</th> -->
+                                <th> </th>
                                 <th>Medio</th>
                                 <th>Noticias publicadas</th>
                                 <th>Porcentaje</th>
@@ -131,7 +132,7 @@
                             </thead>
                             <tbody class="media-table">
                               <tr class="media-table" ng-repeat="media in articles_by_media">
-                                
+                                <td><input type="checkbox" ng-click="add_media([[media.key]])" ng-checked=[[media.key]]></td>
                                 <td>[[media.key]]</td>
                                 <td>[[media.doc_count]]</td>
                                 <td>%[[(media.doc_count/total_found)*100 | limitTo:6]]</td>
