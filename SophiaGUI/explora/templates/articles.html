@@ -82,6 +82,7 @@
                 <li class="active"><a data-toggle="tab" href="#histogramtab">Histograma</a></li>
                 <li><a data-toggle="tab" href="#mapvisz" id="maptab">Mapa</a></li>
                 <li><a data-toggle="tab" href="#extrainfo" id="maptab">Otra Información</a></li>
+                <li><a data-toggle="tab" href="#piechart" id="maptab">Pie Chart</a></li>
               </ul>
             </div>
           </div>
@@ -116,41 +117,8 @@
 
             <div id="extrainfo" class="tab-pane fade">
 
-                <div class="col-xs-4">
-                    <div class="row table-container">
-                          <h2>Medios</h2>
-                          <p>Porcentaje de publicación por medio a partir de la búsqueda</p>            
-                          <table class="table table-striped media-table">
-                            <thead>
-                              <tr class="media-table">
-                              <!-- <th>Filtrar</th> -->
-                                <th> </th>
-                                <th>Medio</th>
-                                <th>Noticias publicadas</th>
-                                <th>Porcentaje</th>
-                              </tr>
-                            </thead>
-                            <tbody class="media-table">
-                              <tr class="media-table" ng-repeat="media in articles_by_media">
-                                <td><input type="checkbox" ng-click="add_media([[media.key]])" ng-checked="mark[[media.key]]"></td>
-                                <td>[[media.key]]</td>
-                                <td>[[media.doc_count]]</td>
-                                <td>%[[(media.doc_count/total_found)*100 | limitTo:6]]</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                  </div>
-                </div>
 
-                <div class="col-xs-8">
-                      <div class="row top-buffer2">
-                        <h4 class="text-center">Medios con mayor publicación</h4>
-                             <div id="piechart_container" style="width:100%">
-                                  <div id="piechart"></div>
-                            </div>
-                      </div>
-
-                        <div class="row">
+                        <div class="row top-buffer">
                           <div class="col-md-12">
                             <form>
                               <label class="radio-inline ">
@@ -176,12 +144,54 @@
                           <h6><strong>Porcentaje respecto al día:</strong> % [[stacktotal | limitTo:6]]</h6>
                         </div>
                      </div>
+                    
                     <div class="row">
                        <div id="stackbar_container" style="width:100%">
                            <div id="stackedbar"></div>
                       </div>
                     </div>
+
+
+                  <div class="col-xs-4">
+                    <div class="row table-container">
+                          <h2>Medios</h2>
+                          <p>Porcentaje de publicación por medio a partir de la búsqueda</p>            
+                          <table class="table table-striped media-table">
+                            <thead>
+                              <tr class="media-table">
+                              <!-- <th>Filtrar</th> -->
+                                <th> </th>
+                                <th>Medio</th>
+                                <th>Noticias publicadas</th>
+                                <th>Porcentaje</th>
+                              </tr>
+                            </thead>
+                            <tbody class="media-table">
+                              <tr class="media-table" ng-repeat="media in articles_by_media">
+                                <td><input type="checkbox" ng-click="add_media([[media.key]])" ng-checked="mark[[media.key]]"></td>
+                                <td>[[media.key]]</td>
+                                <td>[[media.doc_count]]</td>
+                                <td>%[[(media.doc_count/total_found)*100 | limitTo:6]]</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                  </div>
+                  </div>
+
+            </div>
+
+            
+            <div id="piechart" class="tab-pane fade">
+              <div class="row top-buffer">
+                <div class="col-md-12">
+                      <div class="row top-buffer2">
+                        <h4 class="text-center">Medios con mayor publicación</h4>
+                             <div id="piechart_container" style="width:100%">
+                                  <div id="piechart"></div>
+                            </div>
+                      </div>
                 </div>
+              </div>
             </div>
 
 

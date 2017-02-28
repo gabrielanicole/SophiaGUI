@@ -270,7 +270,11 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         Articles.getStackBarData(data1).then(function (data) {
             $scope.stackData = data;
             $("#stackedbar").empty();
-            var stackedbar = generate_stackedbar($scope.stackData.total_by_media, $scope.stackData.total_by_day, $scope.medias, $scope.stacktype);
+            var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
+                $scope.stackData.total_by_day,
+                $scope.medias,
+                $scope.stacktype,
+                ($scope.windowsWidth));
         })
 
         Articles.getArticlesCountBy(data1).then(function (data) {
@@ -341,9 +345,13 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         Articles.getStackBarData(data1).then(function (data) {
             $scope.stackData = data;
             $("#stackedbar").empty();
-            var stackedbar = generate_stackedbar($scope.stackData.total_by_media, $scope.stackData.total_by_day, $scope.medias, $scope.stacktype);
+            var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
+                $scope.stackData.total_by_day,
+                $scope.medias,
+                $scope.stacktype,
+                ($scope.windowsWidth));
         })
-        
+
     }
 
     $scope.update_histogram = function () {
@@ -437,13 +445,21 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         var chart_w = (($scope.windowsWidth / 3) - 40);
         var pie_chart = generate_chart($scope.articles_by_media, chart_w, $scope.total_found, $scope.medias);
         $("#stackedbar").empty();
-        var stackedbar = generate_stackedbar($scope.stackData.total_by_media, $scope.stackData.total_by_day, $scope.medias, $scope.stacktype);
+        var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
+            $scope.stackData.total_by_day,
+            $scope.medias,
+            $scope.stacktype,
+            ($scope.windowsWidth));
     }
 
     $scope.stackChange = function (type) {
         $scope.stacktype = type;
         $("#stackedbar").empty();
-        var stackedbar = generate_stackedbar($scope.stackData.total_by_media, $scope.stackData.total_by_day, $scope.medias, $scope.stacktype);
+        var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
+            $scope.stackData.total_by_day,
+            $scope.medias,
+            $scope.stacktype,
+            ($scope.windowsWidth));
     }
 
     function run() {

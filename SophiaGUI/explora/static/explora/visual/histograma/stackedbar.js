@@ -1,5 +1,6 @@
-function generate_stackedbar(data, total_by_day, medias, type) {
+function generate_stackedbar(data, total_by_day, medias, type, width) {
 
+    var padding = 1;
     aux_data = [];
     data.forEach(function (d) {
         if (medias.indexOf(d.key) != -1) {
@@ -22,7 +23,7 @@ function generate_stackedbar(data, total_by_day, medias, type) {
     })
 
     //We create the extra media data copying the first one and modified al values
-    function createExtraData(data, sumByMedia, totalByDay ) {
+    function createExtraData(data, sumByMedia, totalByDay) {
         var extramedia = JSON.parse(JSON.stringify(data));
         extramedia = extramedia[0];
         extramedia.key = "otros medios"
@@ -39,10 +40,10 @@ function generate_stackedbar(data, total_by_day, medias, type) {
     var scope = angular.element($("#angularController")).scope();
     var formatDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
     var colorScale = d3.scale.category20c();
-    var w = 800;
-    var h = 300;
-    var margin = { top: 20, right: 30, bottom: 50, left: 50 }
-
+    var margin = { top: 20, right: 40, bottom: 50, left: 100 };
+    var w =  width - margin.left - margin.right;
+    var h = 300 - margin.top - margin.bottom;
+    var h2 = h / 2;
 
     var x = d3.time.scale()
         .range([0, w]);
@@ -165,7 +166,7 @@ function generate_stackedbar(data, total_by_day, medias, type) {
             .attr("height", function (d) {
                 return y(d.y0) - y(d.y0 + d.y);
             })
-            .attr("width", w / n_e)
+            .attr("width", w / (n_e - padding))
             .on("mouseover", function (d) {
 
                 var selected_key = d.key;
@@ -259,7 +260,7 @@ function generate_stackedbar(data, total_by_day, medias, type) {
             .attr("height", function (d) {
                 return y(d.y0) - y(d.y0 + d.y);
             })
-            .attr("width", w / n_e)
+            .attr("width", w / (n_e - padding))
             .on("mouseover", function (d) {
 
                 var selected_key = d.key;
