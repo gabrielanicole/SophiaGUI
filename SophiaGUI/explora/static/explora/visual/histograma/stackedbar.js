@@ -64,7 +64,6 @@ function generate_stackedbar(data, total_by_day, medias, type) {
         .tickSize(8, 1)
         .orient("left")
 
-    console.log(data);
     var max = 0; //vax value to create de y axis and scale
     var data = data.map(function (d) {
         var key = d.key;

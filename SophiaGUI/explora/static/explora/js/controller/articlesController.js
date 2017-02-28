@@ -333,6 +333,17 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             $scope.page_end = range.page_end;
             $scope.busy = false;
         });
+
+        var data1 = {
+            countby: 'day',
+            search: JSON.stringify(json_data)
+        };
+        Articles.getStackBarData(data1).then(function (data) {
+            $scope.stackData = data;
+            $("#stackedbar").empty();
+            var stackedbar = generate_stackedbar($scope.stackData.total_by_media, $scope.stackData.total_by_day, $scope.medias, $scope.stacktype);
+        })
+        
     }
 
     $scope.update_histogram = function () {
@@ -428,6 +439,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         $("#stackedbar").empty();
         var stackedbar = generate_stackedbar($scope.stackData.total_by_media, $scope.stackData.total_by_day, $scope.medias, $scope.stacktype);
     }
+
     $scope.stackChange = function (type) {
         $scope.stacktype = type;
         $("#stackedbar").empty();
