@@ -14,6 +14,27 @@ function generate_stackedbar(data, total_by_day, medias, type) {
         d.key_as_string = new Date(d.key_as_string);
     })
 
+    var sumByMedia = [];
+    aux_data.forEach(function (d) {
+        d.result_over_time.buckets.forEach(function (d, i) {
+            sumByMedia[i] != undefined ? sumByMedia[i] += d.doc_count : sumByMedia[i] = d.doc_count;
+        })
+    })
+
+    //We create the extra media data copying the first one and modified al values
+    function createExtraData(data, sumByMedia, totalByDay ) {
+        var extramedia = JSON.parse(JSON.stringify(data));
+        extramedia = extramedia[0];
+        extramedia.key = "otros medios"
+        extramedia.doc_count = 0;
+        extramedia.result_over_time.buckets = extramedia.result_over_time.buckets.map(function (d, i) {
+            return { doc_count: totalByDay[i].doc_count - sumByMedia[i], key: d.key, key_as_string: d.key_as_string }
+        })
+        return extramedia
+    }
+    var extradata = createExtraData(data, sumByMedia, total_by_day);
+    data.push(extradata);
+
     //Declare scope => Interact with angular
     var scope = angular.element($("#angularController")).scope();
     var formatDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
@@ -43,7 +64,7 @@ function generate_stackedbar(data, total_by_day, medias, type) {
         .tickSize(8, 1)
         .orient("left")
 
-
+    console.log(data);
     var max = 0; //vax value to create de y axis and scale
     var data = data.map(function (d) {
         var key = d.key;

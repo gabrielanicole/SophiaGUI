@@ -17,7 +17,6 @@ function generate_chart(data, width, total_found, medias) {
     var dif = total_found - sum;
 
     chartData.push({ key: "otros medios", doc_count: dif });
-    console.log(chartData);
 
     var colorScale = d3.scale.category20c();
 
