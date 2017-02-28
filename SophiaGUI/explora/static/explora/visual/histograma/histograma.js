@@ -2,10 +2,9 @@ function generate_histogram(width, height, min_chart_data, chart_data, min_granu
 
     var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse
     var margin = { top: 20, right: 40, bottom: 50, left: 100 };
-    var margin2 = { top: 20, right: 40, bottom: 50, left: 100 };
     var w = width - margin.left - margin.right;
     var h = height - margin.top - margin.bottom;
-    var h2 = height / 2 - margin2.top - margin2.bottom;
+    var h2 = height / 2 - margin.top - margin.bottom;
     var padding = 1;
 
     //var zoom = d3.behavior.zoom()
@@ -32,15 +31,15 @@ function generate_histogram(width, height, min_chart_data, chart_data, min_granu
         .append("svg")
         .attr("id", "miniHistogram")
         .attr("class", "chart")
-        .attr("width", w + margin2.left + margin2.right)
-        .attr("height", h2 + margin2.top + margin2.bottom)
+        .attr("width", w + margin.left + margin.right)
+        .attr("height", h2 + margin.top + margin.bottom)
         .append("g")
-        .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
         //.call(zoom);
 
     var rect = minichart.append("rect")
-        .attr("width", w + margin2.left + margin2.right)
-        .attr("height", h2 + margin2.top + margin2.bottom)
+        .attr("width", w + margin.left + margin.right)
+        .attr("height", h2 + margin.top + margin.bottom)
         .style("stroke-width", 0)
         .style("fill", "none")
         .style("pointer-events", "all");

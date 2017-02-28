@@ -72,7 +72,7 @@
                 <li ng-repeat="option in options"><a ng-click="loadHistogram(option.value)">[[option.key]]</a></li>
              </ul>
          </div>
-         <button type="button" class="btn btn-default hidden-xs" data-toggle="modal" data-target="#exportImage"><span class="glyphicon glyphicon-download-alt"></span>  Exportar Histograma</button>
+         <button type="button" class="btn btn-default hidden-xs" data-toggle="modal" data-target="#exportImage"><span class="glyphicon glyphicon-download-alt"></span>  Exportar Imagen</button>
       </div>
     </div>
 
@@ -85,16 +85,17 @@
 
     <div class="container-fluid">
       <div id="hideVisz" class="row collapse in">
+
           <div class="container-fluid">
             <div class="row">
               <ul class="nav nav-tabs visz-table">
                 <li class="active"><a data-toggle="tab" href="#histogram">Histograma</a></li>
-                <li><a data-toggle="tab" href="#mapvisz" id="maptab">Mapa</a></li>
               </ul>
             </div>
           </div>
           <div class="tab-content hidden-xs">
-  
+
+            
             <div id="histogram" class="tab-pane fade in active">
               <div class="row">
                       <div class = "row">
@@ -107,15 +108,10 @@
               </div>
             </div>
 
-            <div id="mapvisz" class="tab-pane fade">
-              <div class="row">
-                <div class="col-md-12">
-                  <div id="map_container" style="width:100%">
-                      <div id="mapid"></div>                 
-                  </div>
-                </div>
-              </div>
-            </div>
+            <!--
+            <div id="mapa" class="tab-pane fade">
+            </div> -->
+
           </div>
       </div>
     </div>
@@ -129,6 +125,7 @@
           </div>
       </div>
     </div>
+
 
     <div class="container-fluid">
       <div class = "row">
@@ -183,11 +180,8 @@
                         </div>
 
                         <div class="row">
-                          <div class="col-md-6">
+                          <div class="col-md-12">
                               <h5>[[d.art_name_press_source]] </h5>
-                          </div>
-                          <div class="col-md-6">
-                            <h6 class="text-right"> Relevancia: [[d.art_score]]</h6>
                           </div>
                         </div>
 
@@ -340,10 +334,9 @@
       </div>
     </div>
 
- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.5/leaflet.js"></script>
- <script type="text/javascript" src="/static/explora/visual/map/locationMap.js"></script>
+  <div id="modal"> </div>
 
-<div id="modal"> </div>
 </div>
+
 
 {% endblock content %}

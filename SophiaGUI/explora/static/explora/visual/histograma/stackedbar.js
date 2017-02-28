@@ -1,5 +1,6 @@
 function generate_stackedbar(data, total_by_day, medias, type, width) {
 
+    var height = 300;
     var padding = 1;
     aux_data = [];
     data.forEach(function (d) {
@@ -40,20 +41,33 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
     var scope = angular.element($("#angularController")).scope();
     var formatDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
     var colorScale = d3.scale.category20c();
-    var margin = { top: 20, right: 40, bottom: 50, left: 100 };
-    var w =  width - margin.left - margin.right;
-    var h = 300 - margin.top - margin.bottom;
-    var h2 = h / 2;
+    var margin = { top: 20, right: 60, bottom: 50, left: 100 };
+    var w = width - margin.left - margin.right;
+    var h = height - margin.top - margin.bottom;
+    var h2 = height / 2 - margin.top - margin.bottom;
 
     var x = d3.time.scale()
+        .range([0, w]);
+
+    var x2 = d3.time.scale()
         .range([0, w]);
 
     var y = d3.scale.linear()
         .range([h, 0])
 
+    var y2 = d3.scale.linear()
+        .range([h2, 0])
+
     var xAxis = d3.svg.axis()
         .scale(x)
         .ticks(10)
+        .tickSize(8, 1)
+        .tickPadding(8)
+        .orient("bottom");
+
+    var xAxis2 = d3.svg.axis()
+        .scale(x2)
+        .ticks(15)
         .tickSize(8, 1)
         .tickPadding(8)
         .orient("bottom");
@@ -64,6 +78,17 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
         .tickPadding(8)
         .tickSize(8, 1)
         .orient("left")
+
+    var yAxis2 = d3.svg.axis()
+        .scale(y2)
+        .ticks(10)
+        .tickPadding(8)
+        .tickSize(8, 1)
+        .orient("left")
+
+    var brush = d3.svg.brush()
+        .x(x2)
+        .on("brushend", brushed);
 
     var max = 0; //vax value to create de y axis and scale
     var data = data.map(function (d) {
@@ -91,36 +116,98 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
         return { bucket }
     })
 
-    n_e = data[0].bucket.length;
+    m_e = data[0].bucket.length;
     x.domain([d3.min(data, function (d) { return d.bucket[0].x; }), d3.max(data, function (d) { return d.bucket[d.bucket.length - 1].x; })]);
+    x2.domain([d3.min(data, function (d) { return d.bucket[0].x; }), d3.max(data, function (d) { return d.bucket[d.bucket.length - 1].x; })]);
 
-    function normalizedChart() {
-        $("#stackedbar").empty();
+    $("#stackedbar").empty();
 
-        var stacked = d3.select("#stackedbar")
-            .append("svg")
-            .attr("class", "chart")
-            .attr("width", w + margin.left + margin.right)
-            .attr("height", h + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    var stacked = d3.select("#stackedbar")
+        .append("svg")
+        .attr("class", "chart")
+        .attr("width", w + margin.left + margin.right)
+        .attr("height", h + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        stacked.append("rect")
-            .attr("width", "100%")
-            .attr("height", "100%")
-            .attr("fill", "white")
-            .attr("style", "stroke:white")
-            .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")");
+    stacked.append("rect")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("fill", "white")
+        .attr("style", "stroke:white")
+        .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")");
 
-        stacked.append("g")
-            .attr("class", "y axis")
-            .call(yAxis);
+    stacked.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
 
-        stacked.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + h + ")")
-            .call(xAxis);
+    stacked.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + h + ")")
+        .call(xAxis);
 
+    var ministack = d3.select("#stackedbar")
+        .append("svg")
+        .attr("id", "ministack")
+        .attr("class", "chart")
+        .attr("width", w + margin.left + margin.right)
+        .attr("height", h2 + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    //.call(zoom);
+
+    var rect = ministack.append("rect")
+        .attr("width", w + margin.left + margin.right)
+        .attr("height", h2 + margin.top + margin.bottom)
+        .style("stroke-width", 0)
+        .style("fill", "none")
+        .style("pointer-events", "all");
+
+    ministack.append("g")
+        .attr("class", "y axis")
+        .call(yAxis2);
+
+    ministack.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + h2 + ")")
+        .call(xAxis2);
+
+    function brushed() {
+        var brush_values = brush.extent();
+
+        filtered_data = [];
+        data.forEach(function (d, i) {
+            var filter_aux = d.bucket.filter(function (d) {
+                return d.x >= brush_values[0] && d.x <= brush_values[1];
+            })
+            filtered_data.push({ bucket: filter_aux });
+        })
+
+        filtered_data.forEach(function (d) {
+            offdate = new Date(d.bucket[d.bucket.length - 1].x);
+            offdate.setDate(offdate.getDate() + 1);
+            d.bucket.push({
+                'x': offdate,
+                'y': +0, 'stackValue': 0,
+                'key': d.key,
+                'total_doc_by_media': d.total_doc
+            });
+        })
+
+        stacked.selectAll(".srect").remove();
+        stacked.selectAll(".sgroups").remove();
+
+        x.domain([d3.min(filtered_data, function (d) { return d.bucket[0].x; }), d3.max(filtered_data, function (d) { return d.bucket[d.bucket.length - 1].x; })]);
+        //x.domain([brush_values[0], brush_values[1]])
+        stacked.select("g.x.axis").call(xAxis);
+
+        type == "percent" ? normalizedChart(filtered_data) : countChart(filtered_data);
+
+    }
+
+
+    function normalizedChart(data) {
+        n_e = data[0].bucket.length;
         stacked.select("g.x.axis").call(xAxis);
 
         delete stack
@@ -138,13 +225,13 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
         });
 
         yAxis.ticks(10, "%")
-        stacked.select("g.y.axis").call(yAxis);
-
+        yAxis2.ticks(5)
         // Add a group for each row of data
-        var groups = stacked.selectAll("gr")
+        var groups = stacked.selectAll("sgroups")
             .data(stack)
             .enter()
             .append("g")
+            .attr("class", "sgroups")
             .style("fill", function (d, i) {
                 return colorScale(i);
             });
@@ -195,36 +282,20 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
             .on("mouseout", function (d) {
                 d3.selectAll(".srect").attr("stroke", "black").attr("stroke-width", 0.5);
             });
+
+        y2.domain([0, d3.max(total_by_day, function (d) { return d.doc_count })])
+
+        stacked.select("g.y.axis").call(yAxis);
+        ministack.select("g.y.axis").call(yAxis2);
+
     }
 
-    function countChart() {
-        $("#stackedbar").empty();
+    function countChart(data) {
 
-        var stacked = d3.select("#stackedbar")
-            .append("svg")
-            .attr("class", "chart")
-            .attr("width", w + margin.left + margin.right)
-            .attr("height", h + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        stacked.append("rect")
-            .attr("width", "100%")
-            .attr("height", "100%")
-            .attr("fill", "white")
-            .attr("style", "stroke:white")
-            .attr("transform", "translate(" + -margin.left + "," + -margin.top + ")");
-
-        stacked.append("g")
-            .attr("class", "y axis")
-            .call(yAxis);
-
-        stacked.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + h + ")")
-            .call(xAxis);
-
+        n_e = data[0].bucket.length;
         stacked.select("g.x.axis").call(xAxis);
+
+        yAxis2.ticks(5)
 
         delete stack
         stack = d3.layout.stack().offset("zero")(data.map(function (d) {
@@ -232,13 +303,16 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
         }));
 
         y.domain([0, d3.max(stack, function (d) { return d3.max(d, function (d) { return d.y0 + d.y; }) })])
+
         stacked.select("g.y.axis").call(yAxis);
+        ministack.select("g.y.axis").call(yAxis2);
 
         // Add a group for each row of data
-        var groups = stacked.selectAll("gr")
+        var groups = stacked.selectAll("sgroups")
             .data(stack)
             .enter()
             .append("g")
+            .attr("class", "sgroups")
             .style("fill", function (d, i) {
                 return colorScale(i);
             });
@@ -289,7 +363,36 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
             .on("mouseout", function (d) {
                 d3.selectAll(".srect").attr("stroke", "black").attr("stroke-width", 0.5);
             });
+
+        y2.domain([0, d3.max(total_by_day, function (d) { return d.doc_count })])
+
+        stacked.select("g.y.axis").call(yAxis);
+        ministack.select("g.y.axis").call(yAxis2);
+
     }
 
-    type == "percent" ? normalizedChart() : countChart();
+    type == "percent" ? normalizedChart(data) : countChart(data);
+
+    ministack.selectAll(".stackminibars")
+        .data(total_by_day)
+        .enter()
+        .append("rect")
+        .attr("class", "bar")
+        .attr("x", function (d) {
+            return x(d.key_as_string);
+        })
+        .attr("width", function (d) {
+            return w / (m_e - padding);
+        })
+        .attr("y", function (d) { return y2(d.doc_count); })
+        .attr("height", function (d) { return h2 - y2(d.doc_count); })
+        .style("fill", "#078770");
+
+    ministack.append("g")
+        .attr("class", "brush")
+        .call(brush)
+        .selectAll('rect')
+        .attr("height", h2);
+
+
 }
