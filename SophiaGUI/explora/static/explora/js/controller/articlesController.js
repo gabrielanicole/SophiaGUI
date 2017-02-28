@@ -314,6 +314,9 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
 
             /* Charge initial $scope.medias */
+            for (var j = 0; j < $scope.medias.length; j++) {
+                $scope["mark" + $scope.medias[j]] = false;
+            }
             $scope.medias = [];
             if ($scope.articles_by_media.length > 10) {
                 for (var i = 0; i < 10; i++) {
@@ -327,7 +330,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             for (var j = 0; j < $scope.medias.length; j++) {
                 $scope["mark" + $scope.medias[j]] = true;
             }
-
             $("#piechart").empty();
             var chart_w = (($scope.windowsWidth / 3) - 40);
             var pie_chart = generate_chart($scope.articles_by_media, chart_w, $scope.total_found, $scope.medias);
