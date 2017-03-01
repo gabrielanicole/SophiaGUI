@@ -118,8 +118,8 @@
             <div id="extrainfo" class="tab-pane fade">
 
 
-                        <div class="row top-buffer">
-                          <div class="col-md-12">
+                      <div class="row top-buffer">
+                          <div class="col-md-6 col-md-offset-4">
                             <form>
                               <label class="radio-inline ">
                                 <input class="stackcontrol" type="radio" name="optradio" ng-click="stackChange('percent')" >Porcentajes
@@ -131,52 +131,60 @@
                           </div>
                         </div>
 
+                   
+                    <div class="row">
+
+                      <div class="col-xs-4">
+                        <div class="row table-container">        
+                              <table class="table table-striped media-table">
+                                <thead>
+                                  <tr class="media-table">
+                                  <!-- <th>Filtrar</th> -->
+                                    <th>Ver</th>
+                                    <th>Medio</th>
+                                    <th>Noticias publicadas</th>
+                                    <th>Porcentaje</th>
+                                  </tr>
+                                </thead>
+                                <tbody class="media-table">
+                                  <tr class="media-table" ng-repeat="media in articles_by_media">
+                                    <td><input type="checkbox" ng-click="add_media([[media.key]])" ng-checked="mark[[media.key]]"></td>
+                                    <td>[[media.key]]</td>
+                                    <td>[[media.doc_count]]</td>
+                                    <td>%[[(media.doc_count/total_found)*100 | limitTo:6]]</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                      </div>
+                      </div>
+              
+                      <div class="col-xs-8">
                       <div class="row">
-                        <div class="col-md-4">
-                          <h6><strong>Medio: </strong> [[stackmedia]]</h6>
-                        </div>
-                        <div class="col-md-4">
-                          <h6><strong>Fecha: </strong> [[stackdate]]</h6>
-                        </div>
-                        <div class="col-md-4">
-                          <h6><strong>Total de noticias del día:</strong> [[totalofday]]</h6>
-                          <h6><strong>Total de noticias del medio en el día:</strong> [[totalByMedia]]</h6>
-                          <h6><strong>Porcentaje respecto al día:</strong> % [[stacktotal | limitTo:6]]</h6>
+                        <div class="col-md-6">
+                          <div class="col-md-3">
+                            <h6 class="text-left"><strong>Medio: </strong> [[stackmedia]]</h6>
+                          </div>
+                          <div class="col-md-3">
+                            <h6 class="text-left"><strong>Fecha: </strong> [[stackdate]]</h6>
+                          </div>
+                          <div class="col-md-6">
+                            <h6 class="text-left"><strong>Total de noticias del día:</strong> [[totalofday]]</h6>
+                            <h6 class="text-left"><strong>Total de noticias del medio en el día:</strong> [[totalByMedia]]</h6>
+                            <h6 class="text-left"><strong>Porcentaje respecto al día:</strong> % [[stacktotal | limitTo:6]]</h6>
+                          </div>
                         </div>
                      </div>
-                    
-                    <div class="row">
-                       <div id="stackbar_container" style="width:100%">
-                           <div id="stackedbar"></div>
+
+                     <div class="row">
+                        <div class="col-md-12">
+                          <div id="stackbar_container" style="width:100%">
+                              <div id="stackedbar"></div>
+                          </div>
+                        </div>
+                      </div>
+                     
                       </div>
                     </div>
-
-
-                  <div class="col-xs-5">
-                    <div class="row table-container">
-                          <h2>Medios</h2>
-                          <p>Porcentaje de publicación por medio a partir de la búsqueda</p>            
-                          <table class="table table-striped media-table">
-                            <thead>
-                              <tr class="media-table">
-                              <!-- <th>Filtrar</th> -->
-                                <th>Ver</th>
-                                <th>Medio</th>
-                                <th>Noticias publicadas</th>
-                                <th>Porcentaje</th>
-                              </tr>
-                            </thead>
-                            <tbody class="media-table">
-                              <tr class="media-table" ng-repeat="media in articles_by_media">
-                                <td><input type="checkbox" ng-click="add_media([[media.key]])" ng-checked="mark[[media.key]]"></td>
-                                <td>[[media.key]]</td>
-                                <td>[[media.doc_count]]</td>
-                                <td>%[[(media.doc_count/total_found)*100 | limitTo:6]]</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                  </div>
-                  </div>
 
             </div>
 

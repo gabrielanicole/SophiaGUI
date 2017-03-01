@@ -1,5 +1,6 @@
 function generate_stackedbar(data, total_by_day, medias, type, width) {
 
+    width = 900;
     var height = 300;
     var padding = 1;
     aux_data = [];
@@ -41,7 +42,7 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
     var scope = angular.element($("#angularController")).scope();
     var formatDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
     var colorScale = d3.scale.category20c();
-    var margin = { top: 20, right: 60, bottom: 50, left: 100 };
+    var margin = { top: 20, right: 60, bottom: 50, left: 50 };
     var w = width - margin.left - margin.right;
     var h = height - margin.top - margin.bottom;
     var h2 = height / 2 - margin.top - margin.bottom;
@@ -67,7 +68,7 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
 
     var xAxis2 = d3.svg.axis()
         .scale(x2)
-        .ticks(15)
+        .ticks(10)
         .tickSize(8, 1)
         .tickPadding(8)
         .orient("bottom");

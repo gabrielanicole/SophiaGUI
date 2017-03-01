@@ -181,19 +181,19 @@ table-layout: fixed;
 }
 
 .media-table table{
- height:200px !important; 
+ height:500px !important; 
  display: -moz-groupbox !important;
 }
 
 .media-table tbody{
   overflow-y: scroll !important;
-  height: 200px !important;
+  height: 500px !important;
   width: 95% !important;
   position: absolute !important;
 }
 
 .table-container{
-    height: 400px;
+    height: 500px;
 }
 
 .sophia-logo{
