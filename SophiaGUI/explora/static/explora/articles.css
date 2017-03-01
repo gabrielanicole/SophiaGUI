@@ -199,3 +199,6 @@ table-layout: fixed;
 .sophia-logo{
     z-index: 1003;
 }
+#piecharttab{
+    height: 580px;
+}
