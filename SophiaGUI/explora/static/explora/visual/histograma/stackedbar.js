@@ -1,5 +1,6 @@
 function generate_stackedbar(data, total_by_day, medias, type, width) {
 
+
     width = 900;
     var height = 300;
     var padding = 1;
@@ -263,14 +264,13 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
                 var stacktotal = (parseInt(d.stackValue) / parseInt(aux[0].doc_count)) * 100;
                 var total_by_media = d.stackValue;
 
+                d3.selectAll(".srect").style("opacity", 0.3)
                 d3.selectAll(".srect")
                     .filter(function (f) {
                         return f.key == selected_key;
                     })
-                    .attr("stroke-width", 2)
-                    .attr("stroke", "red");
-
-                //d3.select(this).atrr("stroke","black");
+                    .attr("stroke-width", 0.5)
+                    .style("opacity", 1);
 
                 scope.$apply(function () {
                     scope.stackmedia = selected_key;
@@ -281,7 +281,7 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
                 })
             })
             .on("mouseout", function (d) {
-                d3.selectAll(".srect").attr("stroke", "black").attr("stroke-width", 0.5);
+                d3.selectAll(".srect").attr("stroke", "black").attr("stroke-width", 0.5).style("opacity", 1);
             });
 
         y2.domain([0, d3.max(total_by_day, function (d) { return d.doc_count })])
@@ -344,12 +344,14 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
                 var stacktotal = (parseInt(d.stackValue) / parseInt(aux[0].doc_count)) * 100;
                 var total_by_media = d.stackValue;
 
+
+                d3.selectAll(".srect").style("opacity", 0.3)
                 d3.selectAll(".srect")
                     .filter(function (f) {
                         return f.key == selected_key;
                     })
-                    .attr("stroke-width", 2)
-                    .attr("stroke", "red");
+                    .attr("stroke-width", 0.5)
+                    .style("opacity", 1);
 
                 //d3.select(this).atrr("stroke","black");
 
@@ -362,7 +364,7 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
                 })
             })
             .on("mouseout", function (d) {
-                d3.selectAll(".srect").attr("stroke", "black").attr("stroke-width", 0.5);
+                d3.selectAll(".srect").attr("stroke", "black").attr("stroke-width", 0.5).style("opacity", 1);
             });
 
         y2.domain([0, d3.max(total_by_day, function (d) { return d.doc_count })])
