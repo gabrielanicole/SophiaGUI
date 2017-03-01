@@ -31,7 +31,7 @@ app.factory('Articles', function ($http) {
         changeArticleCategory: function (id, category) {
             return $http({
                 method: 'POST',
-                url: 'articles/changeCategory/',
+                url: '/articles/changeCategory/',
                 data: $.param({ id: id, category: category })
             }).then(function (response) {
                 return response;
@@ -40,7 +40,7 @@ app.factory('Articles', function ($http) {
         getStackBarData: function (data) {
             return $http({
                 method: 'POST',
-                url: 'articles/getStackBar/',
+                url: '/articles/getStackBar/',
                 data: $.param(data)
             }).then(function (response) {
                 return response.data;

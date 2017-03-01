@@ -344,6 +344,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             countby: 'day',
             search: JSON.stringify(json_data)
         };
+        
         Articles.getStackBarData(data1).then(function (data) {
             $scope.stackData = data;
             $("#stackedbar").empty();

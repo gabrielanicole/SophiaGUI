@@ -36,6 +36,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.busy = true;
     $scope.id_not;
 
+    $scope.medias = [];
     $scope.press_source = [];
     $scope.press_media_groups = [""];
     $scope.selectedMediumGroup = $scope.press_media_groups[0];
@@ -45,6 +46,10 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.selectedMediumGroup;
     $scope.selectedCategory = $scope.category[0];
     $scope.twitter = "";
+
+    $scope.articles_by_media = [];
+    $scope.stackData = [];
+    $scope.stacktype = "count";
 
     $scope.validateTotalFound = function () {
         if ($scope.total_found <= 10000) {
@@ -290,7 +295,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
 
         var g1 = 'day';
         var g2 = 'hour';
-        
+
         var data1 = {
             startdate: $scope.histogram_startdate,
             enddate: $scope.histogram_enddate,
@@ -304,6 +309,16 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             countby: g2,
             search: JSON.stringify(json_data)
         };
+
+        Articles.getStackBarData(data1).then(function (data) {
+            $scope.stackData = data;
+            $("#stackedbar").empty();
+            var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
+                $scope.stackData.total_by_day,
+                $scope.medias,
+                $scope.stacktype,
+                ($scope.windowsWidth));
+        })
 
         Articles.getArticlesCountBy(data1).then(function (data) {
             $("#histogram").empty();
@@ -367,17 +382,59 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.busy = true;
 
         Articles.getArticlesList(json_data, $scope.actual_page).then(function (data) {
+
             $scope.articulos = data.results;
             $scope.total_pages = parseInt(data.totalpages);
             $scope.actual_page = parseInt(data.page);
             $scope.total_found = parseInt(data.total);
+            $scope.articles_by_media = data.articles_by_media;
+
+
+            /* Charge initial $scope.medias */
+            for (var j = 0; j < $scope.medias.length; j++) {
+                $scope["mark" + $scope.medias[j]] = false;
+            }
+            $scope.medias = [];
+            if ($scope.articles_by_media.length > 10) {
+                for (var i = 0; i < 10; i++) {
+                    $scope.medias.push($scope.articles_by_media[i]['key']);
+                }
+            } else {
+                for (var i = 0; i < $scope.articles_by_media.length; i++) {
+                    $scope.medias.push($scope.articles_by_media[i]['key']);
+                }
+            }
+            for (var j = 0; j < $scope.medias.length; j++) {
+                $scope["mark" + $scope.medias[j]] = true;
+            }
+            $("#piechart").empty();
+            var chart_w = (($scope.windowsWidth / 3) - 40);
+            var pie_chart = generate_chart($scope.articles_by_media, chart_w, $scope.total_found, $scope.medias);
+
 
             var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
             $scope.page_init = range.page_init;
             $scope.page_end = range.page_end;
             $scope.busy = false;
 
+            
+            var data1 = {
+                countby: 'day',
+                search: JSON.stringify(json_data)
+            };
+
+            Articles.getStackBarData(data1).then(function (data) {
+                $scope.stackData = data;
+                console.log($scope.stackData);
+                $("#stackedbar").empty();
+                var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
+                    $scope.stackData.total_by_day,
+                    $scope.medias,
+                    $scope.stacktype,
+                    ($scope.windowsWidth));
+            })
         })
+
     }
 
     $scope.update_histogram = function () {
@@ -463,6 +520,37 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             $scope.update_list($scope.actual_page, data);
         })
     }
+
+    $scope.add_media = function (media) {
+        var i = $scope.medias.indexOf(media[0][0]);
+        if (i !== -1) {
+            $scope.medias.splice(i, 1);
+        } else {
+            $scope.medias.push(media[0][0]);
+        }
+
+        $("#piechart").empty();
+        var chart_w = (($scope.windowsWidth / 3) - 40);
+        var pie_chart = generate_chart($scope.articles_by_media, chart_w, $scope.total_found, $scope.medias);
+
+        $("#stackedbar").empty();
+        var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
+            $scope.stackData.total_by_day,
+            $scope.medias,
+            $scope.stacktype,
+            ($scope.windowsWidth));
+    }
+
+    $scope.stackChange = function (type) {
+        $scope.stacktype = type;
+        $("#stackedbar").empty();
+        var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
+            $scope.stackData.total_by_day,
+            $scope.medias,
+            $scope.stacktype,
+            ($scope.windowsWidth));
+    }
+
 
     /* Export Image Secction */
     $scope.exportImageFormat = "PNG";

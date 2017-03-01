@@ -18,5 +18,6 @@ urlpatterns = [
     url(r'^exportData/$', views.exportData, name='exportData'),
     url(r'^articles/changeCategory/$', views.changeCategory, name='changeCategory'),
     url(r'^articles/getGeoJSON/$', views.sendGeoJSON, name='sendGeoJSON'),
-    url(r'^articles/getStackBar/$', views.getStackBar, name='getStackBar')
+    url(r'^articles/getStackBar/$', views.getStackBar, name='getStackBar'),
+    url(r'^showNewsCase/articles/getStackBar/$', views.getStackBar, name='getStackBar')
 ]
