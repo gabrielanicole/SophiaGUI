@@ -61,6 +61,10 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     $scope.press_source = [];
     $scope.press_media_groups = [];
     $scope.selectedMedium = [];
+    $scope.medias = [];
+    $scope.stackData = [];
+    $scope.stacktype = "count";
+    $scope.articles_by_media = [];
 
     function loadPressMedia() {
         PressMedia.getPressMediaList().then(function (response) {
@@ -216,10 +220,51 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             $scope.total_pages = parseInt(data.totalPages);
             $scope.actual_page = parseInt(data.page);
             $scope.total_found = data.total;
+            $scope.articles_by_media = data.articles_by_media;
+
+
+            /* Charge initial $scope.medias */
+            for (var j = 0; j < $scope.medias.length; j++) {
+                $scope["mark" + $scope.medias[j]] = false;
+            }
+            $scope.medias = [];
+            if ($scope.articles_by_media.length > 10) {
+                for (var i = 0; i < 10; i++) {
+                    $scope.medias.push($scope.articles_by_media[i]['key']);
+                }
+            } else {
+                for (var i = 0; i < $scope.articles_by_media.length; i++) {
+                    $scope.medias.push($scope.articles_by_media[i]['key']);
+                }
+            }
+            for (var j = 0; j < $scope.medias.length; j++) {
+                $scope["mark" + $scope.medias[j]] = true;
+            }
+
+            $("#piechart").empty();
+            var chart_w = (($scope.windowsWidth / 3) - 40);
+            var pie_chart = generate_chart($scope.articles_by_media, chart_w, $scope.total_found, $scope.medias);
+
             var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
             $scope.page_init = range.page_init;
             $scope.page_end = range.page_end;
+
+            var data1 = {
+                countby: 'day',
+                search: JSON.stringify(json_data)
+            };
+
+            Tweets.getStackBarData(data1).then(function (data) {
+                $scope.stackData = data;
+                $("#stackedbar").empty();
+                var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
+                    $scope.stackData.total_by_day,
+                    $scope.medias,
+                    $scope.stacktype,
+                    ($scope.windowsWidth));
+            })
         })
+
     }
 
     $scope.update_histogram = function () {
@@ -236,6 +281,36 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
         $scope.selectedItem($scope.granularity);
     }
 
+    /* Function to add or remove media in $scope.medias array */
+    $scope.add_media = function (media) {
+        var i = $scope.medias.indexOf(media[0][0]);
+        if (i !== -1) {
+            $scope.medias.splice(i, 1);
+        } else {
+            $scope.medias.push(media[0][0]);
+        }
+
+        $("#piechart").empty();
+        var chart_w = (($scope.windowsWidth / 3) - 40);
+        var pie_chart = generate_chart($scope.articles_by_media, chart_w, $scope.total_found, $scope.medias);
+        $("#stackedbar").empty();
+        var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
+            $scope.stackData.total_by_day,
+            $scope.medias,
+            $scope.stacktype,
+            ($scope.windowsWidth));
+    }
+
+    $scope.stackChange = function (type) {
+        $scope.stacktype = type;
+        $("#stackedbar").empty();
+        var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
+            $scope.stackData.total_by_day,
+            $scope.medias,
+            $scope.stacktype,
+            ($scope.windowsWidth));
+    }
+    
     /* Export Image Secction */
     $scope.exportImageFormat = "PNG";
     $scope.exportImage = function (format) {

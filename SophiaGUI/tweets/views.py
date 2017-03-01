@@ -39,6 +39,7 @@ def getTweetsList(request, page=1):
         
         response = client.post(api, data=data, headers=headers)
         data_array = json.loads(response.text.encode('utf8'))
+        articles_by_media = data_array['aggregations']['countByPressMedia']['buckets']
         total = data_array['hits']['total']
         totalPages = data_array['totalPages']
         actual_page = data_array['page']
@@ -58,7 +59,8 @@ def getTweetsList(request, page=1):
             'totalPages': totalPages,
             'results': results,
             'total':total,
-            'page': actual_page
+            'page': actual_page,
+            'articles_by_media':articles_by_media
         }
 
         return JsonResponse(json_response, safe=False)
@@ -89,6 +91,33 @@ def tweetsCountBy(request):
 
         data = data['aggregations']['result_over_time']['buckets']
         return JsonResponse(data, safe=False)
+
+@login_required(login_url='/login_required')
+def getStackBar(request):
+    countby = request.POST.get('countby').encode('utf8')
+    search = request.POST.get('search').encode('utf8')
+        
+    search = json.loads(search)
+    search['countby']=countby
+    search = json.dumps(search)
+
+    client,headers,api_url = getClient()
+    api = u'http://{0}/v2/stackbar/'.format(api_url)
+    try:
+        response = client.post(api, data=search, headers=headers)
+            #response = requests.get(api)
+    except Exception as e:
+        return HttpResponse(e)
+         
+    data = json.loads(response.text.encode('utf8'))
+    total_by_day = data['aggregations']['result_over_time_all']
+    total_by_media = data['aggregations']['countByPressMedia']['buckets']
+
+    data = {
+        'total_by_day':total_by_day,
+        'total_by_media':total_by_media
+    }
+    return JsonResponse(data, safe=False)
 
 def getClient():
     file = json.loads(open("explora/static/user.json").read())

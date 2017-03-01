@@ -304,6 +304,7 @@ def sendGeoJSON(request):
             print e
             return HttpResponse("Internal server error")
 
+@login_required(login_url='/login_required')
 def getStackBar(request):
     countby = request.POST.get('countby').encode('utf8')
     search = request.POST.get('search').encode('utf8')

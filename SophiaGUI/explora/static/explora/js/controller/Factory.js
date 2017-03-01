@@ -141,6 +141,15 @@ app.factory('Tweets', function ($http) {
             }).then(function successCallback(response) {
                 return response
             });
+        },
+        getStackBarData: function (data) {
+            return $http({
+                method: 'POST',
+                url: '/tweets/getStackBar/',
+                data: $.param(data)
+            }).then(function (response) {
+                return response.data;
+            })
         }
     }
 });

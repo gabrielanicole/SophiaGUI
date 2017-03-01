@@ -8,4 +8,5 @@ urlpatterns = [
         views.getTweetsList, name='getTweetsList'),
     url(r'^get_data/tweets/histogram/$',
         views.tweetsCountBy, name='tweetsCountBy'),
+    url(r'^tweets/getStackBar/$', views.getStackBar, name='getStackBar')
 ]
