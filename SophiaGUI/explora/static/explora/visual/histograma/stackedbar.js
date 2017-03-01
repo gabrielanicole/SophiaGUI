@@ -270,7 +270,8 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
                         return f.key == selected_key;
                     })
                     .attr("stroke-width", 0.5)
-                    .style("opacity", 1);
+                    .style("opacity", 0.8);
+                d3.select(this).style("opacity", 1);
 
                 scope.$apply(function () {
                     scope.stackmedia = selected_key;
@@ -345,15 +346,14 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
                 var total_by_media = d.stackValue;
 
 
-                d3.selectAll(".srect").style("opacity", 0.3)
+                d3.selectAll(".srect").style("opacity", 0.2)
                 d3.selectAll(".srect")
                     .filter(function (f) {
                         return f.key == selected_key;
                     })
                     .attr("stroke-width", 0.5)
-                    .style("opacity", 1);
-
-                //d3.select(this).atrr("stroke","black");
+                    .style("opacity", 0.8);
+                d3.select(this).style("opacity", 1);
 
                 scope.$apply(function () {
                     scope.stackmedia = selected_key;
