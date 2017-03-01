@@ -125,7 +125,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         //Function to get the page number from view
         var page = page_number[0][0];
         $scope.actual_page = page;
-        $scope.update_list(page, data);
+        $scope.update_list(page, false);
     }
 
     $scope.range = function (min, max) {
@@ -267,7 +267,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.selectedCategory = data.news_case_data.new_category;
         //$scope.selectedMedium.media_twitter = data.news_case_data.new_press_source;
         $scope.selectedMediumGroup = data.news_case_data.new_pre_owner;
-        $scope.update_list(1);
+        $scope.update_list(1, true);
         $scope.restoreHistogram();
     }
 
@@ -347,14 +347,15 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.loadHistogram($scope.granularity);
     }
 
-    $scope.update_list = function (page) {
+    $scope.update_list = function (page, update_stack_data) {
+        $scope.upda_st = update_stack_data;
         NewsCases.getRemovedArticles(data).then(function (response) {
             var idNot = response.data.news_case_data.new_art_not;
-            $scope.loadElements(idNot, page);
+            $scope.loadElements(idNot, page, $scope.upda_st);
         });
     }
 
-    $scope.loadElements = function (idNot, page) {
+    $scope.loadElements = function (idNot, page, update_stack_data) {
 
         var date1 = $("#datepicker1").datepicker('getDate');
         var date2 = $("#datepicker2").datepicker('getDate');
@@ -364,6 +365,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
 
         $scope.actual_page = page;
         $scope.idNot = idNot;
+
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
             "index": "articles",
@@ -380,7 +382,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         }
 
         $scope.busy = true;
-
         Articles.getArticlesList(json_data, $scope.actual_page).then(function (data) {
 
             $scope.articulos = data.results;
@@ -388,7 +389,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             $scope.actual_page = parseInt(data.page);
             $scope.total_found = parseInt(data.total);
             $scope.articles_by_media = data.articles_by_media;
-
 
             /* Charge initial $scope.medias */
             for (var j = 0; j < $scope.medias.length; j++) {
@@ -417,22 +417,25 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             $scope.page_end = range.page_end;
             $scope.busy = false;
 
-            
+
             var data1 = {
                 countby: 'day',
                 search: JSON.stringify(json_data)
             };
 
-            Articles.getStackBarData(data1).then(function (data) {
-                $scope.stackData = data;
-                console.log($scope.stackData);
-                $("#stackedbar").empty();
-                var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
-                    $scope.stackData.total_by_day,
-                    $scope.medias,
-                    $scope.stacktype,
-                    ($scope.windowsWidth));
-            })
+            if (update_stack_data == true) {
+                Articles.getStackBarData(data1).then(function (data) {
+                    $scope.stackData = data;
+                    console.log($scope.stackData);
+                    $("#stackedbar").empty();
+                    var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
+                        $scope.stackData.total_by_day,
+                        $scope.medias,
+                        $scope.stacktype,
+                        ($scope.windowsWidth));
+                })
+            }
+
         })
 
     }
@@ -450,7 +453,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         //set day as default
         $scope.granularity = 'hour';
         $scope.update_histogram();
-        $scope.update_list(1);
+        $scope.update_list(1, true);
         $scope.loadHistogram($scope.granularity);
     }
 
@@ -517,7 +520,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             article_id: id[0][0]
         }
         NewsCases.removeArticle(data).then(function (response) {
-            $scope.update_list($scope.actual_page, data);
+            $scope.update_list($scope.actual_page, false);
         })
     }
 
@@ -551,6 +554,11 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             ($scope.windowsWidth));
     }
 
+    $scope.stackBarBrushChange = function (start, end) {
+        $scope.startdate = start;
+        $scope.enddate = end;
+        $scope.update_list(1, false);
+    }
 
     /* Export Image Secction */
     $scope.exportImageFormat = "PNG";

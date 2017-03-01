@@ -276,7 +276,7 @@ function generate_histogram(width, height, min_chart_data, chart_data, min_granu
         scope.$apply(function () {
             scope.startdate = startdate;
             scope.enddate = enddate;
-            scope.update_list(1);
+            scope.update_list(1, false);
         })
     }
 

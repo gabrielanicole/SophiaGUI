@@ -117,7 +117,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.page_number = function (page_number) {
         //Function to get the page number from view
         var page = page_number[0][0];
-        $scope.update_list(page);
+        $scope.update_list(page, false);
     }
 
     $scope.range = function (min, max) {
@@ -288,7 +288,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         })
     }
 
-    $scope.update_list = function (page) {
+    $scope.update_list = function (page, update_stack_data) {
         $scope.busy = true;
         var twitter = $scope.selectedMedium.media_twitter;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
@@ -311,7 +311,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             $scope.actual_page = parseInt(data.page);
             $scope.total_found = parseInt(data.total);
             $scope.articles_by_media = data.articles_by_media;
-
 
             /* Charge initial $scope.medias */
             for (var j = 0; j < $scope.medias.length; j++) {
@@ -344,16 +343,18 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             countby: 'day',
             search: JSON.stringify(json_data)
         };
-        
-        Articles.getStackBarData(data1).then(function (data) {
-            $scope.stackData = data;
-            $("#stackedbar").empty();
-            var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
-                $scope.stackData.total_by_day,
-                $scope.medias,
-                $scope.stacktype,
-                ($scope.windowsWidth));
-        })
+
+        if (update_stack_data == true) {
+            Articles.getStackBarData(data1).then(function (data) {
+                $scope.stackData = data;
+                $("#stackedbar").empty();
+                var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
+                    $scope.stackData.total_by_day,
+                    $scope.medias,
+                    $scope.stacktype,
+                    ($scope.windowsWidth));
+            })
+        }
 
     }
 
@@ -372,7 +373,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         $scope.granularity = 'hour';
         $scope.update_histogram();
         loadHistogram($scope.granularity);
-        $scope.update_list(1);
+        $scope.update_list(1, true);
     }
 
     $scope.loadModal = function (article_id) {
@@ -465,9 +466,15 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             ($scope.windowsWidth));
     }
 
+    $scope.stackBarBrushChange = function (start, end) {
+        $scope.startdate = start;
+        $scope.enddate = end;
+        $scope.update_list(1, false);
+    }
+
     function run() {
         loadHistogram($scope.granularity)
-        $scope.update_list(1);
+        $scope.update_list(1, true);
     }
     loadPressMedia();
     run();

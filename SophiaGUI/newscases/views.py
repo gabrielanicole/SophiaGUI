@@ -296,13 +296,13 @@ def removeArticle(request):
             
             client,headers,api_url = getClient()
             api = u'http://{0}/v2/newscases/{1}/'.format(api_url,elastic_id)
-            response = requests.get(api)
+            response = client.get(api, headers=headers)
             response = json.loads(response.content)
             new_art_not = response['_source']['new_art_not']
             new_art_not.append(article_id)
             response_data = {
                 "new_art_not":new_art_not
-            }
+            }   
             response_data = json.dumps(response_data)
             response = client.put(api, data=response_data, headers=headers)
             return HttpResponse("ok")

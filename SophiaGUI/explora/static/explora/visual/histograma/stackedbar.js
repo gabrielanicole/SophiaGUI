@@ -1,7 +1,8 @@
 function generate_stackedbar(data, total_by_day, medias, type, width) {
 
+    aux_width = parseInt($("#aux_val").css("width"), 10);
+    aux_width > 0 ? width = aux_width : width = 884;
 
-    width = 900;
     var height = 300;
     var padding = 1;
     aux_data = [];
@@ -41,6 +42,7 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
 
     //Declare scope => Interact with angular
     var scope = angular.element($("#angularController")).scope();
+
     var formatDate = d3.time.format("%Y-%m-%d %H:%M:%S").parse;
     var colorScale = d3.scale.category20c();
     var margin = { top: 20, right: 60, bottom: 50, left: 50 };
@@ -202,6 +204,11 @@ function generate_stackedbar(data, total_by_day, medias, type, width) {
         x.domain([d3.min(filtered_data, function (d) { return d.bucket[0].x; }), d3.max(filtered_data, function (d) { return d.bucket[d.bucket.length - 1].x; })]);
         //x.domain([brush_values[0], brush_values[1]])
         stacked.select("g.x.axis").call(xAxis);
+
+        scope.$apply(function () {
+            scope.stackBarBrushChange(String(brush_values[0].toISOString().slice(0, 19)).replace("T", " "),
+                String(brush_values[1].toISOString().slice(0, 19)).replace("T", " "));
+        })
 
         type == "percent" ? normalizedChart(filtered_data) : countChart(filtered_data);
 

@@ -40,7 +40,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     $scope.page_number = function (page_number) {
         //Function to get the page number from view
         var page = page_number[0][0];
-        $scope.update_list(page);
+        $scope.update_list(page, false);
     }
 
     $scope.range = function (min, max) {
@@ -72,7 +72,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             var empty = { media_id: "", media_name: "", media_twitter: "" };
             $scope.press_source.unshift(empty);
             $scope.selectedMedium = empty;
-            $scope.update_list(1);
+            $scope.update_list(1, true);
             //Draw Histogram for first time
             $scope.selectedItem($scope.granularity);
         });
@@ -199,7 +199,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
         });
     }
 
-    $scope.update_list = function (page) {
+    $scope.update_list = function (page, update_stack_data) {
 
         var twitter = $scope.selectedMedium.media_twitter;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
@@ -254,15 +254,18 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
                 search: JSON.stringify(json_data)
             };
 
-            Tweets.getStackBarData(data1).then(function (data) {
-                $scope.stackData = data;
-                $("#stackedbar").empty();
-                var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
-                    $scope.stackData.total_by_day,
-                    $scope.medias,
-                    $scope.stacktype,
-                    ($scope.windowsWidth));
-            })
+            if (update_stack_data == true) {
+                Tweets.getStackBarData(data1).then(function (data) {
+                    $scope.stackData = data;
+                    $("#stackedbar").empty();
+                    var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
+                        $scope.stackData.total_by_day,
+                        $scope.medias,
+                        $scope.stacktype,
+                        ($scope.windowsWidth));
+                })
+            }
+
         })
 
     }
@@ -277,7 +280,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     $scope.get_input_data = function () {
         $scope.granularity = 'hour';
         $scope.update_histogram();
-        $scope.update_list(1);
+        $scope.update_list(1, true);
         $scope.selectedItem($scope.granularity);
     }
 
@@ -310,7 +313,13 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             $scope.stacktype,
             ($scope.windowsWidth));
     }
-    
+
+    $scope.stackBarBrushChange = function (start, end) {
+        $scope.startdate = start;
+        $scope.enddate = end;
+        $scope.update_list(1, false);
+    }
+
     /* Export Image Secction */
     $scope.exportImageFormat = "PNG";
     $scope.exportImage = function (format) {
