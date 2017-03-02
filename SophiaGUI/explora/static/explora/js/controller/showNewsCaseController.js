@@ -310,15 +310,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             search: JSON.stringify(json_data)
         };
 
-        Articles.getStackBarData(data1).then(function (data) {
-            $scope.stackData = data;
-            $("#stackedbar").empty();
-            var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
-                $scope.stackData.total_by_day,
-                $scope.medias,
-                $scope.stacktype,
-                ($scope.windowsWidth));
-        })
 
         Articles.getArticlesCountBy(data1).then(function (data) {
             $("#histogram").empty();
