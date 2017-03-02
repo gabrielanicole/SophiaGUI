@@ -15,7 +15,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     });
 
     var opts = dataFormat.loadSpinnerOPTS();
-
     var absUrl = $location.absUrl().split("/");
     var elastic_id = absUrl[absUrl.length - 1];
     var data = { 'elastic_id': elastic_id };
