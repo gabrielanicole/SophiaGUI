@@ -47,9 +47,7 @@
             <input type="text" class="form-control" id="datepicker1">
             <input type="text" class="form-control" id="datepicker2">
             <button class="btn btn-default" ng-click="get_input_data()"><span class="glyphicon glyphicon-search"></span> Buscar</button>
-            <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal">Crear Caso</button>
-            <button id="exportButton" class="btn btn-default" data-toggle="modal" ng-disabled="total_found >= 120000" data-target="#exportDataModal" data-toggle="tooltip" title="Exportar el resultado de la búsqueda"><span class="glyphicon glyphicon-download-alt"></span></button>
-					</form>
+   				</form>
 
 		</div>
 
@@ -253,6 +251,10 @@
                   <label for="sort">Ordenar resultados por:</label>
                   <select class="form-control" name="categoria" ng-model="selectedSort" ng-change="update_list(1)" ng-options="x.key for x in sortGroup"></select>
               </div>
+  
+         <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal">Crear Caso</button>
+         <button id="exportButton" class="btn btn-default" data-toggle="modal" ng-disabled="total_found >= 120000" data-target="#exportDataModal" data-toggle="tooltip" title="Exportar el resultado de la búsqueda"><span class="glyphicon glyphicon-download-alt"></span></button>
+	
         </form>
       </div>
     </div>

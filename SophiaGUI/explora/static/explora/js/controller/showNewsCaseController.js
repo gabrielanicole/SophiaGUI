@@ -522,8 +522,10 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         var i = $scope.medias.indexOf(media[0][0]);
         if (i !== -1) {
             $scope.medias.splice(i, 1);
+            $scope["mark" + media[0][0]] = false;
         } else {
             $scope.medias.push(media[0][0]);
+            $scope["mark" + media[0][0]] = true;
         }
 
         $("#piechart").empty();

@@ -43,9 +43,7 @@
             <input type="text" class="form-control" id="datepicker1">
             <input type="text" class="form-control" id="datepicker2">
             <button class="btn btn-default" ng-click="get_input_data()"><span class="glyphicon glyphicon-search"></span> Buscar</button>
-            <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal"> Actualizar Caso</button>
-            <button id="exportButton" class="btn btn-default" ng-disabled="total_found >= 120000" data-toggle="modal" data-target="#exportDataModal" data-toggle="tooltip" title="Exportar el resultado de la búsqueda"><span class="glyphicon glyphicon-download-alt"></span></button>
-	          </form>
+          </form>
 
 		  </div>
 
@@ -58,21 +56,6 @@
       </div>
       <div class="col-md-4">
         <div id="not" class="input textarea"></div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-12">
-        <div class="dropdown hidden-xs">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                Ver por
-                <span class="caret"></span>
-            </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li ng-repeat="option in options"><a ng-click="loadHistogram(option.value)">[[option.key]]</a></li>
-             </ul>
-         </div>
-         <button type="button" class="btn btn-default hidden-xs" data-toggle="modal" data-target="#exportImage"><span class="glyphicon glyphicon-download-alt"></span>  Exportar Imagen</button>
       </div>
     </div>
 
@@ -261,6 +244,9 @@
                   <label for="sort">Ordenar resultados por:</label>
                   <select class="form-control" name="categoria" ng-model="selectedSort" ng-change="sortChange(selectedSort);update_list(1)" ng-options="x.key for x in sortGroup"></select>
               </div>
+            <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal"> Actualizar Caso</button>
+            <button id="exportButton" class="btn btn-default" ng-disabled="total_found >= 120000" data-toggle="modal" data-target="#exportDataModal" data-toggle="tooltip" title="Exportar el resultado de la búsqueda"><span class="glyphicon glyphicon-download-alt"></span></button>
+	
         </form>
       </div>
     </div>
