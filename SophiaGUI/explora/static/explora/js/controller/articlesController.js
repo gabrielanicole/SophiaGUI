@@ -86,7 +86,8 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
                 "or": tag_values.should_contain_group,
                 "not_and": tag_values.not_contain_group,
                 "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
-                "art_category": $scope.selectedCategory
+                "art_category": $scope.selectedCategory,
+                "pre_owner": $scope.selecteMediumGroup
             },
             "checkbox": $scope.checkbox
         }
