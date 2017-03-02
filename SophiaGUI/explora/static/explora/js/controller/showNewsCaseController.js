@@ -268,7 +268,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         //$scope.selectedMedium.media_twitter = data.news_case_data.new_press_source;
         $scope.selectedMediumGroup = data.news_case_data.new_pre_owner;
         $scope.update_list(1, true);
-        $scope.restoreHistogram();
     }
 
     $scope.loadHistogram = function (selected) {
@@ -290,6 +289,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             "art_name_press_source": $scope.twitter,
             "art_category": $scope.selectedCategory,
             "pre_owner": $scope.selectedMediumGroup,
+            "idNot": $scope.idNot,
             "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
         }
 
@@ -350,8 +350,9 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.update_list = function (page, update_stack_data) {
         $scope.upda_st = update_stack_data;
         NewsCases.getRemovedArticles(data).then(function (response) {
-            var idNot = response.data.news_case_data.new_art_not;
-            $scope.loadElements(idNot, page, $scope.upda_st);
+            $scope.idNot = response.data.news_case_data.new_art_not;
+            $scope.restoreHistogram();
+            $scope.loadElements($scope.idNot, page, $scope.upda_st);
         });
     }
 
@@ -426,7 +427,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             if (update_stack_data == true) {
                 Articles.getStackBarData(data1).then(function (data) {
                     $scope.stackData = data;
-                    console.log($scope.stackData);
                     $("#stackedbar").empty();
                     var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
                         $scope.stackData.total_by_day,
@@ -519,8 +519,12 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             elastic_id: elastic_id,
             article_id: id[0][0]
         }
+
         NewsCases.removeArticle(data).then(function (response) {
-            $scope.update_list($scope.actual_page, false);
+            //$scope.update_list($scope.actual_page, false);
+            $scope.articulos.splice($scope.articulos.findIndex(function (d) {
+                return d.art_id == data.article_id;
+            }), 1);
         })
     }
 
