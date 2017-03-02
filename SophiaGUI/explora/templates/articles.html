@@ -48,7 +48,7 @@
             <input type="text" class="form-control" id="datepicker2">
             <button class="btn btn-default" ng-click="get_input_data()"><span class="glyphicon glyphicon-search"></span> Buscar</button>
             <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal">Crear Caso</button>
-            <button id="exportButton" class="btn btn-default" data-toggle="modal" data-target="#exportDataModal" data-toggle="tooltip" title="Exportar el resultado de la búsqueda"><span class="glyphicon glyphicon-download-alt"></span></button>
+            <button id="exportButton" class="btn btn-default" data-toggle="modal" ng-disabled="total_found >= 120000" data-target="#exportDataModal" data-toggle="tooltip" title="Exportar el resultado de la búsqueda"><span class="glyphicon glyphicon-download-alt"></span></button>
 					</form>
 
 		</div>
@@ -162,13 +162,13 @@
 
                       <div id="aux_val" class="row">
                         <div class="col-md-6">
-                          <div class="col-md-3">
+                          <div class="col-md-4">
                             <h6 class="text-left"><strong>Medio: </strong> [[stackmedia]]</h6>
                           </div>
-                          <div class="col-md-3">
+                          <div class="col-md-4">
                             <h6 class="text-left"><strong>Fecha: </strong> [[stackdate]]</h6>
                           </div>
-                          <div class="col-md-6">
+                          <div class="col-md-4">
                             <h6 class="text-left"><strong>Total de noticias del día:</strong> [[totalofday]]</h6>
                             <h6 class="text-left"><strong>Total de noticias del medio en el día:</strong> [[totalByMedia]]</h6>
                             <h6 class="text-left"><strong>Porcentaje respecto al día:</strong> % [[stacktotal | limitTo:6]]</h6>

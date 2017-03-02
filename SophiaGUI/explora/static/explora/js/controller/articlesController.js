@@ -11,7 +11,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
     //Spinner Settings
     var opts = dataFormat.loadSpinnerOPTS();
-
     //Date Picker Setup
     $("#datepicker1").datepicker({
         format: "yyyy-mm-dd",
