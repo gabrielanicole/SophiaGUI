@@ -269,10 +269,11 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.update_list(1, true);
     }
 
-    $scope.loadHistogram = function (selected) {
+    $scope.loadHistogram = function (selected, update_stack_data) {
 
         var date1 = $("#datepicker1").datepicker('getDate');
         var date2 = $("#datepicker2").datepicker('getDate');
+
         $scope.histogram_startdate = date1.toISOString().slice(0, 10) + " 00:00:00";
         $scope.histogram_enddate = date2.toISOString().slice(0, 10) + " 23:59:59";
 
@@ -300,50 +301,44 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             search: JSON.stringify(json_data)
         };
 
-
-        Articles.getArticlesCountBy(data1).then(function (data) {
-            $("#histogram").empty();
-            var min_chart_data = data;
-            Articles.getArticlesCountBy(data2).then(function (data) {
-                var chart_data = data;
-                var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300,
-                    min_chart_data = min_chart_data, chart_data = chart_data, min_granularity = g1, chart_granularity = g2);
+        if (update_stack_data == true) {
+            Articles.getArticlesCountBy(data1).then(function (data) {
+                $("#histogram").empty();
+                var min_chart_data = data;
+                Articles.getArticlesCountBy(data2).then(function (data) {
+                    var chart_data = data;
+                    var histograma = generate_histogram(width = ($scope.windowsWidth - 85), height = 300,
+                        min_chart_data = min_chart_data, chart_data = chart_data, min_granularity = g1, chart_granularity = g2);
+                })
             })
-        })
+        }
+
 
     }
 
-    $scope.restoreHistogram = function () {
+    $scope.restoreHistogram = function (update_stack_data) {
         var date1 = $("#datepicker1").datepicker('getDate');
         var date2 = $("#datepicker2").datepicker('getDate');
         $scope.histogram_startdate = date1.toISOString().slice(0, 10) + " 00:00:00";
         $scope.histogram_enddate = date2.toISOString().slice(0, 10) + " 23:59:59";
 
-        $scope.startdate = $scope.histogram_startdate;
-        $scope.enddate = $scope.histogram_enddate;
-
         $scope.windowsWidth = $window.innerWidth;
         $scope.granularity = 'hour';
         //Draw Histogram for first time
-        $scope.loadHistogram($scope.granularity);
+        $scope.loadHistogram($scope.granularity, update_stack_data);
     }
 
     $scope.update_list = function (page, update_stack_data) {
         $scope.upda_st = update_stack_data;
         NewsCases.getRemovedArticles(data).then(function (response) {
             $scope.idNot = response.data.news_case_data.new_art_not;
-            $scope.restoreHistogram();
+            $scope.restoreHistogram($scope.upda_st);
             $scope.loadElements($scope.idNot, page, $scope.upda_st);
         });
     }
 
+
     $scope.loadElements = function (idNot, page, update_stack_data) {
-
-        var date1 = $("#datepicker1").datepicker('getDate');
-        var date2 = $("#datepicker2").datepicker('getDate');
-
-        $scope.histogram_startdate = date1.toISOString().slice(0, 10) + " 00:00:00";
-        $scope.histogram_enddate = date2.toISOString().slice(0, 10) + " 23:59:59";
 
         $scope.actual_page = page;
         $scope.idNot = idNot;
@@ -383,17 +378,19 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
             var chart_w = (($scope.windowsWidth / 3) - 40);
             var pie_chart = generate_chart($scope.articles_by_media, chart_w, $scope.total_found, $scope.medias);
 
-
             var range = dataFormat.get_pagination_range($scope.actual_page, $scope.size, $scope.total_pages);
             $scope.page_init = range.page_init;
             $scope.page_end = range.page_end;
             $scope.busy = false;
 
+            var json_data2 = $scope.makeSearchQuery($scope.histogram_startdate, $scope.histogram_enddate);
+            json_data2.idNot = idNot;
 
             var data1 = {
                 countby: 'day',
-                search: JSON.stringify(json_data)
+                search: JSON.stringify(json_data2)
             };
+
 
             if (update_stack_data == true) {
                 Articles.getStackBarData(data1).then(function (data) {
