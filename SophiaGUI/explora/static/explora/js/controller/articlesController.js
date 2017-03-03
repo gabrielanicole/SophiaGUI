@@ -40,6 +40,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         { key: "Tiempo", value: "art_date" },
         { key: "Relevancia", value: "_score" }
     ]
+    
     $scope.selectedSort = $scope.sortGroup[0];
 
     $scope.searchOptionList = [
@@ -67,6 +68,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.changeCategory = function (category) {
         $scope.selectedCategoryForChange = category[0][0];
     }
+
     $scope.sendCategoryChange = function () {
         Articles.changeArticleCategory($scope.selectedId, $scope.selectedCategoryForChange).then(function (response) {
             response.data == "success" ? toastr.success("Clasificación actualizada") : toastr.error("Ha ocurrido un error");
@@ -77,17 +79,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $scope.exportData = function () {
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
         var json_data = {
-            search: {
-                "index": "articles",
-                "fields": $scope.searchOption.value,
-                "art_name_press_source": $scope.selectedMedium.media_twitter,
-                "and": tag_values.must_contain_group,
-                "or": tag_values.should_contain_group,
-                "not_and": tag_values.not_contain_group,
-                "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
-                "art_category": $scope.selectedCategory,
-                "pre_owner": $scope.selecteMediumGroup
-            },
+            search: $scope.makeSearchQuery($scope.histogram_startdate, $scope.histogram_enddate),
             "checkbox": $scope.checkbox
         }
         ExportData.save(json_data, opts);
@@ -201,18 +193,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         if (page <= $scope.total_pages) {
             var twitter = $scope.selectedMedium.media_twitter;
             var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
-            var json_data = {
-                "index": "articles",
-                "fields": $scope.searchOption.value,
-                "and": tag_values.must_contain_group,
-                "or": tag_values.should_contain_group,
-                "not_and": tag_values.not_contain_group,
-                "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
-                "art_name_press_source": twitter,
-                "art_category": $scope.selectedCategory,
-                "pre_owner": $scope.selecteMediumGroup,
-                "sort": $scope.selectedSort.value
-            }
+            var json_data = $scope.makeSearchQuery($scope.startdate, $scope.enddate);
 
             Articles.getArticlesList(json_data, page).then(function (data) {
                 for (var x = 0; x < data.results.length; x++) {
@@ -241,17 +222,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     function loadHistogram(granularity) {
         var twitter = $scope.selectedMedium.media_twitter;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
-        var json_data = {
-            "index": "articles",
-            "fields": $scope.searchOption.value,
-            "art_name_press_source": twitter,
-            "and": tag_values.must_contain_group,
-            "or": tag_values.should_contain_group,
-            "not_and": tag_values.not_contain_group,
-            "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
-            "art_category": $scope.selectedCategory,
-            "pre_owner": $scope.selecteMediumGroup
-        }
+        var json_data = $scope.makeSearchQuery($scope.histogram_startdate, $scope.histogram_enddate);
 
         //Temporaly works like this
         var g1 = 'day'
@@ -289,20 +260,8 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
     $scope.update_list = function (page, update_stack_data) {
         $scope.busy = true;
-        var twitter = $scope.selectedMedium.media_twitter;
-        var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
-        var json_data = {
-            "index": "articles",
-            "fields": $scope.searchOption.value,
-            "and": tag_values.must_contain_group,
-            "or": tag_values.should_contain_group,
-            "not_and": tag_values.not_contain_group,
-            "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
-            "art_name_press_source": twitter,
-            "art_category": $scope.selectedCategory,
-            "pre_owner": $scope.selecteMediumGroup,
-            "sort": $scope.selectedSort.value
-        }
+
+        var json_data = $scope.makeSearchQuery($scope.startdate, $scope.enddate);
 
         Articles.getArticlesList(json_data, page).then(function (data) {
             $scope.articulos = data.results;
@@ -404,6 +363,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         var twitter = $scope.selectedMedium.media_twitter;
         var today = new Date().toISOString().slice(0, 10)
         var checked = $('#toogleCase').prop('checked');
+
         var json_data = {
             "index": "articles",
             "fields": $scope.searchOption.value,
@@ -418,6 +378,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
             "pre_owner": $scope.selecteMediumGroup,
             "follow_new_feed": checked
         }
+
         if ($scope.news_case_name.length > 0) {
             Articles.createNewsCases(json_data).then(function (response) {
                 console.log(response);
@@ -477,6 +438,25 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         loadHistogram($scope.granularity)
         $scope.update_list(1, true);
     }
+
+    $scope.makeSearchQuery = function (startdate, enddate) {
+        var twitter = $scope.selectedMedium.media_twitter;
+        var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
+        var json_data = {
+            "index": "articles",
+            "fields": $scope.searchOption.value,
+            "and": tag_values.must_contain_group,
+            "or": tag_values.should_contain_group,
+            "not_and": tag_values.not_contain_group,
+            "dates": { "startdate": startdate, "enddate": enddate },
+            "art_name_press_source": twitter,
+            "art_category": $scope.selectedCategory,
+            "pre_owner": $scope.selecteMediumGroup,
+            "sort": $scope.selectedSort.value
+        }
+        return json_data;
+    }
+
     loadPressMedia();
     run();
 }]);

@@ -279,18 +279,9 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.granularity = selected;
         $scope.twitter = $scope.selectedMedium.media_twitter;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
-        var json_data = {
-            "index": "articles",
-            "fields": $scope.searchOption.value,
-            "and": tag_values.must_contain_group,
-            "or": tag_values.should_contain_group,
-            "not_and": tag_values.not_contain_group,
-            "art_name_press_source": $scope.twitter,
-            "art_category": $scope.selectedCategory,
-            "pre_owner": $scope.selectedMediumGroup,
-            "idNot": $scope.idNot,
-            "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
-        }
+
+        var json_data = $scope.makeSearchQuery($scope.histogram_startdate, $scope.histogram_enddate);
+        json_data.idNot = $scope.idNot;
 
         var g1 = 'day';
         var g2 = 'hour';
@@ -358,19 +349,9 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.idNot = idNot;
 
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
-        var json_data = {
-            "index": "articles",
-            "fields": $scope.searchOption.value,
-            "and": tag_values.must_contain_group,
-            "or": tag_values.should_contain_group,
-            "not_and": tag_values.not_contain_group,
-            "idNot": idNot,
-            "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate },
-            "art_name_press_source": $scope.twitter,
-            "pre_owner": $scope.selectedMediumGroup,
-            "art_category": $scope.selectedCategory,
-            "sort": $scope.selectedSort.value
-        }
+
+        var json_data = $scope.makeSearchQuery($scope.startdate, $scope.enddate);
+        json_data.idNot = idNot;
 
         $scope.busy = true;
         Articles.getArticlesList(json_data, $scope.actual_page).then(function (data) {
@@ -554,6 +535,25 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         $scope.startdate = start;
         $scope.enddate = end;
         $scope.update_list(1, false);
+    }
+
+
+    $scope.makeSearchQuery = function (startdate, enddate) {
+        var twitter = $scope.selectedMedium.media_twitter;
+        var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
+        var json_data = {
+            "index": "articles",
+            "fields": $scope.searchOption.value,
+            "and": tag_values.must_contain_group,
+            "or": tag_values.should_contain_group,
+            "not_and": tag_values.not_contain_group,
+            "dates": { "startdate": startdate, "enddate": enddate },
+            "art_name_press_source": twitter,
+            "art_category": $scope.selectedCategory,
+            "pre_owner": $scope.selecteMediumGroup,
+            "sort": $scope.selectedSort.value
+        }
+        return json_data;
     }
 
     /* Export Image Secction */

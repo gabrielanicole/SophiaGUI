@@ -18,6 +18,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     $scope.startdate;
     $scope.enddate;
 
+
     $("#mediaContainer").tooltip();
     $("#mediumGroupContainer").tooltip();
     //Date Picker Setup
@@ -107,18 +108,7 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
                 twitter = "";
             }
 
-            var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
-            var json_data = {
-                "index": "publications",
-                "pub_username": twitter,
-                "fields": ["pub_content"],
-                "and": tag_values.must_contain_group,
-                "or": tag_values.should_contain_group,
-                "not_and": tag_values.not_contain_group,
-                "pre_owner": $scope.selecteMediumGroup,
-                "sort": $scope.selectedSort.value,
-                "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
-            }
+            var json_data = $scope.makeSearchQuery($scope.stardate, $scope.enddate);
 
             Tweets.getTweetList(json_data, page).then(function (data) {
                 for (var x = 0; x < data.results.length; x++) {
@@ -162,19 +152,8 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
 
     $scope.selectedItem = function (selected) {
 
-        var twitter = $scope.selectedMedium.media_twitter;
         $scope.granularity = selected;
-        var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
-        var json_data = {
-            "index": "publications",
-            "fields": ["pub_content"],
-            "and": tag_values.must_contain_group,
-            "or": tag_values.should_contain_group,
-            "not_and": tag_values.not_contain_group,
-            "pub_username": twitter,
-            "pre_owner": $scope.selecteMediumGroup,
-            "dates": { "startdate": $scope.histogram_startdate, "enddate": $scope.histogram_enddate },
-        }
+        var json_data = $scope.makeSearchQuery($scope.histogram_startdate, $scope.histogram_enddate);
 
         //Temporaly works like this
         var g1 = 'day'
@@ -201,21 +180,11 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
 
     $scope.update_list = function (page, update_stack_data) {
 
-        var twitter = $scope.selectedMedium.media_twitter;
-        var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
-        var json_data = {
-            "index": "publications",
-            "pub_username": twitter,
-            "fields": ["pub_content"],
-            "and": tag_values.must_contain_group,
-            "or": tag_values.should_contain_group,
-            "not_and": tag_values.not_contain_group,
-            "pre_owner": $scope.selecteMediumGroup,
-            "sort": $scope.selectedSort.value,
-            "dates": { "startdate": $scope.startdate, "enddate": $scope.enddate }
-        }
+        var json_data = $scope.makeSearchQuery($scope.startdate, $scope.enddate);
+        console.log(json_data);
 
         Tweets.getTweetList(json_data, page).then(function (data) {
+
             $scope.tweets = data.results;
             $scope.total_pages = parseInt(data.totalPages);
             $scope.actual_page = parseInt(data.page);
@@ -327,5 +296,23 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     $scope.exportImage = function (format) {
         ExportData.exportImage(format);
     }
+
+    $scope.makeSearchQuery = function (startdate, enddate) {
+        var twitter = $scope.selectedMedium.media_twitter;
+        var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
+        var json_data = {
+            "index": "publications",
+            "pub_username": twitter,
+            "fields": ["pub_content"],
+            "and": tag_values.must_contain_group,
+            "or": tag_values.should_contain_group,
+            "not_and": tag_values.not_contain_group,
+            "pre_owner": $scope.selecteMediumGroup,
+            "sort": $scope.selectedSort.value,
+            "dates": { "startdate": startdate, "enddate": enddate }
+        }
+        return json_data;
+    }
+
 
 }]);
