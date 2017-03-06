@@ -91,13 +91,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     ]
     $scope.selectedSort = $scope.sortGroup[0];
 
-
-    $scope.options = [
-        { key: "Hora", value: "hour" },
-        { key: "Día", value: "day" },
-        { key: "Mes", value: "month" },
-        { key: "Año", value: "year" }
-    ];
     $scope.selectedCategory = $scope.category[0];
 
     //Adding widgets setup

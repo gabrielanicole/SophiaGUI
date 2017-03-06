@@ -127,12 +127,6 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
             $('#loadIcon').addClass("hidden");
         }
     }
-    $scope.options = [
-        { key: "Hora", value: "hour" },
-        { key: "Día", value: "day" },
-        { key: "Mes", value: "month" },
-        { key: "Año", value: "year" }
-    ];
 
     var histogram_enddate = new Date().toISOString().slice(0, 10);
     //var histogram_startdate = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
@@ -181,7 +175,6 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
     $scope.update_list = function (page, update_stack_data) {
 
         var json_data = $scope.makeSearchQuery($scope.startdate, $scope.enddate);
-        console.log(json_data);
 
         Tweets.getTweetList(json_data, page).then(function (data) {
 
