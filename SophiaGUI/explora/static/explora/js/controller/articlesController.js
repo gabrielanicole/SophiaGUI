@@ -29,18 +29,10 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
     $("#exportButton").tooltip();
     $("#mediumGroupContainer").tooltip();
 
-    $scope.options = [
-        { key: "Hora", value: "hour" },
-        { key: "Día", value: "day" },
-        { key: "Mes", value: "month" },
-        { key: "Año", value: "year" }
-    ];
-
     $scope.sortGroup = [
         { key: "Tiempo", value: "art_date" },
         { key: "Relevancia", value: "_score" }
-    ]
-    
+    ];
     $scope.selectedSort = $scope.sortGroup[0];
 
     $scope.searchOptionList = [
@@ -214,11 +206,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         }
     }
 
-    $scope.selectedItem = function (selected) {
-        $scope.granularity = selected;
-        loadHistogram($scope.granularity);
-    }
-
     function loadHistogram(granularity) {
         var twitter = $scope.selectedMedium.media_twitter;
         var tag_values = dataFormat.get_tag_values(should_contain, must_contain, not_contain);
@@ -334,27 +321,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         $scope.update_list(1, true);
     }
 
-    $scope.loadModal = function (article_id) {
-
-        var data = { art_id: article_id[0][0] };
-        $http({
-            method: 'POST',
-            url: '/articles/modal_new',
-            data: $.param(data)
-        }).then(function successCallback(response) {
-            console.log(response)
-            if ($('#myModal').length) {
-                $('#myModal').remove();
-            }
-            //In the tag <modal> then append the response from Django
-            $('#modal').append(response.data);
-            //Then display the modal window
-            $('#myModal').modal('show');
-
-        }, function errorCallback(response) {
-            console.log(response);
-        });
-    }
 
     $scope.createNewsCase = function (newsCaseName) {
         //Format the necesary data for the newsCase
@@ -381,7 +347,6 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
 
         if ($scope.news_case_name.length > 0) {
             Articles.createNewsCases(json_data).then(function (response) {
-                console.log(response);
                 toastr.success("Caso noticioso creado con éxito");
             })
         }
@@ -410,6 +375,7 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         $("#piechart").empty();
         var chart_w = (($scope.windowsWidth / 3) - 40);
         var pie_chart = generate_chart($scope.articles_by_media, chart_w, $scope.total_found, $scope.medias);
+
         $("#stackedbar").empty();
         var stackedbar = generate_stackedbar($scope.stackData.total_by_media,
             $scope.stackData.total_by_day,

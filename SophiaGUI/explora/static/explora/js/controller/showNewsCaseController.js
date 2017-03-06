@@ -98,7 +98,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
         { key: "Mes", value: "month" },
         { key: "Año", value: "year" }
     ];
-
     $scope.selectedCategory = $scope.category[0];
 
     //Adding widgets setup
@@ -497,6 +496,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     }
 
     $scope.add_media = function (media) {
+        
         var i = $scope.medias.indexOf(media[0][0]);
         if (i !== -1) {
             $scope.medias.splice(i, 1);
