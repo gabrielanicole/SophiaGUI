@@ -12,45 +12,50 @@
 
 <div id="angularController" ng-controller="searchController">
 
+<div class="container-fluid">
 	 <div class="row">
+              <form class="navbar-form navbar-left" role="search">
 
-				<form class="navbar-form navbar-left" role="search">
+                  <div class="form-group">
+                      <div id="mediaContainer" class="selectContainer" data-toggle="tooltip" title="Filtrar por medio">
+                          <select class="form-control" name="medio" ng-model="selectedMedium" ng-options="x.media_name for x in press_source | orderBy:'media_name'">
+                          </select>
+                      </div>
+                </div>
 
-				    <div class="form-group">
-				        <div id="mediaContainer" class="selectContainer" data-toggle="tooltip" title="Filtrar por medio">
-				            <select class="form-control" name="medio" ng-model="selectedMedium" ng-options="x.media_name for x in press_source | orderBy:'media_name'">
-                    </select>
-				        </div>
-		       </div>
+                  <div class="form-group">
+                      <div id="categoryContainer" class="selectContainer" data-toggle="tooltip" title="Filtrar por categoría">
+                          <select class="form-control" name="categoria" ng-model="selectedCategory" ng-options="x for x in category">
+                          </select>
+                      </div>
+                  </div>
 
-				    <div class="form-group">
-				        <div id="categoryContainer" class="selectContainer" data-toggle="tooltip" title="Filtrar por categoría">
-				            <select class="form-control" name="categoria" ng-model="selectedCategory" ng-options="x for x in category">
-				            </select>
-				        </div>
-				    </div>
+                <div class="form-group">
+                      <div id="mediumGroupContainer" class="selectContainer" data-toggle="tooltip" title="Filtrar por grupo de medios">
+                          <select class="form-control" name="categoria" ng-model="selectedMediumGroup" ng-click="groupChange(selectedMediumGroup)" ng-options="x|limitTo:25 for x in press_media_groups">
+                          </select>
+                    </div>
+                </div>
 
-				  <div class="form-group">
-				        <div id="mediumGroupContainer" class="selectContainer" data-toggle="tooltip" title="Filtrar por grupo de medios">
-				            <select class="form-control" name="categoria" ng-model="selectedMediumGroup" ng-click="groupChange(selectedMediumGroup)" ng-options="x|limitTo:25 for x in press_media_groups">
-				            </select>
-				       </div>
-			  	</div>
+                <div class="form-group">
+                      <div id="searchOption" class="selectContainer" data-toggle="tooltip" title="Filtrar por campos">
+                          <select class="form-control" name="categoria" ng-model="searchOption" ng-options="x.key for x in searchOptionList">
+                          </select>
+                    </div>
+                </div>
 
-				  <div class="form-group">
-				        <div id="searchOption" class="selectContainer" data-toggle="tooltip" title="Filtrar por campos">
-				            <select class="form-control" name="categoria" ng-model="searchOption" ng-options="x.key for x in searchOptionList">
-				            </select>
-				       </div>
-			  	</div>
+                <div class="form-group">
+                  <input type="text" class="form-control" id="datepicker1">
+                  <input type="text" class="form-control" id="datepicker2">
+                </div>
 
-            <input type="text" class="form-control" id="datepicker1">
-            <input type="text" class="form-control" id="datepicker2">
-            <button class="btn btn-default" ng-click="get_input_data()"><span class="glyphicon glyphicon-search"></span> Buscar</button>
-            <button class="btn btn-default" ng-click="clearSearch()"><span class="glyphicon glyphicon-erase"></span> Limpiar Búsqueda</button>
-   				</form>
-
+                <div class="form-group">
+                  <button class="btn btn-default" ng-click="clearSearch()"><span class="glyphicon glyphicon-erase"></span> Limpiar Búsqueda</button>
+                  <button class="btn btn-default" ng-click="get_input_data()"><span class="glyphicon glyphicon-search"></span> Buscar</button>
+                </div> 
+        </form>
 		</div>
+</div>
 
     <div class="row">
       <div class="col-md-4">
@@ -253,8 +258,8 @@
                   <select class="form-control" name="categoria" ng-model="selectedSort" ng-change="update_list(1)" ng-options="x.key for x in sortGroup"></select>
               </div>
   
-         <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal">Crear Caso</button>
-         <button id="exportButton" class="btn btn-default" data-toggle="modal" ng-disabled="total_found >= 120000" data-target="#exportDataModal" data-toggle="tooltip" title="Exportar el resultado de la búsqueda"><span class="glyphicon glyphicon-download-alt"></span></button>
+         <button class="btn btn-default" data-toggle="modal" data-target="#newsCaseModal">Crear Caso Noticioso</button>
+         <button id="exportButton" class="btn btn-default" data-toggle="modal" ng-disabled="total_found >= 120000" data-target="#exportDataModal" data-toggle="tooltip" title="Exportar el resultado de la búsqueda"><span class="glyphicon glyphicon-download-alt"></span> Exportar Resultado</button>
 	
         </form>
       </div>
