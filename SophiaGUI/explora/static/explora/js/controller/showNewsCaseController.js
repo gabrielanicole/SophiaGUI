@@ -19,7 +19,6 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     var elastic_id = absUrl[absUrl.length - 1];
     var data = { 'elastic_id': elastic_id };
 
-
     $scope.histogram_startdate;
     $scope.histogram_enddate;
     $scope.idNot;
@@ -489,7 +488,7 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     }
 
     $scope.add_media = function (media) {
-        
+
         var i = $scope.medias.indexOf(media[0][0]);
         if (i !== -1) {
             $scope.medias.splice(i, 1);
@@ -550,6 +549,12 @@ app.controller('showNewsCaseController', ['$scope', '$http', '$location', 'dataF
     $scope.exportImageFormat = "PNG";
     $scope.exportImage = function (format) {
         ExportData.exportImage(format);
+    }
+
+    $scope.clearSearch = function () {
+        should_contain.removeAll();
+        must_contain.removeAll();
+        not_contain.removeAll();
     }
 
 }]);

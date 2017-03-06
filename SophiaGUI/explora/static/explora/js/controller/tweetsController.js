@@ -307,5 +307,10 @@ app.controller('tweetsController', ['$scope', '$http', 'dataFormat', '$window', 
         return json_data;
     }
 
+    $scope.clearSearch = function () {
+        should_contain.removeAll();
+        must_contain.removeAll();
+        not_contain.removeAll();
+    }
 
 }]);

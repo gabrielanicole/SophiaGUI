@@ -423,6 +423,12 @@ app.controller('searchController', ['$scope', '$http', '$window', 'dataFormat', 
         return json_data;
     }
 
+    $scope.clearSearch = function(){
+        should_contain.removeAll();
+        must_contain.removeAll();
+        not_contain.removeAll();
+    }
+
     loadPressMedia();
     run();
 }]);
